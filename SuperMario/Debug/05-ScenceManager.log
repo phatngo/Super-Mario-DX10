@@ -1,0 +1,9 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (05-ScenceManager.vcxproj, SuperMario.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  PlayScence.cpp
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(90,20): warning C4018: '<': signed/unsigned mismatch
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(113,20): warning C4018: '<': signed/unsigned mismatch
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(143,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(144,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(279,20): warning C4018: '<': signed/unsigned mismatch
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(288,20): warning C4018: '<': signed/unsigned mismatch
+  05-ScenceManager.vcxproj -> D:\school\game\phatngo_game\SuperMario\Debug\05-SceneManager.exe
