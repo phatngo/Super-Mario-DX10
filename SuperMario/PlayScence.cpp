@@ -248,7 +248,7 @@ void CPlayScene::Update(DWORD dt)
 	{
 		coObjects.push_back(objects[i]);
 	}
-
+	player->Update(dt, &coObjects);
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
@@ -267,11 +267,13 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx,cy);
 }
 
 void CPlayScene::Render()
 {
+	if (player == NULL) return;
+	player->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }

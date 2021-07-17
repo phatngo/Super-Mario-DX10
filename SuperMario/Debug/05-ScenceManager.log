@@ -4,6 +4,6 @@ D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(90,20): warning C4018: '<'
 D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(113,20): warning C4018: '<': signed/unsigned mismatch
 D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(143,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(144,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(279,20): warning C4018: '<': signed/unsigned mismatch
-D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(288,20): warning C4018: '<': signed/unsigned mismatch
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(277,20): warning C4018: '<': signed/unsigned mismatch
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(286,20): warning C4018: '<': signed/unsigned mismatch
   05-ScenceManager.vcxproj -> D:\school\game\phatngo_game\SuperMario\Debug\05-SceneManager.exe
