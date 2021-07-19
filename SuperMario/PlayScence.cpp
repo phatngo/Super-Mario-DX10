@@ -168,6 +168,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		case OBJECT_TYPE_BRICK:
 			obj = new CBrick();
+			if (ani_set_id == 0) {
+				ani_set_id += 95;
+			}
 			DebugOut(L"[INFO] Brick created!\n");
 			break;
 		case OBJECT_TYPE_KOOPAS: 
@@ -177,14 +180,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		default:
 			obj = new CBrick();
 			DebugOut(L"[INFO] Other object created!\n");
-			return;
+			break;
 		}
 
 		obj->SetPosition(x, y);
 
 		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-
 		obj->SetAnimationSet(ani_set);
+
 		objects.push_back(obj);
 	}
 	f.close();

@@ -9,12 +9,14 @@
 #include "Koopas.h"
 
 
+
+
 class CPlayScene: public CScene
 {
 protected: 
 	CMario *player;					// A play scene has to have player, right? 
-
 	vector<LPGAMEOBJECT> objects;
+	
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
