@@ -1,4 +1,5 @@
 #include "Koopas.h"
+#include "Utils.h"
 
 CKoopas::CKoopas()
 {
@@ -46,6 +47,7 @@ void CKoopas::Render()
 	else if (vx > 0) ani = KOOPAS_ANI_WALKING_RIGHT;
 	else if (vx <= 0) ani = KOOPAS_ANI_WALKING_LEFT;
 
+	DebugOut(L"[INFO] ani_Set: %d", animation_set->size());
 	animation_set->at(ani)->Render(x, y);
 
 	RenderBoundingBox();

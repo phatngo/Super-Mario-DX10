@@ -8,6 +8,7 @@
 #include "Goomba.h"
 #include "Koopas.h"
 #include "Portal.h"
+#include "QuestionBrick.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -141,6 +142,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 								SetState(MARIO_STATE_DIE);
 						}
 					}
+				}
+			}
+			else if (dynamic_cast<CQuestionBrick*>(e->obj)) // if e->obj is Quesion Brick
+			{
+				CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
+				if (e->ny > 0)
+				{
+						questionBrick->SetState(QUESTION_BRICK_STATE_STOP);	
 				}
 			}
 			else if (dynamic_cast<CPortal *>(e->obj))

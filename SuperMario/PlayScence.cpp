@@ -6,6 +6,8 @@
 #include "Textures.h"
 #include "Sprites.h"
 #include "Portal.h"
+#include "QuestionBrick.h"
+#include "FlashAnimationBrick.h"
 
 using namespace std;
 
@@ -32,6 +34,14 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_BRICK	1
 #define OBJECT_TYPE_GOOMBA	2
 #define OBJECT_TYPE_KOOPAS	3
+#define OBJECT_TYPE_QUESTION_BRICK	142
+#define OBJECT_TYPE_BRICK_WITH_FLASH_ANIMATION	112
+#define OBJECT_TYPE_BLOCK 4
+#define OBJECT_TYPE_PIRANHA_PLANT 7
+#define OBJECT_TYPE_FIRE_PIRANHA_PLANT 7
+#define OBJECT_TYPE_COIN 6
+
+
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -176,6 +186,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case OBJECT_TYPE_KOOPAS: 
 			obj = new CKoopas(); 
 			DebugOut(L"[INFO] Koopas created!\n"); 
+			break;
+		case OBJECT_TYPE_QUESTION_BRICK:
+			obj = new CQuestionBrick();
+			DebugOut(L"[INFO] Question Brick created!\n");
+			break;
+		case OBJECT_TYPE_BRICK_WITH_FLASH_ANIMATION:
+			obj = new CFlashAnimationBrick();
+			DebugOut(L"[INFO] Question Brick created!\n");
 			break;
 		default:
 			obj = new CBrick();
