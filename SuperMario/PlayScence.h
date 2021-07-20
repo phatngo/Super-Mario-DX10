@@ -7,6 +7,7 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Koopas.h"
+#include "Map.h"
 
 
 
@@ -16,14 +17,15 @@ class CPlayScene: public CScene
 protected: 
 	CMario *player;					// A play scene has to have player, right? 
 	vector<LPGAMEOBJECT> objects;
-	
+	CMap* current_map = NULL;
 
 	void _ParseSection_TEXTURES(string line);
+	void _ParseSection_TILEMAP_DATA(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
-	void _ParseSection_OBJECTSS(string line);
+	
 
 	
 public: 

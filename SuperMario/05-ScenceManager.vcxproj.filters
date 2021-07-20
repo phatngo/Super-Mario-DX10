@@ -40,6 +40,9 @@
     <Filter Include="Scenes">
       <UniqueIdentifier>{7d98aa67-3a63-4a52-be12-970c49f5effb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{d86a57c3-517f-4b6b-aaa1-0ad86a5a3edc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -99,6 +102,9 @@
     <ClCompile Include="Scence.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -157,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -8,6 +8,7 @@
 #include "Portal.h"
 #include "QuestionBrick.h"
 #include "FlashAnimationBrick.h"
+#include "Map.h"
 
 using namespace std;
 
@@ -24,7 +25,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 */
 
 #define SCENE_SECTION_UNKNOWN -1
-#define SCENE_SECTION_TEXTURES 2
+#define SCENE_SECTION_TEXTURES 1
+#define SCENE_SECTION_TILEMAP_DATA 2
 #define SCENE_SECTION_SPRITES 3
 #define SCENE_SECTION_ANIMATIONS 4
 #define SCENE_SECTION_ANIMATION_SETS	5
@@ -61,6 +63,31 @@ void CPlayScene::_ParseSection_TEXTURES(string line)
 	int B = atoi(tokens[4].c_str());
 
 	CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
+}
+
+void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
+{
+
+	int ID, rowMap, columnMap, columnTile, rowTile, totalTiles;
+	LPCWSTR path = ToLPCWSTR(line);
+	ifstream f;
+	f.open(path);
+	f >> ID >> rowMap >> columnMap >> rowTile >> columnTile >> totalTiles;
+	//Init Map Matrix
+	int** TileMapData = new int* [rowMap];
+	for (int i = 0; i < rowMap; i++)
+	{
+		TileMapData[i] = new int[columnMap];
+		for (int j = 0; j < columnMap; j++)
+			f >> TileMapData[i][j];
+	}
+	f.close();
+
+	current_map = new CMap(ID, rowMap, columnMap, rowTile, columnTile, totalTiles);
+	current_map->ExtractTileFromTileSet();
+	current_map->SetTileMapData(TileMapData);
+	DebugOut(L"[INFO] _ParseSection_TILEMAP_DATA done:: \n");
+
 }
 
 void CPlayScene::_ParseSection_SPRITES(string line)
@@ -229,6 +256,7 @@ void CPlayScene::Load()
 		if (line[0] == '#') continue;	// skip comment lines	
 
 		if (line == "[TEXTURES]") { section = SCENE_SECTION_TEXTURES; continue; }
+		if (line == "[TILEMAP DATA]") { section = SCENE_SECTION_TILEMAP_DATA; continue; }
 		if (line == "[SPRITES]") { 
 			section = SCENE_SECTION_SPRITES; continue; }
 		if (line == "[ANIMATIONS]") { 
@@ -245,6 +273,7 @@ void CPlayScene::Load()
 		switch (section)
 		{ 
 			case SCENE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
+			case SCENE_SECTION_TILEMAP_DATA: _ParseSection_TILEMAP_DATA(line); break;
 			case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
@@ -294,6 +323,7 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	if (player == NULL) return;
+	current_map->Render();
 	player->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
