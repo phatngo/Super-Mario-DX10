@@ -5,6 +5,7 @@
 
 CMap::CMap(int TileSetID, int TotalRowsOfMap, int TotalColumnsOfMap, int TotalRowsOfTileSet, int  TotalColumnsOfTileSet, int TotalTiles)
 {
+	//Tileset is the image
 	TileSet = CTextures::GetInstance()->Get(TileSetID);
 	this->TotalRowsOfMap = TotalRowsOfMap;
 	this->TotalColumnsOfMap = TotalColumnsOfMap;
@@ -27,8 +28,8 @@ void CMap::Render()
 	//my = cam->GetCameraPosition().y;
 	mx = CGame::GetInstance()->GetCamPosX();
 	my = CGame::GetInstance()->GetCamPosY();
-	int FirstColumn = (int)floor(mx*-1 / TILE_WIDTH);
-	int LastColumn = (int)ceil((mx*-1 + CGame::GetInstance()->GetScreenWidth()) / TILE_WIDTH);
+	int FirstColumn = (int)floor(mx / TILE_WIDTH);
+	int LastColumn = (int)ceil((mx + CGame::GetInstance()->GetScreenWidth()) / TILE_WIDTH);
 	DebugOut(L"[INFO] Total column of maps: \n", TotalColumnsOfMap);
 	if (LastColumn >= TotalColumnsOfMap)
 		LastColumn = TotalColumnsOfMap - 1;

@@ -73,13 +73,17 @@ void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
 	ifstream f;
 	f.open(path);
 	f >> ID >> rowMap >> columnMap >> rowTile >> columnTile >> totalTiles;
+	DebugOut(L"[INFO] _ParseSection_TILEMAP %d, %d \n", ID, rowMap);
 	//Init Map Matrix
 	int** TileMapData = new int* [rowMap];
 	for (int i = 0; i < rowMap; i++)
 	{
 		TileMapData[i] = new int[columnMap];
-		for (int j = 0; j < columnMap; j++)
+		int j;
+		for (j = 0; j < columnMap; j++) {
 			f >> TileMapData[i][j];
+			DebugOut(L"[INFO] _ParseSection_TILEMAP %d \n", TileMapData[i][j]);
+		}
 	}
 	f.close();
 
@@ -205,9 +209,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		case OBJECT_TYPE_BRICK:
 			obj = new CBrick();
-			if (ani_set_id == 0) {
+			/*if (ani_set_id == 0) {
 				ani_set_id += 95;
-			}
+			}*/
 			DebugOut(L"[INFO] Brick created!\n");
 			break;
 		case OBJECT_TYPE_KOOPAS: 
@@ -313,11 +317,13 @@ void CPlayScene::Update(DWORD dt)
 	float cx, cy;
 	player->GetPosition(cx, cy);
 
-	CGame *game = CGame::GetInstance();
+	/*CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
+	cy -= game->GetScreenHeight()/2;*/
 
-	CGame::GetInstance()->SetCamPos(cx,cy);
+	DebugOut(L"[INFO] Cam position %f, %f\n", cx,cy);
+
+	CGame::GetInstance()->SetCamPos(cx-80,215);
 }
 
 void CPlayScene::Render()

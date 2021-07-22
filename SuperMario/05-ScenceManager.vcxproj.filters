@@ -43,6 +43,9 @@
     <Filter Include="Map">
       <UniqueIdentifier>{d86a57c3-517f-4b6b-aaa1-0ad86a5a3edc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Objects\Portal">
+      <UniqueIdentifier>{cb99d38f-52a9-4813-9664-843d6db3387c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -61,9 +64,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Portal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
@@ -104,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>Map Objects\Portal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -152,9 +155,6 @@
     <ClInclude Include="KeyEventHandler.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Portal.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Textures.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -166,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>Map Objects\Portal</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
