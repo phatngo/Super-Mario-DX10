@@ -20,6 +20,8 @@ CMap::~CMap()
 {
 }
 
+
+
 void CMap::Render()
 {
 	//Camera* cam = Camera::GetInstance();
@@ -30,7 +32,6 @@ void CMap::Render()
 	my = CGame::GetInstance()->GetCamPosY();
 	int FirstColumn = (int)floor(mx / TILE_WIDTH);
 	int LastColumn = (int)ceil((mx + CGame::GetInstance()->GetScreenWidth()) / TILE_WIDTH);
-	DebugOut(L"[INFO] Total column of maps: \n", TotalColumnsOfMap);
 	if (LastColumn >= TotalColumnsOfMap)
 		LastColumn = TotalColumnsOfMap - 1;
 

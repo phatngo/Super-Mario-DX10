@@ -90,6 +90,7 @@ void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
 	current_map = new CMap(ID, rowMap, columnMap, rowTile, columnTile, totalTiles);
 	current_map->ExtractTileFromTileSet();
 	current_map->SetTileMapData(TileMapData);
+	maxCx = current_map->GetMapWidth() - CGame::GetInstance()->GetScreenWidth();
 	DebugOut(L"[INFO] _ParseSection_TILEMAP_DATA done:: \n");
 
 }
@@ -312,18 +313,11 @@ void CPlayScene::Update(DWORD dt)
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
-	
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
 
-	/*CGame* game = CGame::GetInstance();
-	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight()/2;*/
-
-	DebugOut(L"[INFO] Cam position %f, %f\n", cx,cy);
-
-	CGame::GetInstance()->SetCamPos(cx-80,215);
+	CCamera::GetInstance()->SetCameraPosition(maxCx,cx);
 }
 
 void CPlayScene::Render()

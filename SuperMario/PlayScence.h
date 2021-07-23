@@ -8,6 +8,7 @@
 #include "Goomba.h"
 #include "Koopas.h"
 #include "Map.h"
+#include "Camera.h"
 
 
 
@@ -18,6 +19,7 @@ protected:
 	CMario *player;					// A play scene has to have player, right? 
 	vector<LPGAMEOBJECT> objects;
 	CMap* current_map = NULL;
+	int maxCx; //maximum x coordinate that the camera can reach
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_TILEMAP_DATA(string line);
