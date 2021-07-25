@@ -9,6 +9,7 @@
 #include "QuestionBrick.h"
 #include "FlashAnimationBrick.h"
 #include "Map.h"
+#include "Block.h"
 
 using namespace std;
 
@@ -202,19 +203,20 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			player = (CMario*)obj;
 			DebugOut(L"[INFO] Player object created!\n");
 			break;
+		case OBJECT_TYPE_BRICK:
+			obj = new CBrick();
+			DebugOut(L"[INFO] Brick created!\n");
+			break;
+		case OBJECT_TYPE_BLOCK:
+			obj = new CBlock();
+			DebugOut(L"[INFO] Block created!\n");
+			break;
 		case OBJECT_TYPE_GOOMBA: 
 		{
 			obj = new CGoomba();
 			DebugOut(L"[INFO] Goomba created!\n");
 			break;
 		}
-		case OBJECT_TYPE_BRICK:
-			obj = new CBrick();
-			/*if (ani_set_id == 0) {
-				ani_set_id += 95;
-			}*/
-			DebugOut(L"[INFO] Brick created!\n");
-			break;
 		case OBJECT_TYPE_KOOPAS: 
 			obj = new CKoopas(); 
 			DebugOut(L"[INFO] Koopas created!\n"); 

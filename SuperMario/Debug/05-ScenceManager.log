@@ -1,7 +1,5 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (05-ScenceManager.vcxproj, 05-SceneManager.vcxproj, SuperMario.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Camera.cpp
+  Mario.cpp
 D:\school\game\phatngo_game\SuperMario\Game.h(89,28): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
 D:\school\game\phatngo_game\SuperMario\Game.h(90,28): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-D:\school\game\phatngo_game\SuperMario\Camera.cpp(15,43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\school\game\phatngo_game\SuperMario\Camera.cpp(18,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   05-ScenceManager.vcxproj -> D:\school\game\phatngo_game\SuperMario\Debug\PhatNgo_SuperMarioBros3.exe

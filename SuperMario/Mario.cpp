@@ -9,6 +9,7 @@
 #include "Koopas.h"
 #include "Portal.h"
 #include "QuestionBrick.h"
+#include "Block.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -66,7 +67,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		//	x += nx*abs(rdx); 
 		
 		// block every object first!
-		x += min_tx*dx + nx*0.4f;
+		x += min_tx * dx + nx * 0.4f;
 		y += min_ty*dy + ny*0.4f;
 
 		if (nx!=0) vx = 0;
@@ -82,6 +83,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 			if (dynamic_cast<CGoomba *>(e->obj)) // if e->obj is Goomba 
 			{
+
 				CGoomba *goomba = dynamic_cast<CGoomba *>(e->obj);
 
 				// jump on top >> kill Goomba and deflect a bit 
@@ -109,8 +111,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						}
 					}
 				}
-			} else if (dynamic_cast<CKoopas*>(e->obj)) // if e->obj is Koopas
+			} 
+			else if (dynamic_cast<CKoopas*>(e->obj)) // if e->obj is Koopas
 			{
+
 				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 
 				// jump on top >> kill Goomba and deflect a bit 
@@ -144,9 +148,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 				}
 			}
+			else if (dynamic_cast<CBlock*>(e->obj)) 
+			{
+				CBlock* block = dynamic_cast<CBlock*>(e->obj);
+				if (e->ny > 0)
+				{
+					float l, t, r, b;
+					block->GetBoundingBox(l, t, r, b);
+					y = t + dy;
+					vy = -MARIO_JUMP_DEFLECT_SPEED;
+				}
+			}
 			else if (dynamic_cast<CQuestionBrick*>(e->obj)) // if e->obj is Quesion Brick
 			{
+
 				CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
+				//Mario stays under question brick
 				if (e->ny > 0)
 				{
 						questionBrick->SetState(QUESTION_BRICK_STATE_STOP);	
@@ -154,6 +171,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			else if (dynamic_cast<CPortal *>(e->obj))
 			{
+
 				CPortal *p = dynamic_cast<CPortal *>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
