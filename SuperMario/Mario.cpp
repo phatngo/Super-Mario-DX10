@@ -64,7 +64,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 		// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
 		//if (rdx != 0 && rdx!=dx)
-		//	x += nx*abs(rdx); 
+			//x += nx*abs(rdx); 
 		
 		// block every object first!
 		x += min_tx * dx + nx * 0.4f;
@@ -153,10 +153,26 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				CBlock* block = dynamic_cast<CBlock*>(e->obj);
 				if (e->ny > 0)
 				{
+					//y -= (min_ty * dy + ny * 0.4f);
 					float l, t, r, b;
 					block->GetBoundingBox(l, t, r, b);
-					y = t + dy;
-					vy = -MARIO_JUMP_DEFLECT_SPEED;
+					DebugOut(L"[INFO] Top of block %f\n", t);
+					DebugOut(L"[INFO] Bottom of block %f\n", b);
+					DebugOut(L"[INFO] left of block %f\n", b);
+					DebugOut(L"[INFO] y: %f\n", y);
+					DebugOut(L"[INFO] dy: %f\n", dy);
+
+					if((y+dy)<b && y+dy<t){
+						y += dy;
+						vy = -MARIO_JUMP_DEFLECT_SPEED;
+					}
+					//y += (min_ty * dy + ny * 0.4f);
+					//y = (t + dy);
+					//x-= (min_tx * dx + nx * 0.4f);
+					//y -= (min_ty * dy + ny * 0.4f);
+					//x += dx;
+					//y += dy;
+					//vy = -MARIO_JUMP_DEFLECT_SPEED;
 				}
 			}
 			else if (dynamic_cast<CQuestionBrick*>(e->obj)) // if e->obj is Quesion Brick
