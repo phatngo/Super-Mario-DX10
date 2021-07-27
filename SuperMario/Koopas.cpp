@@ -21,11 +21,6 @@ void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &botto
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt, coObjects);
-
-	//
-	// TO-DO: make sure Koopas can interact with the world and to each of them too!
-	// 
-
 	x += dx;
 	y += dy;
 
@@ -66,5 +61,4 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_WALKING:
 		vx = KOOPAS_WALKING_SPEED;
 	}
-
 }

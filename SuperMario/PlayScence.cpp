@@ -10,6 +10,10 @@
 #include "FlashAnimationBrick.h"
 #include "Map.h"
 #include "Block.h"
+#include "Coin.h"
+#include "Mushroom.h"
+#include "Leaf.h"
+#include "Switch.h"
 
 using namespace std;
 
@@ -190,6 +194,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 
 		CGameObject* obj = NULL;
+		CGameObject* obj_of_questionBrick = NULL;
+		LPANIMATION_SET ani_set_of_obj;
 
 		switch(object_type) 
 		{
@@ -207,6 +213,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CBrick();
 			DebugOut(L"[INFO] Brick created!\n");
 			break;
+		case OBJECT_TYPE_COIN:
+			obj = new CCoin();
+			DebugOut(L"[INFO] Coin created!\n");
+			break;
 		case OBJECT_TYPE_BLOCK:
 			obj = new CBlock();
 			DebugOut(L"[INFO] Block created!\n");
@@ -222,9 +232,33 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[INFO] Koopas created!\n"); 
 			break;
 		case OBJECT_TYPE_QUESTION_BRICK:
+		{
 			obj = new CQuestionBrick();
+			//int tag = atoi(tokens[5].c_str());
+			/*switch (tag)
+			{
+			case COIN_TAG:
+				obj_of_questionBrick = new CCoin();
+				ani_set_of_obj = animation_sets->Get(COIN_ANI_SET);
+				obj_of_questionBrick->SetAnimationSet(ani_set_of_obj);
+			case MUSHROOM_TAG:
+				obj_of_questionBrick = new CMushroom();
+				ani_set_of_obj = animation_sets->Get(MUSHROOM_ANI_SET);
+				obj_of_questionBrick->SetAnimationSet(ani_set_of_obj);
+			case LEAF_TAG:
+				obj_of_questionBrick = new CLeaf();
+				ani_set_of_obj = animation_sets->Get(LEAF_ANI_SET);
+				obj_of_questionBrick->SetAnimationSet(ani_set_of_obj);
+			case SWITCH_TAG:
+				obj_of_questionBrick = new CSwitch();
+				ani_set_of_obj = animation_sets->Get(SWITCH_ANI_SET);
+				obj_of_questionBrick->SetAnimationSet(ani_set_of_obj);
+			default:
+				break;
+			}*/
 			DebugOut(L"[INFO] Question Brick created!\n");
 			break;
+		}
 		case OBJECT_TYPE_BRICK_WITH_FLASH_ANIMATION:
 			obj = new CFlashAnimationBrick();
 			DebugOut(L"[INFO] Question Brick created!\n");
@@ -239,8 +273,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 		obj->SetAnimationSet(ani_set);
-
 		objects.push_back(obj);
+
+		if (obj_of_questionBrick != NULL) {
+			obj_of_questionBrick->SetPosition(x, y);
+			objects.push_back(obj_of_questionBrick);
+		}
 	}
 	f.close();
 }
@@ -346,6 +384,16 @@ void CPlayScene::Unload()
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 
+vector<LPGAMEOBJECT> CPlayScene::GetSceneObjects()
+{
+	return this->objects;
+}
+
+void CPlayScene::SetSceneObjects(vector<LPGAMEOBJECT> objects)
+{
+	this->objects = objects;
+}
+
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
@@ -376,3 +424,4 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	else
 		mario->SetState(MARIO_STATE_IDLE);
 }
+

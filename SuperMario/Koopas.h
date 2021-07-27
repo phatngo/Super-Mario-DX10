@@ -21,6 +21,7 @@ class CKoopas : public CGameObject
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
 
+
 public:
 	CKoopas();
 	virtual void SetState(int state);

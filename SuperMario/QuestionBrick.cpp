@@ -1,4 +1,8 @@
 #include "QuestionBrick.h"
+#include "Leaf.h"
+#include "Coin.h"
+#include "Mushroom.h"
+#include "Switch.h"
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt, coObjects);
@@ -30,6 +34,27 @@ void CQuestionBrick::SetState(int state) {
 	}
 	else if (state == QUESTION_BRICK_STATE_STOP) {
 		currentState = QUESTION_BRICK_STATE_STOP;
+	}
+}
+
+void CQuestionBrick::SetTag(float tag, CGameObject* obj) {
+	this->tag_0 = tag;
+	switch (tag_0)
+	{
+	case COIN_TAG:
+		obj = new CCoin();
+		break;
+	case MUSHROOM_TAG:
+		obj = new CMushroom();
+		break;
+	case LEAF_TAG:
+		obj = new CLeaf();
+		break;
+	case SWITCH_TAG:
+		obj = new CSwitch();
+		break;
+	default:
+		break;
 	}
 }
 

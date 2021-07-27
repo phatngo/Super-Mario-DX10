@@ -1,17 +1,5 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (05-ScenceManager.vcxproj, 05-SceneManager.vcxproj, SuperMario.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Block.cpp
   Mario.cpp
 D:\school\game\phatngo_game\SuperMario\Game.h(89,28): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
 D:\school\game\phatngo_game\SuperMario\Game.h(90,28): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-  PlayScence.cpp
-D:\school\game\phatngo_game\SuperMario\Game.h(89,28): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-D:\school\game\phatngo_game\SuperMario\Game.h(90,28): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(133,20): warning C4018: '<': signed/unsigned mismatch
-D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(156,20): warning C4018: '<': signed/unsigned mismatch
-D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(186,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(187,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(322,50): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(330,20): warning C4018: '<': signed/unsigned mismatch
-D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(340,20): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
   05-ScenceManager.vcxproj -> D:\school\game\phatngo_game\SuperMario\Debug\PhatNgo_SuperMarioBros3.exe

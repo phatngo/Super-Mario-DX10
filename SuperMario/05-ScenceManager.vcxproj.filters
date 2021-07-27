@@ -120,6 +120,15 @@
     <ClCompile Include="Block.cpp">
       <Filter>Map Objects\Block</Filter>
     </ClCompile>
+    <ClCompile Include="Mushroom.cpp">
+      <Filter>Map Objects\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Leaf.cpp">
+      <Filter>Map Objects\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Switch.cpp">
+      <Filter>Map Objects\Others</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -187,6 +196,15 @@
     </ClInclude>
     <ClInclude Include="Block.h">
       <Filter>Map Objects\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="Mushroom.h">
+      <Filter>Map Objects\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Leaf.h">
+      <Filter>Map Objects\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Switch.h">
+      <Filter>Map Objects\Others</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,6 +2,9 @@
 
 #include <d3dx9.h>
 #include "KeyEventHandler.h"
+#include <vector>
+#include "GameObject.h"
+
 
 class CScene
 {
@@ -17,7 +20,9 @@ public:
 	virtual void Load() = 0;
 	virtual void Unload() = 0;
 	virtual void Update(DWORD dt) = 0;
-	virtual void Render() = 0; 
+	virtual void Render() = 0;
+	virtual vector<LPGAMEOBJECT> GetSceneObjects();
+	virtual void  SetSceneObjects(vector<LPGAMEOBJECT> objects)=0;
 };
 typedef CScene * LPSCENE;
 

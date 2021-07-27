@@ -7,11 +7,22 @@
 #define QUESTION_BRICK_ANI_STOP 1
 #define BRICK_BBOX_WIDTH  16
 #define BRICK_BBOX_HEIGHT 16
+#define COIN_TAG 0
+#define MUSHROOM_TAG 1
+#define LEAF_TAG 4
+#define SWITCH_TAG 6
+#define COIN_ANI_SET 6
+#define MUSHROOM_ANI_SET 37
+#define LEAF_ANI_SET 36
+#define SWITCH_ANI_SET 77
+
 
 class CQuestionBrick : public CGameObject
 {
 	int currentState;
+	int tag_0; 
 public:
+	void SetTag(float tag, CGameObject* obj);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	CQuestionBrick();

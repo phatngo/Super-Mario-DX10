@@ -37,6 +37,8 @@ public:
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
+	virtual vector<LPGAMEOBJECT> GetSceneObjects();
+	virtual void  SetSceneObjects(vector<LPGAMEOBJECT> objects);
 
 	CMario * GetPlayer() { return player; } 
 

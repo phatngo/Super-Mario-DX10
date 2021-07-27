@@ -10,6 +10,8 @@
 #include "Portal.h"
 #include "QuestionBrick.h"
 #include "Block.h"
+#include "Coin.h"
+#include "Game.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -52,6 +54,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		x += dx; 
 		y += dy;
+		
 	}
 	else
 	{
@@ -162,17 +165,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					DebugOut(L"[INFO] y: %f\n", y);
 					DebugOut(L"[INFO] dy: %f\n", dy);
 
-					if((y+dy)<b && y+dy<t){
+					if((y+dy)<b && (y+dy)<t){
 						y += dy;
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
-					//y += (min_ty * dy + ny * 0.4f);
-					//y = (t + dy);
-					//x-= (min_tx * dx + nx * 0.4f);
-					//y -= (min_ty * dy + ny * 0.4f);
-					//x += dx;
-					//y += dy;
-					//vy = -MARIO_JUMP_DEFLECT_SPEED;
 				}
 			}
 			else if (dynamic_cast<CQuestionBrick*>(e->obj)) // if e->obj is Quesion Brick
@@ -183,7 +179,23 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				if (e->ny > 0)
 				{
 						questionBrick->SetState(QUESTION_BRICK_STATE_STOP);	
+						//switch(questionBrick->getTag())
+
 				}
+			}
+			else if (dynamic_cast<CCoin*>(e->obj)) {
+				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
+				y -= min_ty * dy + ny * 0.4f;
+				float l, t, r, b;
+				coin->GetBoundingBox(l, t, r, b);
+				DebugOut(L"[INFO] Top of coint %f\n", t);
+				DebugOut(L"[INFO] Bottom of coin %f\n", b);
+				DebugOut(L"[INFO] left of coin %f\n", b);
+				DebugOut(L"[INFO] y: %f\n", y);
+				DebugOut(L"[INFO] dy: %f\n", dy);
+					y += dy*3;
+				DebugOut(L"[INFO] Later y: %f\n", y);
+				coin->SetState(COIN_STATE_NON_EXIST);
 			}
 			else if (dynamic_cast<CPortal *>(e->obj))
 			{

@@ -47,6 +47,8 @@ public:
 
 	float x; 
 	float y;
+	float start_X;
+	float start_Y;
 
 	float dx;	// dx = vx*dt
 	float dy;	// dy = vy*dt
@@ -63,7 +65,7 @@ public:
 	LPANIMATION_SET animation_set;
 
 public: 
-	void SetPosition(float x, float y) { this->x = x, this->y = y; }
+	void SetPosition(float x, float y) { this->x = x, this->y = y; start_X = x; start_Y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
