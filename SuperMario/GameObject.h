@@ -50,11 +50,11 @@ public:
 	float start_X;
 	float start_Y;
 
-	float dx;	// dx = vx*dt
-	float dy;	// dy = vy*dt
+	float dx=0;	// dx = vx*dt
+	float dy=0;	// dy = vy*dt
 
-	float vx;
-	float vy;
+	float vx=0;
+	float vy=0;
 
 	int nx;	 
 
@@ -69,7 +69,8 @@ public:
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
-
+	float GetStartX() { return start_X; }
+	float GetStartY() { return start_Y; }
 	int GetState() { return this->state; }
 
 	void RenderBoundingBox();

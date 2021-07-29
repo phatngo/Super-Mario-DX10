@@ -25,7 +25,7 @@ CMario::CMario(float x, float y) : CGameObject()
 	this->y = y; 
 }
 
-void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> *objects)
 {
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
@@ -52,8 +52,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	// No collision occured, proceed normally
 	if (coEvents.size()==0)
 	{
+		
 		x += dx; 
 		y += dy;
+
+		DebugOut(L"[INFO] y without collision %f\n", y);
 		
 	}
 	else
@@ -68,10 +71,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
 		//if (rdx != 0 && rdx!=dx)
 			//x += nx*abs(rdx); 
-		
+		DebugOut(L"[INFO] y at the beginning %f\n", y);
 		// block every object first!
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty*dy + ny*0.4f;
+		
+		DebugOut(L"[INFO] y with collision %f\n", y);
 
 		if (nx!=0) vx = 0;
 		if (ny!=0) vy = 0;
@@ -96,6 +101,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						goomba->SetState(GOOMBA_STATE_DIE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
+						for (int i = 0; i < objects->size(); i++) {
+							if (dynamic_cast<CGoomba*>(objects->at(i))
+								&& objects->at(i)->GetStartX() == goomba->GetStartX()
+								&& objects->at(i)->GetStartY() == goomba->GetStartY())
+							{
+
+								objects->erase(objects->begin() + i);
+								break;
+							}
+						}
 					}
 				}
 				else if (e->nx != 0)
@@ -185,21 +200,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			else if (dynamic_cast<CCoin*>(e->obj)) {
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
-				y -= min_ty * dy + ny * 0.4f;
 				float l, t, r, b;
 				coin->GetBoundingBox(l, t, r, b);
-				DebugOut(L"[INFO] Top of coint %f\n", t);
-				DebugOut(L"[INFO] Bottom of coin %f\n", b);
-				DebugOut(L"[INFO] left of coin %f\n", b);
-				DebugOut(L"[INFO] y: %f\n", y);
-				DebugOut(L"[INFO] dy: %f\n", dy);
-					y += dy*3;
-				DebugOut(L"[INFO] Later y: %f\n", y);
-				coin->SetState(COIN_STATE_NON_EXIST);
+				y += dy+(b-t);
+				for (int i = 0; i < objects->size(); i++) {
+					if (dynamic_cast<CCoin*>(objects->at(i))
+						&& objects->at(i)->GetStartX() == coin->GetStartX()
+						&& objects->at(i)->GetStartY() == coin->GetStartY()) 
+					{
+						DebugOut(L"[INFO] Coin touched \n");
+						objects->erase(objects->begin() + i);
+						break;
+					}
+				}
 			}
 			else if (dynamic_cast<CPortal *>(e->obj))
 			{
-
 				CPortal *p = dynamic_cast<CPortal *>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}

@@ -328,7 +328,7 @@ void CPlayScene::Load()
 
 	f.close();
 
-	//CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
+	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
@@ -343,7 +343,9 @@ void CPlayScene::Update(DWORD dt)
 	{
 		coObjects.push_back(objects[i]);
 	}
-	player->Update(dt, &coObjects);
+	DebugOut(L"[INFO] coObjects size before %d \n", coObjects.size());
+	player->Update(dt, &coObjects, &objects);
+	DebugOut(L"[INFO] coObjects size after update player %d \n", coObjects.size());
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
@@ -389,9 +391,15 @@ vector<LPGAMEOBJECT> CPlayScene::GetSceneObjects()
 	return this->objects;
 }
 
-void CPlayScene::SetSceneObjects(vector<LPGAMEOBJECT> objects)
+void CPlayScene::SetSceneObjects(vector<LPGAMEOBJECT> newObjects)
 {
-	this->objects = objects;
+	/*for (int i = 0; i < this->objects.size(); i++)
+		delete objects[i];
+
+	for (int i = 0; i < newObjects.size(); i++) {
+		this->objects.push_back(newObjects[i]);
+	}*/
+	this->objects = newObjects;
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
