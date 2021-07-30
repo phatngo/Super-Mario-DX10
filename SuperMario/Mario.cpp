@@ -11,7 +11,7 @@
 #include "QuestionBrick.h"
 #include "Block.h"
 #include "Coin.h"
-#include "Game.h"
+#include "Brick.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -33,6 +33,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 	// Simple fall down
 	vy += MARIO_GRAVITY*dt;
 
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -51,13 +52,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 
 	// No collision occured, proceed normally
 	if (coEvents.size()==0)
-	{
-		
+	{		
 		x += dx; 
 		y += dy;
-
-		DebugOut(L"[INFO] y without collision %f\n", y);
-		
 	}
 	else
 	{
@@ -67,16 +64,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
+		DebugOut(L"[INFO] coEventResult size: %d \n", coEventsResult.size());
+		LPCOLLISIONEVENT e0 = coEventsResult[0];
+		//LPCOLLISIONEVENT e1 = coEventsResult[1];
+		DebugOut(L"[INFO] e0 is brick: %d \n", dynamic_cast<CBrick*>(e0->obj)?1:0);
+		//DebugOut(L"[INFO] e1 is goomba: %d \n", dynamic_cast<CGoomba*>(e1->obj) ? 1 : 0);
 		// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
-		//if (rdx != 0 && rdx!=dx)
-			//x += nx*abs(rdx); 
-		DebugOut(L"[INFO] y at the beginning %f\n", y);
+		if (rdx != 0 && rdx!=dx)
+			x += nx*abs(rdx); 
 		// block every object first!
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty*dy + ny*0.4f;
 		
-		DebugOut(L"[INFO] y with collision %f\n", y);
 
 		if (nx!=0) vx = 0;
 		if (ny!=0) vy = 0;
@@ -106,7 +105,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 								&& objects->at(i)->GetStartX() == goomba->GetStartX()
 								&& objects->at(i)->GetStartY() == goomba->GetStartY())
 							{
-
+								goomba->SetState(GOOMBA_STATE_DIE);
 								objects->erase(objects->begin() + i);
 								break;
 							}
@@ -174,11 +173,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					//y -= (min_ty * dy + ny * 0.4f);
 					float l, t, r, b;
 					block->GetBoundingBox(l, t, r, b);
-					DebugOut(L"[INFO] Top of block %f\n", t);
-					DebugOut(L"[INFO] Bottom of block %f\n", b);
-					DebugOut(L"[INFO] left of block %f\n", b);
-					DebugOut(L"[INFO] y: %f\n", y);
-					DebugOut(L"[INFO] dy: %f\n", dy);
 
 					if((y+dy)<b && (y+dy)<t){
 						y += dy;
@@ -265,8 +259,6 @@ void CMario::Render()
 
 void CMario::SetState(int state)
 {
-	CGameObject::SetState(state);
-
 	switch (state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
@@ -278,7 +270,6 @@ void CMario::SetState(int state)
 		nx = -1;
 		break;
 	case MARIO_STATE_JUMP:
-		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
 		vy = -MARIO_JUMP_SPEED_Y;
 		break; 
 	case MARIO_STATE_IDLE: 
@@ -288,6 +279,7 @@ void CMario::SetState(int state)
 		vy = -MARIO_DIE_DEFLECT_SPEED;
 		break;
 	}
+	CGameObject::SetState(state);
 }
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)

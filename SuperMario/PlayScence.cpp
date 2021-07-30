@@ -343,9 +343,7 @@ void CPlayScene::Update(DWORD dt)
 	{
 		coObjects.push_back(objects[i]);
 	}
-	DebugOut(L"[INFO] coObjects size before %d \n", coObjects.size());
 	player->Update(dt, &coObjects, &objects);
-	DebugOut(L"[INFO] coObjects size after update player %d \n", coObjects.size());
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
@@ -393,12 +391,6 @@ vector<LPGAMEOBJECT> CPlayScene::GetSceneObjects()
 
 void CPlayScene::SetSceneObjects(vector<LPGAMEOBJECT> newObjects)
 {
-	/*for (int i = 0; i < this->objects.size(); i++)
-		delete objects[i];
-
-	for (int i = 0; i < newObjects.size(); i++) {
-		this->objects.push_back(newObjects[i]);
-	}*/
 	this->objects = newObjects;
 }
 
@@ -407,10 +399,14 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
+	float speedX, speedY;
+	mario->GetSpeed(speedX, speedY);
 	switch (KeyCode)
 	{
 	case DIK_S:
-		mario->SetState(MARIO_STATE_JUMP);
+		if (mario->GetState() != MARIO_STATE_JUMP) {
+			mario->SetState(MARIO_STATE_JUMP);
+		}
 		break;
 	case DIK_A: 
 		mario->Reset();
