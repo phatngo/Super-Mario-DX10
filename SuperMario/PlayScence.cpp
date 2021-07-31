@@ -14,6 +14,8 @@
 #include "Mushroom.h"
 #include "Leaf.h"
 #include "Switch.h"
+#include "Goomba.h"
+#include "Koopas.h"
 
 using namespace std;
 
@@ -367,6 +369,14 @@ void CPlayScene::Render()
 	player->Render();
 	for (int i = 0; i < objects.size(); i++) {
 		objects[i]->Render();
+		if (dynamic_cast<CGoomba*>(objects[i])&&objects[i]->GetState()==GOOMBA_STATE_DIE) {
+			objects.erase(objects.begin() + i);
+			//i--;
+		}
+		else if (dynamic_cast<CKoopas*>(objects[i]) && objects[i]->GetState() == KOOPAS_STATE_DIE) {
+			objects.erase(objects.begin() + i);
+			//i--;
+		}
 	}
 }
 

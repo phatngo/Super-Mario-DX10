@@ -27,6 +27,7 @@ CMario::CMario(float x, float y) : CGameObject()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> *objects)
 {
+	
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
@@ -64,10 +65,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-		DebugOut(L"[INFO] coEventResult size: %d \n", coEventsResult.size());
-		LPCOLLISIONEVENT e0 = coEventsResult[0];
-		//LPCOLLISIONEVENT e1 = coEventsResult[1];
-		DebugOut(L"[INFO] e0 is brick: %d \n", dynamic_cast<CBrick*>(e0->obj)?1:0);
 		//DebugOut(L"[INFO] e1 is goomba: %d \n", dynamic_cast<CGoomba*>(e1->obj) ? 1 : 0);
 		// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
 		if (rdx != 0 && rdx!=dx)
@@ -100,7 +97,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					{
 						goomba->SetState(GOOMBA_STATE_DIE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
-						for (int i = 0; i < objects->size(); i++) {
+						/*for (int i = 0; i < objects->size(); i++) {
 							if (dynamic_cast<CGoomba*>(objects->at(i))
 								&& objects->at(i)->GetStartX() == goomba->GetStartX()
 								&& objects->at(i)->GetStartY() == goomba->GetStartY())
@@ -109,7 +106,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 								objects->erase(objects->begin() + i);
 								break;
 							}
-						}
+						}*/
 					}
 				}
 				else if (e->nx != 0)
