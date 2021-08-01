@@ -20,12 +20,7 @@ void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &botto
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	
 	CGameObject::Update(dt);
-	DebugOut(L"Goomba VX: %f \n", vx);
-	DebugOut(L"Goomba DX: %f \n", dx);
-	DebugOut(L"Goomba X: %f \n", x);
-	DebugOut(L"Goomba Y: %f \n", y);
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -41,13 +36,11 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
-		DebugOut(L"Goomba not collided \n");
 		x += dx;
 		y += dy;	
 	}
 	else
 	{
-		DebugOut(L"Goomba collided \n");
 		float min_tx, min_ty, nx = 0, ny;
 		float rdx = 0;
 		float rdy = 0;

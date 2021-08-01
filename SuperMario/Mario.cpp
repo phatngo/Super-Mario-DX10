@@ -31,6 +31,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
+	
+	
 	// Simple fall down
 	vy += MARIO_GRAVITY*dt;
 
@@ -56,12 +58,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 	{		
 		x += dx; 
 		y += dy;
+
 	}
 	else
 	{
 		float min_tx, min_ty, nx = 0, ny;
 		float rdx = 0; 
 		float rdy = 0;
+
+		float y0 = y;
+		float x0 = x;
 
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
@@ -97,16 +103,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					{
 						goomba->SetState(GOOMBA_STATE_DIE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
-						/*for (int i = 0; i < objects->size(); i++) {
-							if (dynamic_cast<CGoomba*>(objects->at(i))
-								&& objects->at(i)->GetStartX() == goomba->GetStartX()
-								&& objects->at(i)->GetStartY() == goomba->GetStartY())
-							{
-								goomba->SetState(GOOMBA_STATE_DIE);
-								objects->erase(objects->begin() + i);
-								break;
-							}
-						}*/
 					}
 				}
 				else if (e->nx != 0)
@@ -128,7 +124,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			} 
 			else if (dynamic_cast<CKoopas*>(e->obj)) // if e->obj is Koopas
 			{
-
 				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 
 				// jump on top >> kill Goomba and deflect a bit 
@@ -192,14 +187,21 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			else if (dynamic_cast<CCoin*>(e->obj)) {
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
 				float l, t, r, b;
-				coin->GetBoundingBox(l, t, r, b);
-				y += dy+(b-t);
+				this->GetBoundingBox(l, t, r, b);
+				DebugOut(L"[INFO] y0: %f \n", y0);
+				DebugOut(L"[INFO] y: %f \n", y);
+				float dy1 = y0 - y;
+				if (dy1 > (-MARIO_JUMP_SPEED_Y * dt)) {
+					DebugOut(L"[INFO] noCollisionDy: %f \n", noCollisionDy);
+					float dy2 = (-MARIO_JUMP_SPEED_Y * dt) + dy1;
+					float vy2 = dy2 / dt;
+					vy = vy2;
+				}
 				for (int i = 0; i < objects->size(); i++) {
 					if (dynamic_cast<CCoin*>(objects->at(i))
 						&& objects->at(i)->GetStartX() == coin->GetStartX()
 						&& objects->at(i)->GetStartY() == coin->GetStartY()) 
 					{
-						DebugOut(L"[INFO] Coin touched \n");
 						objects->erase(objects->begin() + i);
 						break;
 					}

@@ -42,6 +42,8 @@ class CMario : public CGameObject
 	int level;
 	int untouchable;
 	DWORD untouchable_start;
+	float noCollisionDy = -MARIO_STATE_JUMP;
+	DWORD marioDT;
 
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
