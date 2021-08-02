@@ -12,6 +12,7 @@
 #include "Block.h"
 #include "Coin.h"
 #include "Brick.h"
+#include "PiranhaPlant.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -174,12 +175,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			}
 			else if (dynamic_cast<CQuestionBrick*>(e->obj)) // if e->obj is Quesion Brick
 			{
-
 				CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
 				//Mario stays under question brick
 				if (e->ny > 0)
 				{
-						questionBrick->SetState(QUESTION_BRICK_STATE_STOP);	
+						questionBrick->SetState(QUESTION_BRICK_STATE_JUMPING);	
 						//switch(questionBrick->getTag())
 
 				}
@@ -188,8 +188,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
 				float l, t, r, b;
 				this->GetBoundingBox(l, t, r, b);
-				DebugOut(L"[INFO] y0: %f \n", y0);
-				DebugOut(L"[INFO] y: %f \n", y);
 				float dy1 = y0 - y;
 				if (dy1 > (-MARIO_JUMP_SPEED_Y * dt)) {
 					DebugOut(L"[INFO] noCollisionDy: %f \n", noCollisionDy);
@@ -197,16 +195,27 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					float vy2 = dy2 / dt;
 					vy = vy2;
 				}
-				for (int i = 0; i < objects->size(); i++) {
-					if (dynamic_cast<CCoin*>(objects->at(i))
-						&& objects->at(i)->GetStartX() == coin->GetStartX()
-						&& objects->at(i)->GetStartY() == coin->GetStartY()) 
-					{
-						objects->erase(objects->begin() + i);
-						break;
-					}
-				}
+				coin->SetState(COIN_STATE_NON_EXIST);
 			}
+			else if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
+			CPiranhaPlant* piranhaPlant = dynamic_cast<CPiranhaPlant*>(e->obj);
+				//If mario is touchable
+				if (untouchable == 0)
+				{
+					//If koopas is not dead
+
+						//If mario is not in the big size
+						if (level > MARIO_LEVEL_SMALL)
+						{
+							//Makes mario become small
+							level = MARIO_LEVEL_SMALL;
+							StartUntouchable();
+						}
+						else
+							//Makes mario die
+							SetState(MARIO_STATE_DIE);	
+				}
+            }
 			else if (dynamic_cast<CPortal *>(e->obj))
 			{
 				CPortal *p = dynamic_cast<CPortal *>(e->obj);

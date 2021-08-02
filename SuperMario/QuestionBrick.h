@@ -1,7 +1,10 @@
 #include "GameObject.h"
 
-#define QUESTION_BRICK_STATE_SPINNING 602
+#define QUESTION_BRICK_STATE_IDLE 602
+#define QUESTION_BRICK_STATE_JUMPING 603
+#define QUESTION_BRICK_STATE_FALLING 604
 #define QUESTION_BRICK_STATE_STOP 6021
+#define QUESTION_BRICK_JUMP_SPEED 0.06f
 
 #define QUESTION_BRICK_ANI_SPINNING 0
 #define QUESTION_BRICK_ANI_STOP 1
@@ -19,7 +22,6 @@
 
 class CQuestionBrick : public CGameObject
 {
-	int currentState;
 	int tag_0; 
 public:
 	void SetTag(float tag, CGameObject* obj);

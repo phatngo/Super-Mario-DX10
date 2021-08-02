@@ -2,5 +2,17 @@
   Mario.cpp
 D:\school\game\phatngo_game\SuperMario\Game.h(89,28): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
 D:\school\game\phatngo_game\SuperMario\Game.h(90,28): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-D:\school\game\phatngo_game\SuperMario\Mario.cpp(200,23): warning C4018: '<': signed/unsigned mismatch
+  PiranhaPlant.cpp
+  PlayScence.cpp
+D:\school\game\phatngo_game\SuperMario\Game.h(89,28): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+D:\school\game\phatngo_game\SuperMario\Game.h(90,28): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(140,20): warning C4018: '<': signed/unsigned mismatch
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(163,20): warning C4018: '<': signed/unsigned mismatch
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(193,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(194,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(201,19): warning C4101: 'ani_set_of_obj': unreferenced local variable
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(367,50): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(375,20): warning C4018: '<': signed/unsigned mismatch
+D:\school\game\phatngo_game\SuperMario\PlayScence.cpp(392,20): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
   05-ScenceManager.vcxproj -> D:\school\game\phatngo_game\SuperMario\Debug\PhatNgo_SuperMarioBros3.exe

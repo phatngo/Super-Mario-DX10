@@ -6,12 +6,29 @@
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt, coObjects);
+	y += dy;
 }
 
 void CQuestionBrick::Render() {
-	int ani = QUESTION_BRICK_ANI_SPINNING;
-	if (currentState == QUESTION_BRICK_STATE_STOP) {
+	int ani = -1;
+	switch (this->state)
+	{
+	case QUESTION_BRICK_STATE_JUMPING:
 		ani = QUESTION_BRICK_ANI_STOP;
+		this->SetState(QUESTION_BRICK_STATE_FALLING);
+		break;
+	case QUESTION_BRICK_STATE_FALLING:
+		ani = QUESTION_BRICK_ANI_STOP;
+		this->SetState(QUESTION_BRICK_STATE_STOP);
+		break;
+	case QUESTION_BRICK_STATE_IDLE:
+		ani = QUESTION_BRICK_ANI_SPINNING;
+		break;
+	case QUESTION_BRICK_STATE_STOP:
+		ani = QUESTION_BRICK_ANI_STOP;
+		break;
+	default:
+		break;
 	}
 	animation_set->at(ani)->Render(x, y);
 }
@@ -25,16 +42,27 @@ void CQuestionBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 }
 
 CQuestionBrick::CQuestionBrick() {
-	SetState(QUESTION_BRICK_STATE_SPINNING);
+	SetState(QUESTION_BRICK_STATE_IDLE);
 }
 
 void CQuestionBrick::SetState(int state) {
-	if (state == QUESTION_BRICK_STATE_SPINNING) {
-		currentState = QUESTION_BRICK_STATE_SPINNING;
+	switch (state) {
+	case QUESTION_BRICK_STATE_JUMPING:
+		vy = -QUESTION_BRICK_JUMP_SPEED;
+		break;
+	case QUESTION_BRICK_STATE_FALLING:
+		vy = QUESTION_BRICK_JUMP_SPEED;
+		break;
+	case QUESTION_BRICK_STATE_IDLE:
+		vy = 0;
+		break;
+	case QUESTION_BRICK_STATE_STOP:
+		vy = 0;
+		break;
+	default:
+		break;
 	}
-	else if (state == QUESTION_BRICK_STATE_STOP) {
-		currentState = QUESTION_BRICK_STATE_STOP;
-	}
+	CGameObject::SetState(state);
 }
 
 void CQuestionBrick::SetTag(float tag, CGameObject* obj) {

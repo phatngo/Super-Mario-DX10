@@ -16,6 +16,7 @@
 #include "Switch.h"
 #include "Goomba.h"
 #include "Koopas.h"
+#include "PiranhaPlant.h"
 
 using namespace std;
 
@@ -264,6 +265,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case OBJECT_TYPE_BRICK_WITH_FLASH_ANIMATION:
 			obj = new CFlashAnimationBrick();
 			DebugOut(L"[INFO] Question Brick created!\n");
+		    break;
+		case OBJECT_TYPE_PIRANHA_PLANT:
+			obj = new CPiranhaPlant();
+			DebugOut(L"[INFO] Piranha Plant created!\n");
 			break;
 		default:
 			obj = new CBrick();
@@ -371,12 +376,11 @@ void CPlayScene::Render()
 		objects[i]->Render();
 		if (dynamic_cast<CGoomba*>(objects[i])&&objects[i]->GetState()==GOOMBA_STATE_DIE) {
 			objects.erase(objects.begin() + i);
-			//i--;
 		}
-		else if (dynamic_cast<CKoopas*>(objects[i]) && objects[i]->GetState() == KOOPAS_STATE_DIE) {
+		else if (dynamic_cast<CCoin*>(objects[i]) && objects[i]->GetState() == COIN_STATE_NON_EXIST) {
 			objects.erase(objects.begin() + i);
-			//i--;
 		}
+		
 	}
 }
 
