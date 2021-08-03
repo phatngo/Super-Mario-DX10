@@ -129,6 +129,9 @@
     <ClCompile Include="Switch.cpp">
       <Filter>Map Objects\Others</Filter>
     </ClCompile>
+    <ClCompile Include="FireBullet.cpp">
+      <Filter>Map Objects\Piranha</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -205,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="Switch.h">
       <Filter>Map Objects\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBullet.h">
+      <Filter>Map Objects\Piranha</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

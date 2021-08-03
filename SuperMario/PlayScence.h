@@ -39,8 +39,9 @@ public:
 	virtual void Unload();
 	virtual vector<LPGAMEOBJECT> GetSceneObjects();
 	virtual void  SetSceneObjects(vector<LPGAMEOBJECT> objects);
+	void AddObjects(CGameObject* gameObj) { this->objects.push_back(gameObj); }
 
-	CMario * GetPlayer() { return player; } 
+	virtual CMario * GetPlayer() { return player; } 
 
 	//friend class CPlayScenceKeyHandler;
 };

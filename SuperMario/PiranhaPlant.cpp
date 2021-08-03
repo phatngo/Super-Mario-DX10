@@ -25,7 +25,7 @@ void CPiranhaPlant::Render()
 	switch (state)
 	{
 	case PIRANHA_STATE_UP:
-		if (start_Y - y >= 31) {
+		if (start_Y - y >= PIRANHA_HIGHEST_DY) {
 			this->SetState(PIRANHA_STATE_DOWN);
 		}
 		break;

@@ -17,6 +17,7 @@
 #include "Goomba.h"
 #include "Koopas.h"
 #include "PiranhaPlant.h"
+#include "FirePiranhaPlant.h"
 
 using namespace std;
 
@@ -48,7 +49,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_BRICK_WITH_FLASH_ANIMATION	112
 #define OBJECT_TYPE_BLOCK 4
 #define OBJECT_TYPE_PIRANHA_PLANT 7
-#define OBJECT_TYPE_FIRE_PIRANHA_PLANT 7
+#define OBJECT_TYPE_FIRE_PIRANHA_PLANT 70
 #define OBJECT_TYPE_COIN 6
 
 
@@ -193,7 +194,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float x = atof(tokens[1].c_str());
 		float y = atof(tokens[2].c_str());
 		int ani_set_id = atoi(tokens[3].c_str());
-
+		
 		CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 
 		CGameObject* obj = NULL;
@@ -270,6 +271,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CPiranhaPlant();
 			DebugOut(L"[INFO] Piranha Plant created!\n");
 			break;
+		case OBJECT_TYPE_FIRE_PIRANHA_PLANT: {
+			int objTag = atoi(tokens[4].c_str());
+			obj = new CFirePiranhaPlant(objTag);
+			DebugOut(L"[INFO] Fire Piranha Plant created!\n");
+			break;
+		}
 		default:
 			obj = new CBrick();
 			DebugOut(L"[INFO] Other object created!\n");

@@ -75,6 +75,7 @@ public:
 	float GetStartX() { return start_X; }
 	float GetStartY() { return start_Y; }
 	int GetState() { return this->state; }
+	//virtual void SetTag (int objTag) = 0;
 
 	void RenderBoundingBox();
 

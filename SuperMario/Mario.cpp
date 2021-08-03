@@ -13,6 +13,8 @@
 #include "Coin.h"
 #include "Brick.h"
 #include "PiranhaPlant.h"
+#include "FirePiranhaPlant.h"
+#include "FireBullet.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -197,13 +199,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				}
 				coin->SetState(COIN_STATE_NON_EXIST);
 			}
-			else if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
-			CPiranhaPlant* piranhaPlant = dynamic_cast<CPiranhaPlant*>(e->obj);
-				//If mario is touchable
+			else if (dynamic_cast<CPiranhaPlant*>(e->obj)
+			|| dynamic_cast<CFirePiranhaPlant*>(e->obj)
+			|| dynamic_cast<CFireBullet*>(e->obj)) {
 				if (untouchable == 0)
 				{
-					//If koopas is not dead
-
 						//If mario is not in the big size
 						if (level > MARIO_LEVEL_SMALL)
 						{
@@ -223,7 +223,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			}
 		}
 	}
-
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }

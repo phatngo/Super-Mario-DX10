@@ -4,6 +4,7 @@
 #include "KeyEventHandler.h"
 #include <vector>
 #include "GameObject.h"
+#include "Mario.h"
 
 
 class CScene
@@ -23,6 +24,7 @@ public:
 	virtual void Render() = 0;
 	virtual vector<LPGAMEOBJECT> GetSceneObjects();
 	virtual void  SetSceneObjects(vector<LPGAMEOBJECT> objects)=0;
+	virtual CMario* GetPlayer() = 0;
 };
 typedef CScene * LPSCENE;
 
