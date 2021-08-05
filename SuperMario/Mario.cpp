@@ -15,6 +15,7 @@
 #include "PiranhaPlant.h"
 #include "FirePiranhaPlant.h"
 #include "FireBullet.h"
+#include "Mushroom.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -34,7 +35,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
-	
 	
 	// Simple fall down
 	vy += MARIO_GRAVITY*dt;
@@ -181,12 +181,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				//Mario stays under question brick
 				if (e->ny > 0)
 				{
+					if(e->obj->GetState()!= QUESTION_BRICK_STATE_STOP)
 						questionBrick->SetState(QUESTION_BRICK_STATE_JUMPING);	
-						//switch(questionBrick->getTag())
-
 				}
 			}
-			else if (dynamic_cast<CCoin*>(e->obj)) {
+			else if (dynamic_cast<CCoin*>(e->obj)) 
+			{
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
 				float l, t, r, b;
 				this->GetBoundingBox(l, t, r, b);

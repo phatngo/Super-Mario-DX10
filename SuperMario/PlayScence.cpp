@@ -237,29 +237,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			break;
 		case OBJECT_TYPE_QUESTION_BRICK:
 		{
-			obj = new CQuestionBrick();
-			//int tag = atoi(tokens[5].c_str());
-			/*switch (tag)
-			{
-			case COIN_TAG:
-				obj_of_questionBrick = new CCoin();
-				ani_set_of_obj = animation_sets->Get(COIN_ANI_SET);
-				obj_of_questionBrick->SetAnimationSet(ani_set_of_obj);
-			case MUSHROOM_TAG:
-				obj_of_questionBrick = new CMushroom();
-				ani_set_of_obj = animation_sets->Get(MUSHROOM_ANI_SET);
-				obj_of_questionBrick->SetAnimationSet(ani_set_of_obj);
-			case LEAF_TAG:
-				obj_of_questionBrick = new CLeaf();
-				ani_set_of_obj = animation_sets->Get(LEAF_ANI_SET);
-				obj_of_questionBrick->SetAnimationSet(ani_set_of_obj);
-			case SWITCH_TAG:
-				obj_of_questionBrick = new CSwitch();
-				ani_set_of_obj = animation_sets->Get(SWITCH_ANI_SET);
-				obj_of_questionBrick->SetAnimationSet(ani_set_of_obj);
-			default:
-				break;
-			}*/
+			int tag = atoi(tokens[5].c_str());
+			obj = new CQuestionBrick(tag);
 			DebugOut(L"[INFO] Question Brick created!\n");
 			break;
 		}

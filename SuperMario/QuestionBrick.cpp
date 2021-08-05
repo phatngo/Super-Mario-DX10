@@ -3,10 +3,15 @@
 #include "Coin.h"
 #include "Mushroom.h"
 #include "Switch.h"
+#include "Game.h"
+#include "PlayScence.h"
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt, coObjects);
-	y += dy;
+	if (state == QUESTION_BRICK_STATE_STOP)
+		y = start_Y;
+	else
+	    y += dy;
 }
 
 void CQuestionBrick::Render() {
@@ -41,14 +46,16 @@ void CQuestionBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = y + BRICK_BBOX_HEIGHT;
 }
 
-CQuestionBrick::CQuestionBrick() {
+CQuestionBrick::CQuestionBrick(int tag) {
 	SetState(QUESTION_BRICK_STATE_IDLE);
+	this->tag = tag;
 }
 
 void CQuestionBrick::SetState(int state) {
 	switch (state) {
 	case QUESTION_BRICK_STATE_JUMPING:
 		vy = -QUESTION_BRICK_JUMP_SPEED;
+		CreateObject();
 		break;
 	case QUESTION_BRICK_STATE_FALLING:
 		vy = QUESTION_BRICK_JUMP_SPEED;
@@ -65,24 +72,39 @@ void CQuestionBrick::SetState(int state) {
 	CGameObject::SetState(state);
 }
 
-void CQuestionBrick::SetTag(float tag, CGameObject* obj) {
-	this->tag_0 = tag;
-	switch (tag_0)
+void CQuestionBrick::CreateObject() {
+	switch (tag)
 	{
-	case COIN_TAG:
-		obj = new CCoin();
+	case COIN_TAG: 
+		CreateCoin();
 		break;
 	case MUSHROOM_TAG:
-		obj = new CMushroom();
-		break;
-	case LEAF_TAG:
-		obj = new CLeaf();
-		break;
-	case SWITCH_TAG:
-		obj = new CSwitch();
+		CreateMushroom();
 		break;
 	default:
 		break;
 	}
 }
+
+void CQuestionBrick::CreateCoin() {
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET tmp_ani_set = animation_sets->Get(COIN_ANI_SET_ID);
+	CCoin* coin = new CCoin(TAG_COIN_IN_BRICK);
+	coin->SetPosition(this->x, this->y);
+	coin->SetAnimationSet(tmp_ani_set);
+	scene->AddObjects(coin);
+}
+
+void CQuestionBrick::CreateMushroom() {
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET tmp_ani_set = animation_sets->Get(MUSHROOM_ANI_SET_ID);
+	CMushroom* mushroom = new CMushroom();
+	mushroom->SetPosition(this->x, this->y);
+	mushroom->SetAnimationSet(tmp_ani_set);
+	scene->AddObjects(mushroom);
+}
+
+
 

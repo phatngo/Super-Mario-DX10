@@ -22,13 +22,15 @@
 
 class CQuestionBrick : public CGameObject
 {
-	int tag_0; 
+	int tag; 
 public:
-	void SetTag(float tag, CGameObject* obj);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
-	CQuestionBrick();
+	CQuestionBrick(int tag);
 	void SetState(int state);
+	void CreateObject();
+	void CreateCoin();
+	void CreateMushroom();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
 #pragma once

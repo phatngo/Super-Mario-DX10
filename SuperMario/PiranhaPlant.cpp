@@ -21,7 +21,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CPiranhaPlant::Render()
 {
-	int ani = PIRANHA_ANI_A;
+	int ani = PIRANHA_ANI_NORMAL;
 	switch (state)
 	{
 	case PIRANHA_STATE_UP:
