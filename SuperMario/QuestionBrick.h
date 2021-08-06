@@ -31,6 +31,7 @@ public:
 	void CreateObject();
 	void CreateCoin();
 	void CreateMushroom();
+	void CreateLeaf();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
 #pragma once

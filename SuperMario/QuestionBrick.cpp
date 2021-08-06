@@ -81,6 +81,9 @@ void CQuestionBrick::CreateObject() {
 	case MUSHROOM_TAG:
 		CreateMushroom();
 		break;
+	case LEAF_TAG:
+		CreateLeaf();
+		break;
 	default:
 		break;
 	}
@@ -104,6 +107,16 @@ void CQuestionBrick::CreateMushroom() {
 	mushroom->SetPosition(this->x, this->y);
 	mushroom->SetAnimationSet(tmp_ani_set);
 	scene->AddObjects(mushroom);
+}
+
+void CQuestionBrick::CreateLeaf() {
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET tmp_ani_set = animation_sets->Get(LEAF_ANI_SET_ID);
+	CLeaf* leaf = new CLeaf();
+	leaf->SetPosition(this->x, this->y);
+	leaf->SetAnimationSet(tmp_ani_set);
+	scene->AddObjects(leaf);
 }
 
 

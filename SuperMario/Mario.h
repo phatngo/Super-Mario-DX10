@@ -13,13 +13,13 @@
 #define MARIO_STATE_JUMP			300
 #define MARIO_STATE_DIE				400
 
-#define MARIO_ANI_BIG_IDLE_RIGHT		0
-#define MARIO_ANI_BIG_IDLE_LEFT			1
+#define MARIO_ANI_BIG_IDLE_RIGHT		14
+#define MARIO_ANI_BIG_IDLE_LEFT			22
 #define MARIO_ANI_SMALL_IDLE_RIGHT		0
 #define MARIO_ANI_SMALL_IDLE_LEFT	    7
 
-#define MARIO_ANI_BIG_WALKING_RIGHT			4
-#define MARIO_ANI_BIG_WALKING_LEFT			5
+#define MARIO_ANI_BIG_WALKING_RIGHT			15
+#define MARIO_ANI_BIG_WALKING_LEFT			23
 #define MARIO_ANI_SMALL_WALKING_RIGHT		1
 #define MARIO_ANI_SMALL_WALKING_LEFT		8
 
@@ -28,11 +28,11 @@
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 
-#define MARIO_BIG_BBOX_WIDTH  15
+#define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 27
 
-#define MARIO_SMALL_BBOX_WIDTH  13
-#define MARIO_SMALL_BBOX_HEIGHT 15
+#define MARIO_SMALL_BBOX_WIDTH  12
+#define MARIO_SMALL_BBOX_HEIGHT 16
 
 #define MARIO_UNTOUCHABLE_TIME 5000
 
@@ -42,7 +42,6 @@ class CMario : public CGameObject
 	int level;
 	int untouchable;
 	DWORD untouchable_start;
-	float noCollisionDy = -MARIO_STATE_JUMP;
 	DWORD marioDT;
 
 	float start_x;			// initial position of Mario at scene

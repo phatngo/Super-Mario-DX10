@@ -61,7 +61,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 	{		
 		x += dx; 
 		y += dy;
-
 	}
 	else
 	{
@@ -188,15 +187,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			else if (dynamic_cast<CCoin*>(e->obj)) 
 			{
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
-				float l, t, r, b;
-				this->GetBoundingBox(l, t, r, b);
-				float dy1 = y0 - y;
-				if (dy1 > (-MARIO_JUMP_SPEED_Y * dt)) {
-					DebugOut(L"[INFO] noCollisionDy: %f \n", noCollisionDy);
-					float dy2 = (-MARIO_JUMP_SPEED_Y * dt) + dy1;
-					float vy2 = dy2 / dt;
-					vy = vy2;
-				}
+				vy = -MARIO_JUMP_SPEED_Y/2;
 				coin->SetState(COIN_STATE_NON_EXIST);
 			}
 			else if (dynamic_cast<CPiranhaPlant*>(e->obj)
@@ -215,6 +206,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 							//Makes mario die
 							SetState(MARIO_STATE_DIE);	
 				}
+            }
+
+			else if (dynamic_cast<CMushroom*>(e->obj)) 
+            {
+			CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
+				if (this->level < MARIO_LEVEL_BIG) {
+					this->level = MARIO_LEVEL_BIG;
+
+					//Change the rendering y to the y of big mario
+					y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
+				}
+				mushroom->SetState(MUSHROOM_STATE_NOT_EXIST);
             }
 			else if (dynamic_cast<CPortal *>(e->obj))
 			{
@@ -237,8 +240,10 @@ void CMario::Render()
 	{
 		if (vx == 0)
 		{
-			if (nx>0) ani = MARIO_ANI_BIG_IDLE_RIGHT;
-			else ani = MARIO_ANI_BIG_IDLE_LEFT;
+			if (nx>0) 
+				ani = MARIO_ANI_BIG_IDLE_RIGHT;
+			else 
+				ani = MARIO_ANI_BIG_IDLE_LEFT;
 		}
 		else if (vx > 0) 
 			ani = MARIO_ANI_BIG_WALKING_RIGHT; 

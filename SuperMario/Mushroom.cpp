@@ -82,6 +82,7 @@ void CMushroom::Render()
 	default:
 		break;
 	}
+	RenderBoundingBox();
 }
 
 void CMushroom::SetState(int state)
@@ -100,6 +101,7 @@ void CMushroom::SetState(int state)
 	case MUSHROOM_STATE_NOT_EXIST:
 		vx = 0;
 		vy = 0;
+		break;
 	default:
 		break;
 	}
