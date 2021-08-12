@@ -4,10 +4,13 @@
 #include "Mario.h"
 #include "QuestionBrick.h"
 #include "Utils.h"
+#include "PlayScence.h"
+#include "Game.h"
 
 CMushroom::CMushroom()
 {
 	this->SetState(MUSHROOM_STATE_IDLE);
+	DebugOut(L"[info] Mushroom nx: %d", nx);
 }
 
 void CMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -50,7 +53,8 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				LPCOLLISIONEVENT e = coEventsResult[i];
 				float mLeft, mTop, mRight, mBottom;
 				GetBoundingBox(mLeft, mTop, mRight, mBottom);
-				if (dynamic_cast<CBrick*>(e->obj)||dynamic_cast<CQuestionBrick*>(e->obj))
+				if (dynamic_cast<CBrick*>(e->obj)
+					||dynamic_cast<CQuestionBrick*>(e->obj))
 				{
 					if (e->ny != 0)
 					{
@@ -87,6 +91,8 @@ void CMushroom::Render()
 
 void CMushroom::SetState(int state)
 {
+	CMario* mario = {};
+	mario = ((CPlayScene*)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	switch (state)
 	{
 	case MUSHROOM_STATE_IDLE:
@@ -94,11 +100,13 @@ void CMushroom::SetState(int state)
 		vx = 0;
 		break;
 	case MUSHROOM_STATE_MOVING:
-		vx = -MUSHROOM_X_VELOCITY;
+	{
+		vx = mario->nx*MUSHROOM_X_VELOCITY;
 		ay = MUSHROOM_GRAVITY;
 		vy = 0;
 		break;
-	case MUSHROOM_STATE_NOT_EXIST:
+	}
+	case MUSHROOM_STATE_NON_EXIST:
 		vx = 0;
 		vy = 0;
 		break;

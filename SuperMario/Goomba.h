@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Utils.h"
 
-#define GOOMBA_WALKING_SPEED 0.06f
+#define GOOMBA_WALKING_SPEED 0.04f
 #define GOOMBA_GRAVITY 0.001f
 #define GOOMBA_DIE_DEFLECT_SPEED	0.35f
 

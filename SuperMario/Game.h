@@ -86,8 +86,8 @@ public:
 
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 	//temporary
-	int GetCamPosX() { return cam_x;}
-	int GetCamPosY() { return cam_y; }
+	float GetCamPosX() { return cam_x;}
+	float GetCamPosY() { return cam_y; }
 
 	static CGame * GetInstance();
 

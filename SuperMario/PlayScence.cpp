@@ -362,7 +362,8 @@ void CPlayScene::Render()
 		objects[i]->Render();
 		if ((dynamic_cast<CGoomba*>(objects[i])&&objects[i]->GetState()==GOOMBA_STATE_DIE)
 			||(dynamic_cast<CCoin*>(objects[i]) && objects[i]->GetState() == COIN_STATE_NON_EXIST)
-			||(dynamic_cast<CMushroom*>(objects[i]) && objects[i]->GetState() == MUSHROOM_STATE_NOT_EXIST)) {
+			||(dynamic_cast<CMushroom*>(objects[i]) && objects[i]->GetState() == MUSHROOM_STATE_NON_EXIST)
+			||(dynamic_cast<CLeaf*>(objects[i]) && objects[i]->GetState() == LEAF_STATE_NON_EXIST)) {
 			objects.erase(objects.begin() + i);
 		}
 	}

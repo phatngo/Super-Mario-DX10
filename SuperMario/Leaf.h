@@ -15,6 +15,7 @@
 #define LEAF_STATE_FLY_DOWN_LEFT 300
 #define LEAF_STATE_FLY_DOWN_RIGHT 200
 #define LEAF_STATE_FLY_UP 100
+#define LEAF_STATE_NON_EXIST 400
 
 class CLeaf : public CGameObject
 {

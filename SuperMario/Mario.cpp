@@ -16,6 +16,7 @@
 #include "FirePiranhaPlant.h"
 #include "FireBullet.h"
 #include "Mushroom.h"
+#include "Leaf.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -81,10 +82,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty*dy + ny*0.4f;
 		
-
 		if (nx!=0) vx = 0;
 		if (ny!=0) vy = 0;
-
 
 		//
 		// Collision logic with other objects
@@ -115,8 +114,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 						{
 							if (level > MARIO_LEVEL_SMALL)
 							{
-								level = MARIO_LEVEL_SMALL;
-								StartUntouchable();
+								if (level == MARIO_LEVEL_TAIL) 
+									level = MARIO_LEVEL_BIG;
+								else
+								    level = MARIO_LEVEL_SMALL;
+								    StartUntouchable();
 							}
 							else 
 								SetState(MARIO_STATE_DIE);
@@ -148,8 +150,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 							//If mario is not in the big size
 							if (level > MARIO_LEVEL_SMALL)
 							{
-								//Makes mario become small
-								level = MARIO_LEVEL_SMALL;
+								if (level == MARIO_LEVEL_TAIL)
+									level = MARIO_LEVEL_BIG;
+								else
+									level = MARIO_LEVEL_SMALL;
 								StartUntouchable();
 							}
 							else
@@ -196,12 +200,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				if (untouchable == 0)
 				{
 						//If mario is not in the big size
-						if (level > MARIO_LEVEL_SMALL)
-						{
-							//Makes mario become small
+					if (level > MARIO_LEVEL_SMALL)
+					{
+						if (level == MARIO_LEVEL_TAIL)
+							level = MARIO_LEVEL_BIG;
+						else
 							level = MARIO_LEVEL_SMALL;
-							StartUntouchable();
-						}
+						StartUntouchable();
+					}
 						else
 							//Makes mario die
 							SetState(MARIO_STATE_DIE);	
@@ -211,14 +217,42 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			else if (dynamic_cast<CMushroom*>(e->obj)) 
             {
 			CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
-				if (this->level < MARIO_LEVEL_BIG) {
-					this->level = MARIO_LEVEL_BIG;
-
-					//Change the rendering y to the y of big mario
-					y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
+			mushroom->SetState(MUSHROOM_STATE_NON_EXIST);
+			if (e->ny > 0) {
+				//Change the rendering y to the y of big mario
+				y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
+			}
+			if (this->level < MARIO_LEVEL_BIG) {
+				//Change the rendering y to the y of big mario
+				y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
+				this->level = MARIO_LEVEL_TRANSFORM_BIG;
+				this->transformTimer.Start();
+			}
+			}
+			else if (dynamic_cast<CLeaf*>(e->obj)) {
+			CLeaf* leaf = dynamic_cast<CLeaf*>(e->obj);
+			leaf->SetState(LEAF_STATE_NON_EXIST);
+			if (e->ny > 0) {
+				//Change the rendering y to the y of big mario
+				if (this->level == MARIO_LEVEL_SMALL) {
+					y -= (MARIO_TAIL_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
 				}
-				mushroom->SetState(MUSHROOM_STATE_NOT_EXIST);
-            }
+				else {
+					y -= (MARIO_TAIL_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT);
+				}
+			}
+			if (this->level < MARIO_LEVEL_TAIL) 
+			{
+				if (this->level == MARIO_LEVEL_SMALL) {
+					y -= (MARIO_TAIL_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
+				}
+				else {
+					y -= (MARIO_TAIL_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT);
+				}
+				this->level = MARIO_LEVEL_TRANSFORM_TAIL;
+				this->transformTimer.Start();
+			}
+			}
 			else if (dynamic_cast<CPortal *>(e->obj))
 			{
 				CPortal *p = dynamic_cast<CPortal *>(e->obj);
@@ -233,34 +267,70 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 void CMario::Render()
 {
 	int ani = -1;
-	if (state == MARIO_STATE_DIE)
+	if (state == MARIO_STATE_DIE) 
+	{
 		ani = MARIO_ANI_DIE;
-	else
-	if (level == MARIO_LEVEL_BIG)
-	{
-		if (vx == 0)
-		{
-			if (nx>0) 
-				ani = MARIO_ANI_BIG_IDLE_RIGHT;
-			else 
-				ani = MARIO_ANI_BIG_IDLE_LEFT;
-		}
-		else if (vx > 0) 
-			ani = MARIO_ANI_BIG_WALKING_RIGHT; 
-		else ani = MARIO_ANI_BIG_WALKING_LEFT;
 	}
-	else if (level == MARIO_LEVEL_SMALL)
-	{
-		if (vx == 0)
+	else {
+		if(level == MARIO_LEVEL_TRANSFORM_BIG)
 		{
-			if (nx>0) ani = MARIO_ANI_SMALL_IDLE_RIGHT;
-			else ani = MARIO_ANI_SMALL_IDLE_LEFT;
+			if (nx > 0) {
+				ani = MARIO_ANI_TRANSFORM_BIG_RIGHT;
+			}
+			else {
+				ani = MARIO_ANI_TRANSFORM_BIG_LEFT;
+			}
+			if (transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME && transformTimer.IsStarted()) {
+				level = MARIO_LEVEL_BIG;
+				transformTimer.Reset();
+			}
 		}
-		else if (vx > 0)
-			ani = MARIO_ANI_SMALL_WALKING_RIGHT;
-		else ani = MARIO_ANI_SMALL_WALKING_LEFT;
+		else if(level == MARIO_LEVEL_TRANSFORM_TAIL)
+		{
+			ani = MARIO_ANI_TRANSFORM_TAIL;
+			if (transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME && transformTimer.IsStarted()) {
+				level = MARIO_LEVEL_TAIL;
+				transformTimer.Reset();
+			}
+		}
+		else if (level == MARIO_LEVEL_TAIL)
+		{
+			if (vx == 0)
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_TAIL_IDLE_RIGHT;
+				else
+					ani = MARIO_ANI_TAIL_IDLE_LEFT;
+			}
+			else if (vx > 0)
+				ani = MARIO_ANI_TAIL_WALKING_RIGHT;
+			else ani = MARIO_ANI_TAIL_WALKING_LEFT;
+		}
+		else if (level == MARIO_LEVEL_BIG)
+		{
+			if (vx == 0)
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_BIG_IDLE_RIGHT;
+				else
+					ani = MARIO_ANI_BIG_IDLE_LEFT;
+			}
+			else if (vx > 0)
+				ani = MARIO_ANI_BIG_WALKING_RIGHT;
+			else ani = MARIO_ANI_BIG_WALKING_LEFT;
+		}
+		else if (level == MARIO_LEVEL_SMALL)
+		{
+			if (vx == 0)
+			{
+				if (nx > 0) ani = MARIO_ANI_SMALL_IDLE_RIGHT;
+				else ani = MARIO_ANI_SMALL_IDLE_LEFT;
+			}
+			else if (vx > 0)
+				ani = MARIO_ANI_SMALL_WALKING_RIGHT;
+			else ani = MARIO_ANI_SMALL_WALKING_LEFT;
+		}
 	}
-
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
@@ -299,10 +369,15 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	left = x;
 	top = y; 
 
-	if (level==MARIO_LEVEL_BIG)
+	if (level==MARIO_LEVEL_BIG || level==MARIO_LEVEL_TRANSFORM_BIG)
 	{
 		right = x + MARIO_BIG_BBOX_WIDTH;
 		bottom = y + MARIO_BIG_BBOX_HEIGHT;
+	}
+	else if (level == MARIO_LEVEL_TAIL || level==MARIO_LEVEL_TRANSFORM_TAIL)
+	{
+		right = x + MARIO_TAIL_BBOX_WIDTH;
+		bottom = y + MARIO_TAIL_BBOX_HEIGHT;
 	}
 	else
 	{

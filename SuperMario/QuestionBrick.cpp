@@ -54,9 +54,11 @@ CQuestionBrick::CQuestionBrick(int tag) {
 void CQuestionBrick::SetState(int state) {
 	switch (state) {
 	case QUESTION_BRICK_STATE_JUMPING:
+	{
 		vy = -QUESTION_BRICK_JUMP_SPEED;
 		CreateObject();
 		break;
+	}
 	case QUESTION_BRICK_STATE_FALLING:
 		vy = QUESTION_BRICK_JUMP_SPEED;
 		break;
