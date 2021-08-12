@@ -10,7 +10,6 @@
 CMushroom::CMushroom()
 {
 	this->SetState(MUSHROOM_STATE_IDLE);
-	DebugOut(L"[info] Mushroom nx: %d", nx);
 }
 
 void CMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)

@@ -360,7 +360,7 @@ void CPlayScene::Render()
 	player->Render();
 	for (int i = 0; i < objects.size(); i++) {
 		objects[i]->Render();
-		if ((dynamic_cast<CGoomba*>(objects[i])&&objects[i]->GetState()==GOOMBA_STATE_DIE)
+		if ((dynamic_cast<CGoomba*>(objects[i])&&objects[i]->GetState()== GOOMBA_STATE_NON_EXIST)
 			||(dynamic_cast<CCoin*>(objects[i]) && objects[i]->GetState() == COIN_STATE_NON_EXIST)
 			||(dynamic_cast<CMushroom*>(objects[i]) && objects[i]->GetState() == MUSHROOM_STATE_NON_EXIST)
 			||(dynamic_cast<CLeaf*>(objects[i]) && objects[i]->GetState() == LEAF_STATE_NON_EXIST)) {

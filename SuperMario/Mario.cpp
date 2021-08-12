@@ -114,10 +114,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 						{
 							if (level > MARIO_LEVEL_SMALL)
 							{
-								if (level == MARIO_LEVEL_TAIL) 
-									level = MARIO_LEVEL_BIG;
-								else
-								    level = MARIO_LEVEL_SMALL;
+								if (level == MARIO_LEVEL_TAIL) {
+									level = MARIO_LEVEL_TRANSFORM_BIG;
+									this->transformTimer.Start();
+								}
+								else {
+									level = MARIO_LEVEL_TRANSFORM_SMALL;
+									this->transformTimer.Start();
+								}
 								    StartUntouchable();
 							}
 							else 
@@ -202,10 +206,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 						//If mario is not in the big size
 					if (level > MARIO_LEVEL_SMALL)
 					{
-						if (level == MARIO_LEVEL_TAIL)
-							level = MARIO_LEVEL_BIG;
-						else
-							level = MARIO_LEVEL_SMALL;
+						if (level == MARIO_LEVEL_TAIL) {
+							level = MARIO_LEVEL_TRANSFORM_BIG;
+							this->transformTimer.Start();
+						}
+						else {
+							level = MARIO_LEVEL_TRANSFORM_SMALL;
+							this->transformTimer.Start();
+						}
 						StartUntouchable();
 					}
 						else
@@ -282,6 +290,19 @@ void CMario::Render()
 			}
 			if (transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME && transformTimer.IsStarted()) {
 				level = MARIO_LEVEL_BIG;
+				transformTimer.Reset();
+			}
+		}
+		else if (level == MARIO_LEVEL_TRANSFORM_SMALL)
+		{
+			if (nx > 0) {
+				ani = MARIO_ANI_TRANSFORM_BIG_RIGHT;
+			}
+			else {
+				ani = MARIO_ANI_TRANSFORM_BIG_LEFT;
+			}
+			if (transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME && transformTimer.IsStarted()) {
+				level = MARIO_LEVEL_SMALL;
 				transformTimer.Reset();
 			}
 		}
@@ -369,7 +390,9 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	left = x;
 	top = y; 
 
-	if (level==MARIO_LEVEL_BIG || level==MARIO_LEVEL_TRANSFORM_BIG)
+	if (level==MARIO_LEVEL_BIG 
+	|| level==MARIO_LEVEL_TRANSFORM_BIG 
+	|| level==MARIO_LEVEL_TRANSFORM_SMALL)
 	{
 		right = x + MARIO_BIG_BBOX_WIDTH;
 		bottom = y + MARIO_BIG_BBOX_HEIGHT;

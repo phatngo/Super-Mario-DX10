@@ -23,6 +23,8 @@
 class CQuestionBrick : public CGameObject
 {
 	int tag; 
+	bool isObjectCreated;
+
 public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

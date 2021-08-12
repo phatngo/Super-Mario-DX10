@@ -49,6 +49,7 @@ void CQuestionBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 CQuestionBrick::CQuestionBrick(int tag) {
 	SetState(QUESTION_BRICK_STATE_IDLE);
 	this->tag = tag;
+	isObjectCreated = false;
 }
 
 void CQuestionBrick::SetState(int state) {
@@ -75,19 +76,22 @@ void CQuestionBrick::SetState(int state) {
 }
 
 void CQuestionBrick::CreateObject() {
-	switch (tag)
-	{
-	case COIN_TAG: 
-		CreateCoin();
-		break;
-	case MUSHROOM_TAG:
-		CreateMushroom();
-		break;
-	case LEAF_TAG:
-		CreateLeaf();
-		break;
-	default:
-		break;
+	if (!isObjectCreated) {
+		switch (tag)
+		{
+		case COIN_TAG:
+			CreateCoin();
+			break;
+		case MUSHROOM_TAG:
+			CreateMushroom();
+			break;
+		case LEAF_TAG:
+			CreateLeaf();
+			break;
+		default:
+			break;
+		}
+		isObjectCreated = true;
 	}
 }
 
