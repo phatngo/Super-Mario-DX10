@@ -69,28 +69,32 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 		float rdx = 0; 
 		float rdy = 0;
 
-		float y0 = y;
-		float x0 = x;
-
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 		//DebugOut(L"[INFO] e1 is goomba: %d \n", dynamic_cast<CGoomba*>(e1->obj) ? 1 : 0);
 		// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
-		if (rdx != 0 && rdx!=dx)
-			x += nx*abs(rdx); 
+		/*if (rdx != 0 && rdx != dx)
+			x += nx*abs(rdx);*/ 
 		// block every object first!
-		x += min_tx * dx + nx * 0.4f;
-		y += min_ty*dy + ny*0.4f;
-		
-		if (nx!=0) vx = 0;
-		if (ny!=0) vy = 0;
+		float y0 = y;
+		float x0 = x;
 
+		x = x0 + min_tx * dx + nx * PUSHBACK;
+		y = y0 + min_ty * dy + ny * PUSHBACK;
+		
+		if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+		
 		//
 		// Collision logic with other objects
 		//
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
+			float oLeft, oTop, oRight, oBottom;			
+			float mLeft, mTop, mRight, mBottom;
+			GetBoundingBox(mLeft, mTop, mRight, mBottom);
+			e->obj->GetBoundingBox(oLeft, oTop, oRight, oBottom);
 
 			if (dynamic_cast<CGoomba *>(e->obj)) // if e->obj is Goomba 
 			{
@@ -170,16 +174,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			else if (dynamic_cast<CBlock*>(e->obj)) 
 			{
 				CBlock* block = dynamic_cast<CBlock*>(e->obj);
-				if (e->ny > 0)
+				float bTop, bLeft, bRight, bBottom;
+				block->GetBoundingBox(bLeft, bTop, bRight, bBottom);
+				if (e->nx != 0 && ceil(mBottom) != oTop) {
+					x = x0 + dx;
+				}
+				if (e->ny < 0) {
+					vy = 0;
+				}
+				if (e->ny > 0) 
 				{
-					//y -= (min_ty * dy + ny * 0.4f);
-					float l, t, r, b;
-					block->GetBoundingBox(l, t, r, b);
-
-					if((y+dy)<b && (y+dy)<t){
-						y += dy;
-						vy = -MARIO_JUMP_DEFLECT_SPEED;
-					}
+					y += dy;
+					vy = -MARIO_JUMP_DEFLECT_SPEED;
 				}
 			}
 			else if (dynamic_cast<CQuestionBrick*>(e->obj)) // if e->obj is Quesion Brick
@@ -192,7 +198,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 						questionBrick->SetState(QUESTION_BRICK_STATE_JUMPING);	
 				}
 			}
-			else if (dynamic_cast<CCoin*>(e->obj)) 
+			else if (dynamic_cast<CCoin*>(e->obj))
 			{
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
 				vy = -MARIO_JUMP_SPEED_Y/2;

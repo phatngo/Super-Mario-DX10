@@ -15,6 +15,8 @@
 
 #define COIN_ANI_SET_ID 6
 
+#define COIN_ANI_GENERAL 0
+
 #define TAG_COIN_IN_BRICK 100
 
 class CCoin : public CGameObject
@@ -23,6 +25,7 @@ class CCoin : public CGameObject
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	int tag = 0;
+	bool isAppear;
 public:
 	CCoin();
 	CCoin(int tag);

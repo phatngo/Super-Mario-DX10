@@ -1,6 +1,5 @@
 #include "Mushroom.h"
 #include "Brick.h"
-#include "Game.h"
 #include "Mario.h"
 #include "QuestionBrick.h"
 #include "Utils.h"
@@ -42,8 +41,8 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			float rdy = 0;
 			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
-			x += min_tx * dx + nx * 0.4f;
-			y += min_ty * dy + ny * 0.4f;
+			x += min_tx * dx + nx * PUSHBACK;
+			y += min_ty * dy + ny * PUSHBACK;
 
 			if (ny != 0) vy = 0;
 

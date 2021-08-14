@@ -11,6 +11,7 @@
 using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
+#define PUSHBACK 0.4f
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;
@@ -99,6 +100,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }
+	virtual bool isColliding(float friend_left, float friend_top, float friend_right, float friend_bottom);
 
 
 	~CGameObject();

@@ -1,7 +1,13 @@
 #include "Coin.h"
+#include "Mario.h"
+#include "Utils.h"
+#include "Game.h"
+#include "PlayScence.h"
+
 CCoin::CCoin()
 {
 	this->SetState(COIN_STATE_EXIST);
+	isAppear = true;
 }
 
 CCoin::CCoin(int tag)
@@ -12,16 +18,17 @@ CCoin::CCoin(int tag)
 
 void CCoin::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
-	top = y;
-	right = x + COIN_BBOX_WIDTH;
-	bottom = y + COIN_BBOX_HEIGHT;
+	
+		left = x;
+		top = y;
+		right = x + COIN_BBOX_WIDTH;
+		bottom = y + COIN_BBOX_HEIGHT;
+
 }
 
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt, coObjects);
-	if (tag == TAG_COIN_IN_BRICK)
+	    CGameObject::Update(dt, coObjects);
 		y += dy;
 }
 
@@ -34,21 +41,19 @@ void CCoin::Render()
 			if (start_Y - y >= COIN_JUMP_MAX_DY) {
 				this->SetState(COIN_STATE_FALLING);
 			}
-			animation_set->at(0)->Render(x, y);
-			RenderBoundingBox();
 			break;
 		case COIN_STATE_FALLING:
 			if (start_Y - y <= COIN_JUMP_DISAPPEAR_DY) {
 				this->SetState(COIN_STATE_NON_EXIST);
 			}
-			animation_set->at(0)->Render(x, y);
-			RenderBoundingBox();
 		default:
 			break;
 		}
+		animation_set->at(COIN_ANI_GENERAL)->Render(x, y);
+		RenderBoundingBox();
 	}
-	else if (state == COIN_STATE_EXIST) {
-		animation_set->at(0)->Render(x, y);
+	else if (this->state == COIN_STATE_EXIST) {
+		animation_set->at(COIN_ANI_GENERAL)->Render(x, y);
 		RenderBoundingBox();
 	}
 }
@@ -70,5 +75,4 @@ void CCoin::SetState(int state)
 		break;
 	}
 	CGameObject::SetState(state);
-	
 }
