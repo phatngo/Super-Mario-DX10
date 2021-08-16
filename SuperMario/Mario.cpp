@@ -1,10 +1,9 @@
 #include <algorithm>
 #include <assert.h>
-#include "Utils.h"
 
+#include "Utils.h"
 #include "Mario.h"
 #include "Game.h"
-
 #include "Goomba.h"
 #include "Koopas.h"
 #include "Portal.h"
@@ -104,9 +103,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				// jump on top >> kill Goomba and deflect a bit 
 				if (e->ny < 0)
 				{
-					if (goomba->GetState()!= GOOMBA_STATE_DIE)
-					{
-						goomba->SetState(GOOMBA_STATE_DIE);
+					if(goomba->GetTag()==GOOMBA_TAG_YELLOW){
+						if (goomba->GetState() != GOOMBA_STATE_DIE)
+						{
+								goomba->SetState(GOOMBA_STATE_DIE);
+								vy = -MARIO_JUMP_DEFLECT_SPEED;
+						}
+					}
+					else {
+						if (goomba->GetState() != GOOMBA_STATE_RED_WALKING && goomba->GetState()!= GOOMBA_STATE_RED_DIE) {
+							 goomba->SetState(GOOMBA_STATE_RED_WALKING);
+						}
+						else if (goomba->GetState() == GOOMBA_STATE_RED_WALKING) {
+							 goomba->SetState(GOOMBA_STATE_RED_DIE);
+						}
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
 				}

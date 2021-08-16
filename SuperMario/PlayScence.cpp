@@ -227,9 +227,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			break;
 		case OBJECT_TYPE_GOOMBA: 
 		{
-			int tag = atoi(tokens[5].c_str());
+			int tag = atoi(tokens[4].c_str());
 			obj = new CGoomba(tag);
-			DebugOut(L"[INFO] Goomba created!\n");
+			DebugOut(L"[INFO] Goomba created! \n");
 			break;
 		}
 		case OBJECT_TYPE_KOOPAS: 
