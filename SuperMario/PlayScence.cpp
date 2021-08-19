@@ -232,10 +232,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[INFO] Goomba created! \n");
 			break;
 		}
-		case OBJECT_TYPE_KOOPAS: 
-			obj = new CKoopas(); 
-			DebugOut(L"[INFO] Koopas created!\n"); 
+		case OBJECT_TYPE_KOOPAS:
+		{
+			int tag = atoi(tokens[4].c_str());
+			obj = new CKoopas(tag);
+			DebugOut(L"[INFO] Koopas created!\n");
 			break;
+		}
 		case OBJECT_TYPE_QUESTION_BRICK:
 		{
 			int tag = atoi(tokens[5].c_str());
@@ -268,11 +271,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 		obj->SetAnimationSet(ani_set);
 		objects.push_back(obj);
-
-		if (obj_of_questionBrick != NULL) {
-			obj_of_questionBrick->SetPosition(x, y);
-			objects.push_back(obj_of_questionBrick);
-		}
 	}
 	f.close();
 }
