@@ -9,6 +9,9 @@
 
 
 using namespace std;
+#define STATIC	0
+#define MOVING	1
+#define IGNORE_DEFINE	2
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
 #define PUSHBACK 0.4f
@@ -46,6 +49,7 @@ struct CCollisionEvent
 
 class CGameObject
 {
+
 public:
 
 	float x; 
@@ -59,7 +63,8 @@ public:
 	float ay = 0;
 	float vx=0;
 	float vy=0;
-
+	int tag;
+	int type;
 	int nx;	 
 
 	int state;
@@ -76,9 +81,11 @@ public:
 	float GetStartX() { return start_X; }
 	float GetStartY() { return start_Y; }
 	int GetState() { return this->state; }
+	void SetTag(int tag) { this->tag = tag; }
+	void SetType(int type) { this->type = type; }
 	//virtual void SetTag (int objTag) = 0;
 
-	void RenderBoundingBox();
+	void RenderBoundingBox(int alpha = 32);
 
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
 

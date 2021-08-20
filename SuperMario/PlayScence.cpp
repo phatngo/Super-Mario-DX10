@@ -232,10 +232,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[INFO] Goomba created! \n");
 			break;
 		}
-		case OBJECT_TYPE_KOOPAS: 
-			obj = new CKoopas(); 
-			DebugOut(L"[INFO] Koopas created!\n"); 
-			break;
+		case OBJECT_TYPE_KOOPAS: {
+			int tag = (int)atof(tokens[4].c_str());
+			obj = new CKoopas();
+			obj->SetTag(tag);
+			obj->SetType(MOVING);
+			DebugOut(L"[INFO] Koopas created!\n");
+			break; 
+		}
 		case OBJECT_TYPE_QUESTION_BRICK:
 		{
 			int tag = atoi(tokens[5].c_str());
