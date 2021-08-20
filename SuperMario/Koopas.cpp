@@ -198,7 +198,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						vx = 0;
 					if (tag == KOOPAS_RED && state == KOOPAS_STATE_WALKING)
 					{
-						DebugOut(L"aaa \n");
 						if (this->nx > 0 && x >= e->obj->x + KOOPAS_TURN_DIFF)
 							if (CalTurnable(e->obj, coObjects))
 							{
