@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "Timer.h"
 
-#define KOOPAS_WALKING_SPEED			0.03f
+#define KOOPAS_WALKING_SPEED			0.02f
 #define KOOPAS_PARA_WALKING_SPEED		0.035f
 #define KOOPAS_JUMP_SPEED				0.35f
 #define KOOPAS_RED_SPEED				0.03f
@@ -59,7 +59,7 @@ public:
 	bool CanPullBack = false;
 	float start_x = 0, start_y = 0;
 	int start_tag = 0;
-	CKoopas();
+	CKoopas(int tag);
 	void SetIsHold(bool m) { isHold = m; };
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();

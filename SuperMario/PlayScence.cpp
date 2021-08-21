@@ -194,6 +194,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float x = atof(tokens[1].c_str());
 		float y = atof(tokens[2].c_str());
 		int ani_set_id = atoi(tokens[3].c_str());
+
+		int tag = -1;
+		int objectInsideTag = -1;
+
+		if (tokens.size() > 4)
+			tag = atoi(tokens[4].c_str());
+
+		if (tokens.size() > 5)
+			objectInsideTag = atoi(tokens[5].c_str());
 		
 		CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 
@@ -211,71 +220,58 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			}
 			obj = new CMario(x, y);
 			player = (CMario*)obj;
-			DebugOut(L"[INFO] Player object created!\n");
 			break;
 		case OBJECT_TYPE_BRICK:
 			obj = new CBrick();
-			DebugOut(L"[INFO] Brick created!\n");
 			break;
 		case OBJECT_TYPE_COIN:
 			obj = new CCoin();
-			DebugOut(L"[INFO] Coin created!\n");
 			break;
 		case OBJECT_TYPE_BLOCK:
 			obj = new CBlock();
-			DebugOut(L"[INFO] Block created!\n");
 			break;
 		case OBJECT_TYPE_GOOMBA: 
 		{
-			int tag = atoi(tokens[4].c_str());
-			obj = new CGoomba(tag);
-			DebugOut(L"[INFO] Goomba created! \n");
-			break;
+			if (tag != -1) {
+				obj = new CGoomba(tag);
+				break;
+			}
 		}
 		case OBJECT_TYPE_KOOPAS: {
-			int tag = (int)atof(tokens[4].c_str());
-			obj = new CKoopas();
-			obj->SetTag(tag);
-			obj->SetType(MOVING);
-			DebugOut(L"[INFO] Koopas created!\n");
-			break; 
+			if (tag != -1) {
+				obj = new CKoopas(tag);
+				break;
+			}
 		}
 		case OBJECT_TYPE_QUESTION_BRICK:
 		{
-			int tag = atoi(tokens[5].c_str());
-			obj = new CQuestionBrick(tag);
-			DebugOut(L"[INFO] Question Brick created!\n");
-			break;
+			if (objectInsideTag != -1) {
+				obj = new CQuestionBrick(objectInsideTag);
+				break;
+			}
 		}
 		case OBJECT_TYPE_BRICK_WITH_FLASH_ANIMATION:
 			obj = new CFlashAnimationBrick();
-			DebugOut(L"[INFO] Question Brick created!\n");
 		    break;
 		case OBJECT_TYPE_PIRANHA_PLANT:
 			obj = new CPiranhaPlant();
-			DebugOut(L"[INFO] Piranha Plant created!\n");
 			break;
 		case OBJECT_TYPE_FIRE_PIRANHA_PLANT: {
-			int objTag = atoi(tokens[4].c_str());
-			obj = new CFirePiranhaPlant(objTag);
-			DebugOut(L"[INFO] Fire Piranha Plant created!\n");
-			break;
+			if (tag != -1) {
+				obj = new CFirePiranhaPlant(tag);
+				break;
+			}
 		}
 		default:
 			obj = new CBrick();
 			DebugOut(L"[INFO] Other object created!\n");
-			break;
 		}
 
-		obj->SetPosition(x, y);
-
-		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-		obj->SetAnimationSet(ani_set);
-		objects.push_back(obj);
-
-		if (obj_of_questionBrick != NULL) {
-			obj_of_questionBrick->SetPosition(x, y);
-			objects.push_back(obj_of_questionBrick);
+		if (obj != NULL) {
+			obj->SetPosition(x, y);
+			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+			obj->SetAnimationSet(ani_set);
+			objects.push_back(obj);
 		}
 	}
 	f.close();
