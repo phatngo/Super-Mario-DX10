@@ -216,7 +216,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 
 			}*/
-			if (dynamic_cast<CBlock*>(e->obj)||dynamic_cast<CFlashAnimationBrick*>(e->obj))
+			if (dynamic_cast<CBlock*>(e->obj))
 			{
 				if (e->ny < 0)
 				{
@@ -253,7 +253,47 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					if (state == KOOPAS_STATE_SHELL_UP && e->ny > 0)
 						y = y0 + dy;
 				}
-				//DebugOut(L"[KOOPAS] kx: %f ky: %f bx: %f by: %f\n", x, y, e->obj->x, e->obj->y);
+			}
+			else if (dynamic_cast<CFlashAnimationBrick*>(e->obj))
+			{
+				CFlashAnimationBrick* flashAnimationBrick = dynamic_cast<CFlashAnimationBrick*>(e->obj);
+				if (e->ny < 0)
+				{
+					vy = 0;
+					ay = KOOPAS_GRAVITY;
+					if (state == KOOPAS_STATE_SHELL_UP)
+						vx = 0;
+					if (tag == KOOPAS_RED && state == KOOPAS_STATE_WALKING)
+					{
+						if (this->nx > 0 && x >= e->obj->x + KOOPAS_TURN_DIFF)
+							if (CalTurnable(e->obj, coObjects))
+							{
+								this->nx = -1;
+								vx = this->nx * KOOPAS_WALKING_SPEED;
+							}
+						if (this->nx < 0 && x <= e->obj->x - KOOPAS_TURN_DIFF)
+							if (CalTurnable(e->obj, coObjects))
+							{
+								this->nx = 1;
+								vx = this->nx * KOOPAS_WALKING_SPEED;
+							}
+					}
+					if (tag == KOOPAS_GREEN_PARA)
+					{
+						y = e->obj->y - KOOPAS_BBOX_HEIGHT;
+						vy = -KOOPAS_JUMP_SPEED;
+					}
+
+				}
+				else
+				{
+					if (e->nx != 0) {
+						flashAnimationBrick->SetState(FLASH_BRICK_STATE_NON_EXIST);
+						x = x0 + dx;
+					}
+					if (state == KOOPAS_STATE_SHELL_UP && e->ny > 0)
+						y = y0 + dy;
+				}
 			}
 			/*if (dynamic_cast<CCoin*>(e->obj)) {
 				if (e->nx != 0)

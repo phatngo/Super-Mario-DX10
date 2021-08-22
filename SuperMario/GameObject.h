@@ -65,7 +65,8 @@ public:
 	float vy=0;
 	int tag;
 	int type;
-	int nx;	 
+	int nx;
+	int ny;
 
 	int state;
 

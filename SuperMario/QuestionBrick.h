@@ -1,3 +1,4 @@
+#pragma once
 #include "GameObject.h"
 
 #define QUESTION_BRICK_STATE_IDLE 602
@@ -36,4 +37,4 @@ public:
 	void CreateLeaf();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
-#pragma once
+
