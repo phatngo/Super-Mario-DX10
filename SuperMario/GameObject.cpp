@@ -122,7 +122,7 @@ void CGameObject::RenderBoundingBox(int alpha)
 
 	LPDIRECT3DTEXTURE9 bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
 
-	float l,t,r,b; 
+	float l, t, r, b;
 
 	this->GetBoundingBox(l, t, r, b);
 	rect.left = 0;

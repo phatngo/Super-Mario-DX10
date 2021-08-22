@@ -288,8 +288,9 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				else
 				{
 					if (e->nx != 0) {
+						vx = -vx;
+						this->nx = -this->nx;
 						flashAnimationBrick->SetState(FLASH_BRICK_STATE_NON_EXIST);
-						x = x0 + dx;
 					}
 					if (state == KOOPAS_STATE_SHELL_UP && e->ny > 0)
 						y = y0 + dy;
