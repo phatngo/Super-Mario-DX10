@@ -117,13 +117,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					goomba->SetState(GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS);
 				}
 				vx += ax * dt;
-				/*else
-				{
-					goomba->vx = -goomba->vx;
-					goomba->nx = -goomba->nx;
-					this->vx = -this->vx;
-					this->nx = -this->nx;
-				}*/
 			}
 			if (dynamic_cast<CBrick*>(e->obj))
 			{

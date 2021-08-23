@@ -36,8 +36,8 @@ void CPiece::Render()
 			this->SetState(PIECE_STATE_NON_EXIST);
 		}
 	}
-	animation_set->at(0)->Render(x,y,500);
-	RenderBoundingBox(255);
+	animation_set->at(PIECE_ANI_FLYING)->Render(x,y);
+	RenderBoundingBox();
 }
 
 void CPiece::SetState(int state)

@@ -12,7 +12,7 @@ CCoin::CCoin()
 
 CCoin::CCoin(int tag)
 {
-	this->tag = tag;
+	this->SetTag(tag);
 	this->SetState(COIN_STATE_JUMPING);
 }
 

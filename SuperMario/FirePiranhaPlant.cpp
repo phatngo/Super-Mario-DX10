@@ -8,9 +8,9 @@ CFirePiranhaPlant::CFirePiranhaPlant(int objTag)
 {
 	this->SetState(FIRE_PIRANHA_STATE_UP);
 	if (objTag == TAG_FIRE_PIRANHA_RED)
-		this->tag = TAG_FIRE_PIRANHA_RED;
+		this->SetTag(TAG_FIRE_PIRANHA_RED);
 	else
-		this->tag = TAG_FIRE_PIRANHA_GREEN;
+		this->SetTag(TAG_FIRE_PIRANHA_GREEN);
 }
 
 void CFirePiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom)

@@ -46,24 +46,24 @@ void CFlashAnimationBrick::CreatePieces() {
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 	LPANIMATION_SET tmp_ani_set = animation_sets->Get(PIECE_ANI_SET_ID);
 
-	CPiece* piece_1 = new CPiece(PIECE_LEFT, PIECE_UP);
-	piece_1->SetPosition(x, y);
-	piece_1->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(piece_1);
+	CPiece* piece_left_up = new CPiece(PIECE_LEFT, PIECE_UP);
+	piece_left_up->SetPosition(x, y);
+	piece_left_up->SetAnimationSet(tmp_ani_set);
+	scene->AddObjects(piece_left_up);
 
-	CPiece* piece_2 = new CPiece(PIECE_LEFT, PIECE_DOWN);
-	piece_2->SetPosition(x, y + PIECE_BBOX_HEIGHT);
-	piece_2->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(piece_2);
+	CPiece* piece_left_down = new CPiece(PIECE_LEFT, PIECE_DOWN);
+	piece_left_down->SetPosition(x, y + PIECE_BBOX_HEIGHT);
+	piece_left_down->SetAnimationSet(tmp_ani_set);
+	scene->AddObjects(piece_left_down);
 
-	CPiece* piece_3 = new CPiece(PIECE_RIGHT, PIECE_UP);
-	piece_3->SetPosition(x+PIECE_BBOX_WIDTH, y);
-	piece_3->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(piece_3);
+	CPiece* piece_right_up = new CPiece(PIECE_RIGHT, PIECE_UP);
+	piece_right_up->SetPosition(x+PIECE_BBOX_WIDTH, y);
+	piece_right_up->SetAnimationSet(tmp_ani_set);
+	scene->AddObjects(piece_right_up);
 
-	CPiece* piece_4 = new CPiece(PIECE_RIGHT, PIECE_DOWN);
-	piece_4->SetPosition(x + PIECE_BBOX_WIDTH, y + PIECE_BBOX_HEIGHT);
-	piece_4->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(piece_4);
+	CPiece* piece_right_down = new CPiece(PIECE_RIGHT, PIECE_DOWN);
+	piece_right_down->SetPosition(x + PIECE_BBOX_WIDTH, y + PIECE_BBOX_HEIGHT);
+	piece_right_down->SetAnimationSet(tmp_ani_set);
+	scene->AddObjects(piece_right_down);
 }
 

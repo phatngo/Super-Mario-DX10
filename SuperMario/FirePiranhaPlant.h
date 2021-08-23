@@ -27,7 +27,6 @@ class CFirePiranhaPlant : public CGameObject
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	void CreateFireBullet();
-	int tag;
 	int ani;
 
 public:

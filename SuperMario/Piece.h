@@ -3,6 +3,7 @@
 #include "Timer.h"
 #define PIECE_BBOX_WIDTH  8
 #define PIECE_BBOX_HEIGHT 8
+
 #define PIECE_ANI_FLYING  0
 
 #define PIECE_STATE_FLYING    100

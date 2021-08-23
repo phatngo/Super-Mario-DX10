@@ -92,8 +92,10 @@ void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		float rdy = 0;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
-		x += min_tx * dx + nx * PUSHBACK;
-		y += min_ty * dy + ny * PUSHBACK;
+		float x0 = x, y0 = y;
+
+		x = x0 + min_tx * dx + nx * PUSHBACK;
+		y = y0 + min_ty * dy + ny * PUSHBACK;
 
 
 		if (ny != 0) vy = 0;
@@ -116,7 +118,10 @@ void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 					if (state != GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS) {
 						vy = 0;
 					}
-					
+					else {
+						y = y0 + dy;
+						DebugOut(L"vy: %f \n", vy);
+					}
 					ay = GOOMBA_GRAVITY;
 				}
 				if (e->nx != 0)

@@ -24,7 +24,6 @@ class CCoin : public CGameObject
 	
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
-	int tag = 0;
 	bool isAppear;
 public:
 	CCoin();

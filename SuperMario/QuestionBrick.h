@@ -23,7 +23,6 @@
 
 class CQuestionBrick : public CGameObject
 {
-	int tag; 
 	bool isObjectCreated;
 
 public:
