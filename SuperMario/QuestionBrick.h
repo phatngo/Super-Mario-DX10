@@ -1,3 +1,4 @@
+#pragma once
 #include "GameObject.h"
 
 #define QUESTION_BRICK_STATE_IDLE 602
@@ -22,7 +23,6 @@
 
 class CQuestionBrick : public CGameObject
 {
-	int tag; 
 	bool isObjectCreated;
 
 public:
@@ -36,4 +36,4 @@ public:
 	void CreateLeaf();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
-#pragma once
+

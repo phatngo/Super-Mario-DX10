@@ -73,8 +73,9 @@ void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	coEvents.clear();
 
-	// turn off collision when die 
-	if (state != GOOMBA_STATE_DIE) {
+	// turn off collision when die
+
+	if (state != GOOMBA_STATE_DIE || state != GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS) {
 		CalcPotentialCollisions(coObjects, coEvents);
 	}
 
@@ -91,8 +92,10 @@ void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		float rdy = 0;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
-		x += min_tx * dx + nx * PUSHBACK;
-		y += min_ty * dy + ny * PUSHBACK;
+		float x0 = x, y0 = y;
+
+		x = x0 + min_tx * dx + nx * PUSHBACK;
+		y = y0 + min_ty * dy + ny * PUSHBACK;
 
 
 		if (ny != 0) vy = 0;
@@ -109,9 +112,16 @@ void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				CBrick* object = dynamic_cast<CBrick*>(e->obj);
 				object->GetBoundingBox(oLeft, oTop, oRight, oBottom);
 
-				if (e->ny != 0)
+				if (e->ny < 0)
 				{
-					vy = 0;
+					vy = GOOMBA_DIE_DEFLECT_SPEED;
+					if (state != GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS) {
+						vy = 0;
+					}
+					else {
+						y = y0 + dy;
+						DebugOut(L"vy: %f \n", vy);
+					}
 					ay = GOOMBA_GRAVITY;
 				}
 				if (e->nx != 0)
@@ -257,6 +267,10 @@ void CGoomba::Render()
 				this->SetState(GOOMBA_STATE_NON_EXIST);
 			}
 			ani = GOOMBA_ANI_YELLOW_DIE;
+		}
+		if (state == GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS) {
+			if (start_Y - y >= 25)
+				this->SetState(GOOMBA_STATE_FALLING_KILLED_BY_KOOPAS);
 		}
 	}
 	else {
@@ -429,6 +443,14 @@ void CGoomba::SetState(int state)
 	case GOOMBA_STATE_NON_EXIST:
 		vx = 0;
 		vy = 0;
+		break;
+	case GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS:
+		vy = -GOOMBA_DIE_DEFLECT_SPEED;
+		vx = -vx;
+		ay = GOOMBA_GRAVITY;
+		break;
+	case GOOMBA_STATE_FALLING_KILLED_BY_KOOPAS:
+		vy = GOOMBA_JUMPING_HIGH_SPEED_Y;
 		break;
 	}
 	CGameObject::SetState(state);

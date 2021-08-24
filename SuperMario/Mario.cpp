@@ -151,10 +151,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				// jump on top >> kill Goomba and deflect a bit 
 				if (e->ny < 0)
 				{
-					if (koopas->GetState() != KOOPAS_STATE_DIE)
+					if (koopas->GetState() != KOOPAS_STATE_DEATH)
 					{
-						koopas->SetState(KOOPAS_STATE_DIE);
-						vy = -MARIO_JUMP_DEFLECT_SPEED;
+						if (koopas->GetState() == KOOPAS_STATE_IN_SHELL) {
+							koopas->SetState(KOOPAS_STATE_SPINNING);
+							vy = -MARIO_JUMP_DEFLECT_SPEED;
+						}
+						else {
+							koopas->SetState(KOOPAS_STATE_DEATH);
+							vy = -MARIO_JUMP_DEFLECT_SPEED;
+						}
 					}
 				}
 				else if (e->nx != 0)
@@ -163,7 +169,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					if (untouchable == 0)
 					{
 						//If koopas is not dead
-						if (koopas->GetState() != KOOPAS_STATE_DIE)
+						if (koopas->GetState() != KOOPAS_STATE_DEATH)
 						{
 							//If mario is not in the big size
 							if (level > MARIO_LEVEL_SMALL)
@@ -373,7 +379,7 @@ void CMario::Render()
 
 	animation_set->at(ani)->Render(x, y, alpha);
 
-	RenderBoundingBox();
+	RenderBoundingBox(500);
 }
 
 void CMario::SetState(int state)
