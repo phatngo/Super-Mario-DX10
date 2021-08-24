@@ -244,16 +244,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				break;
 			}
 		}
-<<<<<<< HEAD
-		case OBJECT_TYPE_KOOPAS:
-		{
-			int tag = atoi(tokens[4].c_str());
-			obj = new CKoopas(tag);
-			DebugOut(L"[INFO] Koopas created!\n");
-			break;
-		}
-=======
->>>>>>> staging
 		case OBJECT_TYPE_QUESTION_BRICK:
 		{
 			if (objectInsideTag != -1) {
@@ -278,20 +268,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[INFO] Other object created!\n");
 		}
 
-<<<<<<< HEAD
-		obj->SetPosition(x, y);
-
-		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-		obj->SetAnimationSet(ani_set);
-		objects.push_back(obj);
-=======
 		if (obj != NULL) {
 			obj->SetPosition(x, y);
 			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 			obj->SetAnimationSet(ani_set);
 			objects.push_back(obj);
 		}
->>>>>>> staging
 	}
 	f.close();
 }

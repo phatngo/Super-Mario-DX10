@@ -1,19 +1,4 @@
-#include "Koopas.h"
-#include "Utils.h"
-<<<<<<< HEAD
-#include "Brick.h"
-#include "QuestionBrick.h"
-#include "Block.h"
 
-CKoopas::CKoopas(int tag)
-{
-	if (tag == KOOPAS_TAG_RED) {
-		SetState(KOOPAS_STATE_WALKING_LEFT);
-		this->tag = tag;
-		currentHeight = KOOPAS_BBOX_RED_HEIGHT_1;
-		ax = KOOPAS_GRAVITY;
-	}
-=======
 #include "Koopas.h"
 #include "FirePiranhaPlant.h"
 #include "Brick.h"
@@ -21,6 +6,7 @@ CKoopas::CKoopas(int tag)
 #include "QuestionBrick.h"
 #include "FlashAnimationBrick.h"
 #include "Goomba.h"
+#include "Utils.h"
 
 CKoopas::CKoopas(int tag)
 {
@@ -28,33 +14,13 @@ CKoopas::CKoopas(int tag)
 	SetState(KOOPAS_STATE_WALKING);
 	this->SetTag(tag);
 	this->SetType(MOVING);
->>>>>>> staging
+
 }
 
 void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	left = x;
 	top = y;
-<<<<<<< HEAD
-	if (tag == KOOPAS_TAG_RED) {
-		right = x + KOOPAS_BBOX_RED_WIDTH;
-		if (state == KOOPAS_STATE_DIE)
-			bottom = y + KOOPAS_BBOX_RED_HEIGHT_DIE;
-		else {
-			if (timer.IsStarted() && timer.ElapsedTime() >= 200) {
-				if (currentHeight == KOOPAS_BBOX_RED_HEIGHT_1) {
-					currentHeight = KOOPAS_BBOX_RED_HEIGHT_2;
-				}
-				else if(currentHeight == KOOPAS_BBOX_RED_HEIGHT_2){
-					currentHeight = KOOPAS_BBOX_RED_HEIGHT_1;
-				}
-				timer.Reset();
-				timer.Start();
-			}
-			bottom = y + currentHeight;
-		}
-	}
-=======
 	right = x + KOOPAS_BBOX_WIDTH;
 	if (state == KOOPAS_STATE_IN_SHELL || state == KOOPAS_STATE_SPINNING || state == KOOPAS_STATE_SHELL_UP)
 	{
@@ -62,93 +28,17 @@ void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &botto
 	}
 	else
 		bottom = y + KOOPAS_BBOX_HEIGHT;
->>>>>>> staging
+
 }
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-<<<<<<< HEAD
-
-	if (this->tag == KOOPAS_TAG_RED) {
-		UpdateRedKoopas(dt, coObjects);
-	}
-}
-
-void CKoopas::UpdateRedKoopas(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	CGameObject::Update(dt);
-
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-
-	//vy += ay * dt;
-
-	coEvents.clear();
-
-	CalcPotentialCollisions(coObjects, coEvents);
-
-
-	// No collision occured, proceed normally
-	if (coEvents.size() == 0)
-	{
-		//DebugOut(L"Koopas no collied \n");
-		//DebugOut(L"No collied - x: %f, y: %f \n", x, y);
-		//DebugOut(L"No collied vx: %f \n", this->vx);
-		//x += dx;
-		//y += dy;
-	}
-	else
-	{
-		float min_tx, min_ty, nx = 0, ny;
-		float rdx = 0;
-		float rdy = 0;
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
-		x += min_tx * dx + nx * PUSHBACK;
-		y += min_ty * dy + ny * PUSHBACK;
-
-		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
-
-
-		for (UINT i = 0; i < coEventsResult.size(); i++)
-		{
-			float kLeft, kTop, kRight, kBottom;
-			GetBoundingBox(kLeft, kTop, kRight, kBottom);
-			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (dynamic_cast<CBlock*>(e->obj))
-			{
-				CBlock* block = dynamic_cast<CBlock*>(e->obj);
-				float oLeft, oTop, oRight, oBottom;
-				block->GetBoundingBox(oLeft, oTop, oRight, oBottom);
-
-				if (e->ny < 0) {
-
-					DebugOut(L"Block with x: %f, y: %f \n", oLeft, oTop);
-					DebugOut(L"Collied - x: %f, y: %f \n", x, y);
-
-					vy = 0;
-					//ay = KOOPAS_GRAVITY;
-					vx += ax * dt;
-					DebugOut(L"vx: %f \n", vx);
-				}
-				if (oTop==kBottom)
-				{
-					DebugOut(L"X: %f \n", x);
-					DebugOut(L"Y: %f \n", y);
-				}
-			}
-		}
-	}
-	// clean up collision events
-	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-=======
-	
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	if (state != KOOPAS_STATE_DEATH)
-	vy += ay * dt;
+		vy += ay * dt;
 
 	coEvents.clear();
 
@@ -183,7 +73,7 @@ void CKoopas::UpdateRedKoopas(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (e->obj != NULL)
 
-			GetBoundingBox(mLeft, mTop, mRight, mBottom);
+				GetBoundingBox(mLeft, mTop, mRight, mBottom);
 			if (dynamic_cast<CKoopas*>(e->obj)) // if e->obj is Koopas 
 			{
 				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
@@ -221,11 +111,11 @@ void CKoopas::UpdateRedKoopas(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			if (dynamic_cast<CGoomba*>(e->obj))
 			{
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-				if (goomba->GetState() != GOOMBA_STATE_DIE && this->GetState() == KOOPAS_STATE_SPINNING )
+				if (goomba->GetState() != GOOMBA_STATE_DIE && this->GetState() == KOOPAS_STATE_SPINNING)
 				{
 					//mario->AddScore(x, y, 100, true);
-					if(goomba->GetState()!= GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS)
-					goomba->SetState(GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS);
+					if (goomba->GetState() != GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS)
+						goomba->SetState(GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS);
 				}
 				vx += ax * dt;
 			}
@@ -253,7 +143,7 @@ void CKoopas::UpdateRedKoopas(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 					}
 				}
 			}
-			if (dynamic_cast<CQuestionBrick*>(e->obj) && state == KOOPAS_STATE_SPINNING && e->nx != 0 
+			if (dynamic_cast<CQuestionBrick*>(e->obj) && state == KOOPAS_STATE_SPINNING && e->nx != 0
 				//&& ceil(mBottom) != oTop
 				)
 			{
@@ -262,8 +152,8 @@ void CKoopas::UpdateRedKoopas(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 					if (e->obj->state == QUESTION_BRICK_STATE_IDLE)
 						e->obj->SetState(QUESTION_BRICK_STATE_JUMPING);
 				}
-					vx = -vx;
-					this->nx = -this->nx;
+				vx = -vx;
+				this->nx = -this->nx;
 			}
 			/*if (dynamic_cast<CMusicalBrick*>(e->obj) && state == KOOPAS_STATE_SPINNING)
 			{
@@ -428,27 +318,10 @@ void CKoopas::UpdateRedKoopas(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 
 
->>>>>>> staging
 }
 
 void CKoopas::Render()
 {
-<<<<<<< HEAD
-	int ani = KOOPAS_ANI_RED_WALKING_LEFT;
-	if (state == KOOPAS_STATE_DIE) {
-		ani = KOOPAS_ANI_RED_DIE;
-	}
-	else if (vx < 0) {
-
-		ani = KOOPAS_ANI_RED_WALKING_LEFT;
-	}
-	else if (vx > 0) {
-		
-		ani = KOOPAS_ANI_RED_WALKING_RIGHT;
-	}
-	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox();
-=======
 	int ani = -1;
 	if (state == KOOPAS_STATE_SHELL_UP || state == KOOPAS_STATE_DEATH) {
 		ani = KOOPAS_ANI_SHELL_UP;
@@ -485,20 +358,13 @@ void CKoopas::Render()
 	animation_set->at(ani)->Render(x, y);
 
 	RenderBoundingBox(75);
->>>>>>> staging
 }
 
 void CKoopas::SetState(int state)
 {
-<<<<<<< HEAD
-	switch (state)
-	{
-	case KOOPAS_STATE_DIE:
-		y += currentHeight - KOOPAS_BBOX_RED_HEIGHT_DIE;
-=======
+
 	CGameObject* player = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
 
-	CGameObject::SetState(state);
 	switch (state)
 	{
 	
@@ -519,39 +385,23 @@ void CKoopas::SetState(int state)
 		break;
 	case KOOPAS_STATE_IN_SHELL:
 		y += KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_SHELL_HEIGHT;
->>>>>>> staging
 		vx = 0;
 		shellTimer.Start();
 		revivingTimer.Reset();
 		vy = 0;
 		break;
-<<<<<<< HEAD
-	case KOOPAS_STATE_WALKING_LEFT:
-		vx = -KOOPAS_WALKING_SPEED; 
-		ay =  KOOPAS_GRAVITY;
-		timer.Start();
-		nx = -1;
-		break;
-	case KOOPAS_STATE_WALKING_RIGHT:
-		vx = KOOPAS_WALKING_SPEED;
-		ay = KOOPAS_GRAVITY;
-		timer.Start();
-		nx = 1;
-		break;
-	default:
-		break;
-	}
-	CGameObject::SetState(state);
-}
-=======
 	case KOOPAS_STATE_DEATH:
 		vy = 0;
 		vx = 0;
 		SetType(IGNORE_DEFINE);
 		respawnTimer.Start();
 		break;
+	default:
+		break;
 	}
+	CGameObject::SetState(state);
 }
+
 
 bool CKoopas::CalRevivable()
 {
@@ -600,4 +450,3 @@ void CKoopas::Reset()
 	type = MOVING;
 	//isEnable = true;
 }
->>>>>>> staging
