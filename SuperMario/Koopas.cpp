@@ -31,6 +31,7 @@ void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &botto
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -50,7 +51,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	else
 	{
-
 		float min_tx, min_ty;
 		float nx = 0, ny = 0;
 		float rdx = 0;
@@ -121,13 +121,17 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
 				CBrick* object = dynamic_cast<CBrick*>(e->obj);
-
-				//object->SetDebugAlpha(255);
 				object->GetBoundingBox(oLeft, oTop, oRight, oBottom);
-				if (e->ny != 0)
-				{
+				if (e->ny != 0) {
 					vy = 0;
 					ay = KOOPAS_GRAVITY;
+					if (state == KOOPAS_STATE_SHELL_UP)
+						vx = 0;
+					if (tag == KOOPAS_GREEN_PARA)
+					{
+						y = e->obj->y - KOOPAS_BBOX_HEIGHT;
+						vy = -KOOPAS_JUMP_SPEED;
+					}
 				}
 				if (e->nx != 0)
 				{
@@ -137,7 +141,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						this->nx = -this->nx;
 					}
 				}
-
 			}
 			if (dynamic_cast<CQuestionBrick*>(e->obj) && state == KOOPAS_STATE_SPINNING && e->nx != 0 
 				//&& ceil(mBottom) != oTop
