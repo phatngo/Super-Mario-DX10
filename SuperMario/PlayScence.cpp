@@ -19,6 +19,7 @@
 #include "PiranhaPlant.h"
 #include "FirePiranhaPlant.h"
 #include "Piece.h"
+#include "HUD.h"
 
 using namespace std;
 
@@ -42,6 +43,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 
+
 #define OBJECT_TYPE_MARIO	0
 #define OBJECT_TYPE_BRICK	1
 #define OBJECT_TYPE_GOOMBA	2
@@ -52,6 +54,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_PIRANHA_PLANT 7
 #define OBJECT_TYPE_FIRE_PIRANHA_PLANT 70
 #define OBJECT_TYPE_COIN 6
+#define OBJECT_TYPE_HUD 58
 
 
 
@@ -176,8 +179,11 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
-	wstring path = ToWSTR(line);
 
+	wstring path = ToWSTR(line);
+	float longest_y=0.0;
+	float oLeft = -1, oTop = -1, oRight = -1, oBottom = -1;
+	//float height_of_object_with_longest_y;
 	ifstream f;
 	DebugOut(L"[INFO] Start object resources from : %s \n", path.c_str());
 	f.open(path.c_str());
@@ -219,7 +225,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				DebugOut(L"[ERROR] MARIO object was created before!\n");
 				return;
 			}
-			obj = new CMario(x, y);
+			obj = new CMario(x, y-HUD_HEIGHT);
 			player = (CMario*)obj;
 			break;
 		case OBJECT_TYPE_BRICK:
@@ -263,12 +269,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				break;
 			}
 		}
+		case OBJECT_TYPE_HUD: {
+			obj = new HUD();
+			DebugOut(L"[INFO] HUD created!\n");
+			break;
+		}
 		default:
 			obj = new CBrick();
 			DebugOut(L"[INFO] Other object created!\n");
 		}
-
 		if (obj != NULL) {
+			y -= HUD_HEIGHT;
 			obj->SetPosition(x, y);
 			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 			obj->SetAnimationSet(ani_set);
@@ -322,7 +333,6 @@ void CPlayScene::Load()
 	}
 
 	f.close();
-
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);

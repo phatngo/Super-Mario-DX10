@@ -2,6 +2,7 @@
 #include "Utils.h"
 #include "Textures.h"
 #include "Game.h"
+#include "HUD.h"
 
 CMap::CMap(int TileSetID, int TotalRowsOfMap, int TotalColumnsOfMap, int TotalRowsOfTileSet, int  TotalColumnsOfTileSet, int TotalTiles)
 {
@@ -41,7 +42,7 @@ void CMap::Render()
 		{
 			int index = TileMap[CurrentRow][CurrentColumn] - 1;
 			if (index < TotalTiles)
-				Tiles.at(index)->Draw((float)(CurrentColumn * TILE_WIDTH), (float)(CurrentRow * TILE_HEIGHT/*- HUD_HEIGHT*/));
+				Tiles.at(index)->Draw((float)(CurrentColumn * TILE_WIDTH), (float)(CurrentRow * TILE_HEIGHT - HUD_HEIGHT));
 		}
 }
 void CMap::SetTileMapData(int** TileMapData)

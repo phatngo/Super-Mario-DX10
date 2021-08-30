@@ -13,6 +13,7 @@ protected:
 	CKeyEventHandler * key_handler;
 	int id;
 	LPCWSTR sceneFilePath;
+	bool isCameraAutoMove = false;
 
 public: 
 	CScene(int id, LPCWSTR filePath);
@@ -22,6 +23,7 @@ public:
 	virtual void Unload() = 0;
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0;
+	void SetCamerAutoMove(bool l) { this->isCameraAutoMove = l; }
 	virtual vector<LPGAMEOBJECT> GetSceneObjects();
 	virtual void  SetSceneObjects(vector<LPGAMEOBJECT> objects)=0;
 	virtual CMario* GetPlayer() = 0;
