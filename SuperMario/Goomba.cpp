@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Utils.h"
 #include "PlayScence.h"
+#include "EffectPoint.h"
 
 CGoomba::CGoomba(int tag)
 {
@@ -265,6 +266,8 @@ void CGoomba::Render()
 			//After being killed, goomba becomes dead then delay for a while, then disappears
 			if (this->transformToNonExistTimer.ElapsedTime() >= GOOMBA_DELAY_TIME && this->transformToNonExistTimer.IsStarted()) {
 				this->SetState(GOOMBA_STATE_NON_EXIST);
+				CreatePoint();
+				transformToNonExistTimer.Reset();
 			}
 			ani = GOOMBA_ANI_YELLOW_DIE;
 		}
@@ -311,6 +314,7 @@ void CGoomba::Render()
 				//After being killed, goomba becomes dead then delay for a while, then disappears
 				if (transformToNonExistTimer.ElapsedTime() >= GOOMBA_DELAY_TIME && transformToNonExistTimer.IsStarted()) {
 					this->SetState(GOOMBA_STATE_NON_EXIST);
+					CreatePoint(EFFECT_POINT_800);
 				}
 				ani = GOOMBA_ANI_RED_DIE;
 				break;
@@ -454,4 +458,25 @@ void CGoomba::SetState(int state)
 		break;
 	}
 	CGameObject::SetState(state);
+}
+
+void CGoomba::CreatePoint(int point) {
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_100);
+	switch (point)
+	{
+	case EFFECT_POINT_400:
+		tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_400);
+		break;
+	case EFFECT_POINT_800:
+		tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_800);
+		break;
+	default:
+		break;
+	}
+	EffectPoint* effectPoint = new EffectPoint();
+	effectPoint->SetPosition(this->x, this->y - GOOMBA_BBOX_NORMAL_HEIGHT);
+	effectPoint->SetAnimationSet(tmp_ani_set);
+	scene->AddObjects(effectPoint);
 }

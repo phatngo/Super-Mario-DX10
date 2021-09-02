@@ -622,6 +622,16 @@ Resources\Tilemap\world1-1.txt
 [ANIMATIONS]
 # ==== HUD ====
 8000	99999	100
+# ==== Point100 ====
+8001	50049	100
+# ==== Point400 ====
+8002	50051	100
+# ==== Point800 ====
+8003	50052	100
+# ==== Point1000 ====
+8004	50053	100
+# ==== Point200 ====
+8005	50050	100
 # ==== transparent ====
 0	10999	100
 # ==== IconP ====
@@ -1018,6 +1028,16 @@ Resources\Tilemap\world1-1.txt
 [ANIMATION_SETS]
 # HUD
 127	8000
+# Point100
+128	8001
+# Point400
+129	8002
+# Point800
+131	8003
+# Point1000
+132	8004
+# Point200
+133	8005
 # transparent
 0	0
 # Card

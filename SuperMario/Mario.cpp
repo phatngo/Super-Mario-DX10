@@ -16,6 +16,9 @@
 #include "FireBullet.h"
 #include "Mushroom.h"
 #include "Leaf.h"
+#include "EffectPoint.h"
+#include "Game.h"
+#include "PlayScence.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -112,7 +115,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					}
 					else {
 						if (goomba->GetState() != GOOMBA_STATE_RED_WALKING && goomba->GetState()!= GOOMBA_STATE_RED_DIE) {
-							 goomba->SetState(GOOMBA_STATE_RED_WALKING);
+							this->CreatePoint(oLeft, oTop - GOOMBA_BBOX_NORMAL_HEIGHT, EFFECT_POINT_400);
+							goomba->SetState(GOOMBA_STATE_RED_WALKING);
 						}
 						else if (goomba->GetState() == GOOMBA_STATE_RED_WALKING) {
 							 goomba->SetState(GOOMBA_STATE_RED_DIE);
@@ -156,10 +160,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 						if (koopas->GetState() == KOOPAS_STATE_IN_SHELL) {
 							koopas->SetState(KOOPAS_STATE_SPINNING);
 							vy = -MARIO_JUMP_DEFLECT_SPEED;
+							CreatePoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT);
 						}
 						else {
 							koopas->SetState(KOOPAS_STATE_DEATH);
 							vy = -MARIO_JUMP_DEFLECT_SPEED;
+							CreatePoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT, EFFECT_POINT_200);
 						}
 					}
 				}
@@ -258,6 +264,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				this->level = MARIO_LEVEL_TRANSFORM_BIG;
 				this->transformTimer.Start();
 			}
+
 			}
 			else if (dynamic_cast<CLeaf*>(e->obj)) {
 			CLeaf* leaf = dynamic_cast<CLeaf*>(e->obj);
@@ -313,6 +320,7 @@ void CMario::Render()
 			if (transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME && transformTimer.IsStarted()) {
 				level = MARIO_LEVEL_BIG;
 				transformTimer.Reset();
+				CreatePoint(this->x, this->y, EFFECT_POINT_1000);
 			}
 		}
 		else if (level == MARIO_LEVEL_TRANSFORM_SMALL)
@@ -334,6 +342,7 @@ void CMario::Render()
 			if (transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME && transformTimer.IsStarted()) {
 				level = MARIO_LEVEL_TAIL;
 				transformTimer.Reset();
+				CreatePoint(this->x, this->y, EFFECT_POINT_1000);
 			}
 		}
 		else if (level == MARIO_LEVEL_TAIL)
@@ -361,6 +370,7 @@ void CMario::Render()
 			else if (vx > 0)
 				ani = MARIO_ANI_BIG_WALKING_RIGHT;
 			else ani = MARIO_ANI_BIG_WALKING_LEFT;
+
 		}
 		else if (level == MARIO_LEVEL_SMALL)
 		{
@@ -442,3 +452,29 @@ void CMario::Reset()
 	SetSpeed(0, 0);
 }
 
+void CMario::CreatePoint(float x, float y, int point) {
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_100);
+	switch (point)
+	{
+	case EFFECT_POINT_200:
+		tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_200);
+		break;
+	case EFFECT_POINT_400:
+		tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_400);
+		break;
+	case EFFECT_POINT_800:
+		tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_800);
+		break;
+	case EFFECT_POINT_1000:
+		tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_1000);
+		break;
+	default:
+		break;
+	}
+	EffectPoint* effectPoint = new EffectPoint();
+	effectPoint->SetPosition(this->x, this->y);
+	effectPoint->SetAnimationSet(tmp_ani_set);
+	scene->AddObjects(effectPoint);
+}

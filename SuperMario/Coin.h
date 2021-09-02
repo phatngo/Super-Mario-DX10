@@ -19,6 +19,8 @@
 
 #define TAG_COIN_IN_BRICK 100
 
+
+
 class CCoin : public CGameObject
 {
 	

@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Timer.h"
+#include "EffectPoint.h"
 
 #define MARIO_WALKING_SPEED		0.15f 
 #define MARIO_JUMP_SPEED_Y		0.43f 
@@ -78,4 +79,5 @@ public:
 	int GetLevel() { return level; }
 	void Reset();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
+	void CreatePoint(float x, float y, int point = EFFECT_POINT_100);
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Timer.h"
 
 #define QUESTION_BRICK_STATE_IDLE 602
 #define QUESTION_BRICK_STATE_JUMPING 603
@@ -20,11 +21,15 @@
 #define LEAF_ANI_SET 36
 #define SWITCH_ANI_SET 77
 
+#define TIME_UNTIL_POINT_APPEAR 700
+
+#define POINT_SPRITE_ID_100  50049
+
 
 class CQuestionBrick : public CGameObject
 {
 	bool isObjectCreated;
-
+	Timer pointAppearanceTimer;
 public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -34,6 +39,7 @@ public:
 	void CreateCoin();
 	void CreateMushroom();
 	void CreateLeaf();
+	void CreatePoint();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
 

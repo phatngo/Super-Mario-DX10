@@ -55,6 +55,9 @@
     <Filter Include="HUD">
       <UniqueIdentifier>{2fa38192-d2c3-4d0c-8dbe-e60d621272e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Objects\EffectPoint">
+      <UniqueIdentifier>{b056c96b-f7b2-430d-8968-5095b3496379}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -144,6 +147,9 @@
     <ClCompile Include="HUD.cpp">
       <Filter>HUD</Filter>
     </ClCompile>
+    <ClCompile Include="EffectPoint.cpp">
+      <Filter>Map Objects\EffectPoint</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -232,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="HUD.h">
       <Filter>HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectPoint.h">
+      <Filter>Map Objects\EffectPoint</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

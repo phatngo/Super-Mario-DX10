@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Game.h"
 #include "PlayScence.h"
+#include "Sprites.h"
 
 CCoin::CCoin()
 {

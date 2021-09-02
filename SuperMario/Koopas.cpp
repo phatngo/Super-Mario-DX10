@@ -7,6 +7,10 @@
 #include "FlashAnimationBrick.h"
 #include "Goomba.h"
 #include "Utils.h"
+#include "Timer.h"
+#include "PlayScence.h"
+#include "Game.h"
+#include "EffectPoint.h"
 
 CKoopas::CKoopas(int tag)
 {

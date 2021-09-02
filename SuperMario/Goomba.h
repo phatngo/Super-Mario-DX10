@@ -52,6 +52,7 @@
 #define GOOMBA_WALK_WING_TIME              1000
 #define MAX_LOW_FALLING_TIME               3
 
+
 #define GOOMBA_MAX_JUMP_LOW_DY             15
 #define GOOMBA_MAX_JUMP_HIGH_DY            35
 
@@ -68,8 +69,10 @@ class CGoomba : public CGameObject
 	bool isQuestionBrickAboveTouched;
 	void updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void updateRedGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+
 public: 	
 	CGoomba(int tag);
 	virtual void SetState(int state);
 	int GetTag() { return this->tag; }
+	void CreatePoint(int point = 100);
 };

@@ -5,6 +5,7 @@
 #include "Switch.h"
 #include "Game.h"
 #include "PlayScence.h"
+#include "EffectPoint.h"
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt, coObjects);
@@ -12,6 +13,7 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		y = start_Y;
 	else
 	    y += dy;
+	
 }
 
 void CQuestionBrick::Render() {
@@ -31,6 +33,13 @@ void CQuestionBrick::Render() {
 		break;
 	case QUESTION_BRICK_STATE_STOP:
 		ani = QUESTION_BRICK_ANI_STOP;
+		if (tag == COIN_TAG) {
+			//Delay until coin disappears => Effect point appears
+			if (pointAppearanceTimer.ElapsedTime() >= TIME_UNTIL_POINT_APPEAR && pointAppearanceTimer.IsStarted()) {
+				CreatePoint();
+				pointAppearanceTimer.Reset();
+			}
+		}
 		break;
 	default:
 		break;
@@ -58,6 +67,9 @@ void CQuestionBrick::SetState(int state) {
 	{
 		vy = -QUESTION_BRICK_JUMP_SPEED;
 		CreateObject();
+		if (tag == COIN_TAG) {
+			pointAppearanceTimer.Start();
+		}
 		break;
 	}
 	case QUESTION_BRICK_STATE_FALLING:
@@ -123,6 +135,16 @@ void CQuestionBrick::CreateLeaf() {
 	leaf->SetPosition(this->x, this->y);
 	leaf->SetAnimationSet(tmp_ani_set);
 	scene->AddObjects(leaf);
+}
+
+void CQuestionBrick::CreatePoint() {
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_100);
+	EffectPoint* effectPoint = new EffectPoint();
+	effectPoint->SetPosition(this->x, this->y - BRICK_BBOX_HEIGHT);
+	effectPoint->SetAnimationSet(tmp_ani_set);
+	scene->AddObjects(effectPoint);
 }
 
 
