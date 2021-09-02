@@ -36,7 +36,7 @@ public:
 	virtual void Unload();
 	virtual vector<LPGAMEOBJECT> GetSceneObjects();
 	virtual void  SetSceneObjects(vector<LPGAMEOBJECT> objects);
-	void AddObjects(CGameObject* gameObj) { this->objects.push_back(gameObj); }
+	void AddObjects(CGameObject* gameObj) { this->objects.insert(this->objects.end()-2, gameObj);}
 
 	virtual CMario * GetPlayer() { return player; } 
 

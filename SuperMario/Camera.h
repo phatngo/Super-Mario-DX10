@@ -3,7 +3,7 @@
 
 
 #define MARIO_MINIMUM_POSITION_X 80
-#define CAMERA_POSITION_Y 215
+#define CAMERA_POSITION_Y 214
 
 class CCamera
 {
@@ -16,5 +16,6 @@ public:
 	static CCamera* GetInstance();
 	void SetCameraPosition(int maxCx, int cx);
 	int GetCameraX() { return this->cameraPositionX; }
+	int GetCameraY() { return this->cameraPositionY; }
 };
 

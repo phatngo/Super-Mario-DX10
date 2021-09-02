@@ -1,6 +1,8 @@
 
 #include "FireBullet.h"
 #include "FirePiranhaPlant.h"
+#include "Camera.h"
+#include "Game.h"
 
 CFireBullet::CFireBullet(float x, float y, int FirePiranhaPlant_CurrentState)
 {
@@ -42,7 +44,14 @@ void CFireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CFireBullet::Render()
 {
-	animation_set->at(this->ani)->Render(x, y);
+	float cameraPositionY = CCamera::GetInstance()->GetCameraY();
+	float screenWidth = CGame::GetInstance()->GetScreenHeight();
+	if (this->y < cameraPositionY || this->y > cameraPositionY + screenWidth) {
+		SetState(FIRE_BULLET_STATE_NON_EXIST);
+	}
+	else {
+		animation_set->at(this->ani)->Render(x, y);
+	}
 }
 
 void CFireBullet::SetState(int state)
@@ -66,6 +75,10 @@ void CFireBullet::SetState(int state)
 		this->SetPosition(x + FIRE_BULLET_BBOX_WIDTH, y + FIRE_BULLET_BBOX_HEIGHT);
 		vx = FIRE_BULLET_X_VELOCITY;
 		vy = FIRE_BULLET_Y_VELOCITY;
+		break;
+	case FIRE_BULLET_STATE_NON_EXIST:
+		vx = 0;
+		vy = 0;
 		break;
 	default:
 		break;

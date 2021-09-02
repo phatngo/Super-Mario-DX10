@@ -21,6 +21,7 @@
 #include "Piece.h"
 #include "HUD.h"
 #include "EffectPoint.h"
+#include "FireBullet.h"
 
 using namespace std;
 
@@ -277,7 +278,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		default:
 			obj = new CBrick();
-			DebugOut(L"[INFO] Other object created!\n");
 		}
 		if (obj != NULL) {
 			y -= HUD_HEIGHT;
@@ -379,7 +379,8 @@ void CPlayScene::Render()
 			||(dynamic_cast<CLeaf*>(objects[i]) && objects[i]->GetState() == LEAF_STATE_NON_EXIST)
 			||(dynamic_cast<CFlashAnimationBrick*>(objects[i]) && objects[i]->GetState() == FLASH_BRICK_STATE_NON_EXIST)
 			||(dynamic_cast<CPiece*>(objects[i]) && objects[i]->GetState() == PIECE_STATE_NON_EXIST)
-			|| (dynamic_cast<EffectPoint*>(objects[i]) && objects[i]->GetState() == EFFECT_POINT_STATE_NON_EXIST)) {
+			||(dynamic_cast<EffectPoint*>(objects[i]) && objects[i]->GetState() == EFFECT_POINT_STATE_NON_EXIST)
+			||(dynamic_cast<CFireBullet*>(objects[i]) && objects[i]->GetState() == FIRE_BULLET_STATE_NON_EXIST)) {
 			objects.erase(objects.begin() + i);
 
 		}

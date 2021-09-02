@@ -78,6 +78,7 @@ void CFirePiranhaPlant::Render()
 	}
 	case FIRE_PIRANHA_STATE_SHOOT:
 		this->SetState(FIRE_PIRANHA_STATE_DOWN);
+		CreateFireBullet();
 		break;
 	case FIRE_PIRANHA_STATE_DOWN:
 		
@@ -102,7 +103,7 @@ void CFirePiranhaPlant::SetState(int state)
 		break;
 	case FIRE_PIRANHA_STATE_SHOOT:
 		vy = 0;
-		CreateFireBullet();
+		//CreateFireBullet();
 		break;
 	default:
 		break;
