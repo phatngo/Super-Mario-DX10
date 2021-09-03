@@ -5,6 +5,7 @@
 #include "Utils.h"
 #include "PlayScence.h"
 #include "EffectPoint.h"
+#include "Block.h"
 
 CGoomba::CGoomba(int tag)
 {
@@ -121,7 +122,6 @@ void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 					}
 					else {
 						y = y0 + dy;
-						DebugOut(L"vy: %f \n", vy);
 					}
 					ay = GOOMBA_GRAVITY;
 				}
@@ -158,6 +158,13 @@ void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				//When goomba touches each other
 				if (e->nx != 0) {
 					x += dx;
+				}
+			}
+			else if (dynamic_cast<CBlock*>(e->obj)) {
+				if (e->ny != 0) {
+					if (state == GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS); {
+						y = y0+dy; 
+					}
 				}
 			}
 		}
@@ -454,7 +461,9 @@ void CGoomba::SetState(int state)
 		ay = GOOMBA_GRAVITY;
 		break;
 	case GOOMBA_STATE_FALLING_KILLED_BY_KOOPAS:
-		vy = GOOMBA_JUMPING_HIGH_SPEED_Y;
+		vy = -GOOMBA_JUMPING_HIGH_SPEED_Y;
+		ay = -GOOMBA_GRAVITY;
+		vx = GOOMBA_JUMPING_LOW_SPEED_Y;
 		break;
 	}
 	CGameObject::SetState(state);

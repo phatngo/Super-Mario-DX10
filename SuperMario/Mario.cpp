@@ -97,7 +97,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			float mLeft, mTop, mRight, mBottom;
 			GetBoundingBox(mLeft, mTop, mRight, mBottom);
 			e->obj->GetBoundingBox(oLeft, oTop, oRight, oBottom);
-
 			if (dynamic_cast<CGoomba *>(e->obj)) // if e->obj is Goomba 
 			{
 
@@ -226,9 +225,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				vy = -MARIO_JUMP_SPEED_Y/2;
 				coin->SetState(COIN_STATE_NON_EXIST);
 			}
-			else if (dynamic_cast<CPiranhaPlant*>(e->obj)
-			|| dynamic_cast<CFirePiranhaPlant*>(e->obj)
-			|| dynamic_cast<CFireBullet*>(e->obj)) {
+			else if (dynamic_cast<CFireBullet*>(e->obj)) {
 				if (untouchable == 0)
 				{
 						//If mario is not in the big size
@@ -238,7 +235,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 							level = MARIO_LEVEL_TRANSFORM_BIG;
 							this->transformTimer.Start();
 						}
-						else {
+						else if(level == MARIO_LEVEL_BIG) {
 							level = MARIO_LEVEL_TRANSFORM_SMALL;
 							this->transformTimer.Start();
 						}
@@ -249,7 +246,56 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 							SetState(MARIO_STATE_DIE);	
 				}
             }
-
+			else if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
+			if (untouchable == 0)
+			 {
+				CPiranhaPlant* piranhaPlant = dynamic_cast<CPiranhaPlant*>(e->obj);
+				if (e->ny < 0 && piranhaPlant->GetState()== PIRANHA_STATE_UP) {
+					piranhaPlant->SetState(PIRANHA_STATE_DOWN);
+				}
+				//If mario is not in the big size
+				else if (level > MARIO_LEVEL_SMALL)
+				{
+					if (level == MARIO_LEVEL_TAIL) {
+						level = MARIO_LEVEL_TRANSFORM_BIG;
+						this->transformTimer.Start();
+					}
+					else if (level == MARIO_LEVEL_BIG) {
+						level = MARIO_LEVEL_TRANSFORM_SMALL;
+						this->transformTimer.Start();
+					}
+					StartUntouchable();
+				}
+				else
+					//Makes mario die
+					SetState(MARIO_STATE_DIE);
+			 }
+            }
+			else if (dynamic_cast<CFirePiranhaPlant*>(e->obj)) {
+			if (untouchable == 0)
+			{
+				CFirePiranhaPlant* firePiranhaPlant = dynamic_cast<CFirePiranhaPlant*>(e->obj);
+				if (e->ny < 0 && firePiranhaPlant->GetState() == FIRE_PIRANHA_STATE_UP ) {
+					firePiranhaPlant->SetState(FIRE_PIRANHA_STATE_DOWN);
+				}
+				//If mario is not in the big size
+				else if (level > MARIO_LEVEL_SMALL)
+				{
+					if (level == MARIO_LEVEL_TAIL) {
+						level = MARIO_LEVEL_TRANSFORM_BIG;
+						this->transformTimer.Start();
+					}
+					else if (level == MARIO_LEVEL_BIG) {
+						level = MARIO_LEVEL_TRANSFORM_SMALL;
+						this->transformTimer.Start();
+					}
+					StartUntouchable();
+				}
+				else
+					//Makes mario die
+					SetState(MARIO_STATE_DIE);
+			}
+			}
 			else if (dynamic_cast<CMushroom*>(e->obj)) 
             {
 			CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
@@ -263,6 +309,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
 				this->level = MARIO_LEVEL_TRANSFORM_BIG;
 				this->transformTimer.Start();
+				CreatePoint(this->x, this->y, EFFECT_POINT_1000);
 			}
 
 			}
@@ -320,7 +367,6 @@ void CMario::Render()
 			if (transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME && transformTimer.IsStarted()) {
 				level = MARIO_LEVEL_BIG;
 				transformTimer.Reset();
-				CreatePoint(this->x, this->y, EFFECT_POINT_1000);
 			}
 		}
 		else if (level == MARIO_LEVEL_TRANSFORM_SMALL)

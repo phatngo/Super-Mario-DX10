@@ -117,9 +117,16 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 				if (goomba->GetState() != GOOMBA_STATE_DIE && this->GetState() == KOOPAS_STATE_SPINNING)
 				{
-					//mario->AddScore(x, y, 100, true);
-					if (goomba->GetState() != GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS)
+					if (goomba->GetState() != GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS) {
 						goomba->SetState(GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS);
+					}
+					vy = 0;
+					ay = KOOPAS_GRAVITY;
+				}
+				if (e->ny > 0) {
+					DebugOut(L"Touched Above \n");
+					vy = 0;
+					ay = 0;
 				}
 				vx += ax * dt;
 			}

@@ -10,6 +10,7 @@
 #define PIRANHA_BBOX_HEIGHT 24
 #define PIRANHA_HIGHEST_DY 31
 #define PIRANHA_UP_SPEED 0.01f
+
 class CPiranhaPlant : public CGameObject
 {
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

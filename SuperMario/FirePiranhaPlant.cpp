@@ -11,6 +11,7 @@ CFirePiranhaPlant::CFirePiranhaPlant(int objTag)
 		this->SetTag(TAG_FIRE_PIRANHA_RED);
 	else
 		this->SetTag(TAG_FIRE_PIRANHA_GREEN);
+	isFireBulletCreated = false;
 }
 
 void CFirePiranhaPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -64,11 +65,13 @@ void CFirePiranhaPlant::Render()
 		case TAG_FIRE_PIRANHA_RED:
 			if (start_Y - y >= RED_FIRE_PIRANHA_HIGHEST_DY) {
 				this->SetState(FIRE_PIRANHA_STATE_SHOOT);
+				y = start_Y - RED_FIRE_PIRANHA_HIGHEST_DY;
 			}
 			break;
 		case TAG_FIRE_PIRANHA_GREEN:
 			if (start_Y - y >= GREEN_FIRE_PIRANHA_HIGHEST_DY) {
 				this->SetState(FIRE_PIRANHA_STATE_SHOOT);
+				y = start_Y - GREEN_FIRE_PIRANHA_HIGHEST_DY;
 			}
 			break;
 		default:
@@ -77,13 +80,24 @@ void CFirePiranhaPlant::Render()
 		break;
 	}
 	case FIRE_PIRANHA_STATE_SHOOT:
-		this->SetState(FIRE_PIRANHA_STATE_DOWN);
-		CreateFireBullet();
+		if (shoot_Timer.ElapsedTime() >= SHOOT_DELAY_TIME && shoot_Timer.IsStarted()) {
+			CreateFireBullet();
+			shoot_Timer.Reset();
+			down_Timer.Start();
+		}else if (down_Timer.ElapsedTime() >= DOWN_DELAY_TIME && down_Timer.IsStarted()) {
+			this->SetState(FIRE_PIRANHA_STATE_DOWN);
+			down_Timer.Reset();
+		}
 		break;
 	case FIRE_PIRANHA_STATE_DOWN:
-		
-		if (start_Y - y <= 0) {
-			this->SetState(FIRE_PIRANHA_STATE_UP);
+		if (start_Y <= y) {
+			if (up_Timer.ElapsedTime() >= UP_DELAY_TIME && up_Timer.IsStarted()) {
+				this->SetState(FIRE_PIRANHA_STATE_UP);
+				up_Timer.Reset();
+			}
+			else {
+				y = start_Y;
+			}
 		}
 		break;
 	default:
@@ -100,10 +114,12 @@ void CFirePiranhaPlant::SetState(int state)
 		break;
 	case FIRE_PIRANHA_STATE_DOWN:
 		vy = FIRE_PIRANHA_UP_SPEED;
+		up_Timer.Start();
+		isFireBulletCreated = false;
 		break;
 	case FIRE_PIRANHA_STATE_SHOOT:
 		vy = 0;
-		//CreateFireBullet();
+		shoot_Timer.Start();
 		break;
 	default:
 		break;
@@ -112,12 +128,15 @@ void CFirePiranhaPlant::SetState(int state)
 }
 
 void CFirePiranhaPlant::CreateFireBullet() {
-	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-	LPANIMATION_SET tmp_ani_set = animation_sets->Get(FIRE_BULLET_ANI_SET_ID);
-	CFireBullet* bullet = new CFireBullet(this->x, this->y, this->ani);
-	bullet->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(bullet);
+	if (!isFireBulletCreated) {
+		CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+		CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+		LPANIMATION_SET tmp_ani_set = animation_sets->Get(FIRE_BULLET_ANI_SET_ID);
+		CFireBullet* bullet = new CFireBullet(this->x, this->y, this->ani);
+		bullet->SetAnimationSet(tmp_ani_set);
+		scene->AddObjects(bullet);
+		isFireBulletCreated = true;
+	}
 }
 
 
