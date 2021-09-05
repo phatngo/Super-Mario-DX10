@@ -13,6 +13,7 @@
 #define ANI_SET_ID_POINT_800  131
 #define ANI_SET_ID_POINT_1000 132
 
+#define POINT_GENERAL_ANI 0
 
 #define POINT_SPEED_Y 0.05f
 #define POINT_FLYING_DY 30
@@ -20,7 +21,8 @@
 #define EFFECT_POINT_STATE_EXIST 1
 #define EFFECT_POINT_STATE_NON_EXIST 0
 
-class EffectPoint : public CGameObject{
+class EffectPoint : public CGameObject
+{
 public:
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

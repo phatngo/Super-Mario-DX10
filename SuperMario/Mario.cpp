@@ -30,6 +30,9 @@ CMario::CMario(float x, float y) : CGameObject()
 	start_y = y; 
 	this->x = x; 
 	this->y = y; 
+	totalPoint = 0;
+	totalMoney = 0;
+	bool isKickingKoopas = false;
 }
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> *objects)
@@ -114,7 +117,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					}
 					else {
 						if (goomba->GetState() != GOOMBA_STATE_RED_WALKING && goomba->GetState()!= GOOMBA_STATE_RED_DIE) {
-							this->CreatePoint(oLeft, oTop - GOOMBA_BBOX_NORMAL_HEIGHT, EFFECT_POINT_400);
+							this->AddPoint(oLeft, oTop - GOOMBA_BBOX_NORMAL_HEIGHT, EFFECT_POINT_400);
 							goomba->SetState(GOOMBA_STATE_RED_WALKING);
 						}
 						else if (goomba->GetState() == GOOMBA_STATE_RED_WALKING) {
@@ -159,12 +162,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 						if (koopas->GetState() == KOOPAS_STATE_IN_SHELL) {
 							koopas->SetState(KOOPAS_STATE_SPINNING);
 							vy = -MARIO_JUMP_DEFLECT_SPEED;
-							CreatePoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT);
+							AddPoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT);
 						}
 						else {
-							koopas->SetState(KOOPAS_STATE_DEATH);
+							koopas->SetState(KOOPAS_STATE_IN_SHELL);
 							vy = -MARIO_JUMP_DEFLECT_SPEED;
-							CreatePoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT, EFFECT_POINT_200);
+							AddPoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT, EFFECT_POINT_200);
 						}
 					}
 				}
@@ -174,15 +177,24 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					if (untouchable == 0)
 					{
 						//If koopas is not dead
-						if (koopas->GetState() != KOOPAS_STATE_DEATH)
+						if (koopas->GetState() != KOOPAS_STATE_DEATH && koopas->GetState()!=KOOPAS_STATE_SPINNING)
 						{
-							//If mario is not in the big size
+							if (state == MARIO_STATE_WALKING_LEFT || state == MARIO_STATE_WALKING_RIGHT) {
+								isKickingKoopas = true;
+								koopas->SetState(KOOPAS_STATE_SPINNING);
+							}
+						}
+						else if (KOOPAS_STATE_SPINNING) {
 							if (level > MARIO_LEVEL_SMALL)
 							{
-								if (level == MARIO_LEVEL_TAIL)
-									level = MARIO_LEVEL_BIG;
-								else
-									level = MARIO_LEVEL_SMALL;
+								if (level == MARIO_LEVEL_TAIL) {
+									level = MARIO_LEVEL_TRANSFORM_BIG;
+									this->transformTimer.Start();
+								}
+								else {
+									level = MARIO_LEVEL_TRANSFORM_SMALL;
+									this->transformTimer.Start();
+								}
 								StartUntouchable();
 							}
 							else
@@ -224,6 +236,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
 				vy = -MARIO_JUMP_SPEED_Y/2;
 				coin->SetState(COIN_STATE_NON_EXIST);
+				AddMoney();
 			}
 			else if (dynamic_cast<CFireBullet*>(e->obj)) {
 				if (untouchable == 0)
@@ -309,7 +322,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);
 				this->level = MARIO_LEVEL_TRANSFORM_BIG;
 				this->transformTimer.Start();
-				CreatePoint(this->x, this->y, EFFECT_POINT_1000);
+				AddPoint(this->x, this->y, EFFECT_POINT_1000);
 			}
 
 			}
@@ -388,7 +401,7 @@ void CMario::Render()
 			if (transformTimer.ElapsedTime() >= MARIO_TRANSFORMING_TIME && transformTimer.IsStarted()) {
 				level = MARIO_LEVEL_TAIL;
 				transformTimer.Reset();
-				CreatePoint(this->x, this->y, EFFECT_POINT_1000);
+				AddPoint(this->x, this->y, EFFECT_POINT_1000);
 			}
 		}
 		else if (level == MARIO_LEVEL_TAIL)
@@ -400,9 +413,24 @@ void CMario::Render()
 				else
 					ani = MARIO_ANI_TAIL_IDLE_LEFT;
 			}
-			else if (vx > 0)
-				ani = MARIO_ANI_TAIL_WALKING_RIGHT;
-			else ani = MARIO_ANI_TAIL_WALKING_LEFT;
+			else if (vx > 0) {
+				if (isKickingKoopas) {
+					ani = MARIO_ANI_TAIL_KICK_RIGHT;
+					isKickingKoopas = false;
+				}
+				else {
+					ani = MARIO_ANI_TAIL_WALKING_RIGHT;
+				}
+			}
+			else {
+				if (isKickingKoopas) {
+					ani = MARIO_ANI_TAIL_KICK_LEFT;
+					isKickingKoopas = false;
+				}
+				else {
+					ani = MARIO_ANI_TAIL_WALKING_LEFT;
+				}
+			}
 		}
 		else if (level == MARIO_LEVEL_BIG)
 		{
@@ -413,10 +441,24 @@ void CMario::Render()
 				else
 					ani = MARIO_ANI_BIG_IDLE_LEFT;
 			}
-			else if (vx > 0)
-				ani = MARIO_ANI_BIG_WALKING_RIGHT;
-			else ani = MARIO_ANI_BIG_WALKING_LEFT;
-
+			else if (vx > 0) {
+				if (isKickingKoopas) {
+					ani = MARIO_ANI_BIG_KICK_RIGHT;
+					isKickingKoopas = false;
+				}
+				else {
+					ani = MARIO_ANI_BIG_WALKING_RIGHT;
+				}
+			}
+			else {
+				if (isKickingKoopas) {
+					ani = MARIO_ANI_BIG_KICK_LEFT;
+					isKickingKoopas = false;
+				}
+				else {
+					ani = MARIO_ANI_BIG_WALKING_LEFT;
+				}
+			}
 		}
 		else if (level == MARIO_LEVEL_SMALL)
 		{
@@ -425,9 +467,24 @@ void CMario::Render()
 				if (nx > 0) ani = MARIO_ANI_SMALL_IDLE_RIGHT;
 				else ani = MARIO_ANI_SMALL_IDLE_LEFT;
 			}
-			else if (vx > 0)
-				ani = MARIO_ANI_SMALL_WALKING_RIGHT;
-			else ani = MARIO_ANI_SMALL_WALKING_LEFT;
+			else if (vx > 0) {
+				if (isKickingKoopas) {
+					ani = MARIO_ANI_SMALL_KICK_RIGHT;
+					isKickingKoopas = false;
+				}
+				else {
+					ani = MARIO_ANI_SMALL_WALKING_RIGHT;
+				}
+			}
+			else {
+				if (isKickingKoopas) {
+					ani = MARIO_ANI_SMALL_KICK_LEFT;
+					isKickingKoopas = false;
+				}
+				else {
+					ani = MARIO_ANI_SMALL_WALKING_LEFT;
+				}
+			}
 		}
 	}
 	int alpha = 255;
@@ -498,7 +555,7 @@ void CMario::Reset()
 	SetSpeed(0, 0);
 }
 
-void CMario::CreatePoint(float x, float y, int point) {
+void CMario::AddPoint(float x, float y, int point) {
 	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 	LPANIMATION_SET tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_100);
@@ -519,8 +576,9 @@ void CMario::CreatePoint(float x, float y, int point) {
 	default:
 		break;
 	}
+	this->totalPoint += point;
 	EffectPoint* effectPoint = new EffectPoint();
-	effectPoint->SetPosition(this->x, this->y);
+	effectPoint->SetPosition(x, y);
 	effectPoint->SetAnimationSet(tmp_ani_set);
 	scene->AddObjects(effectPoint);
 }

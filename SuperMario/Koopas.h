@@ -3,8 +3,8 @@
 #include "GameObject.h"
 #include "Timer.h"
 
-#define KOOPAS_WALKING_SPEED			0.02f
-#define KOOPAS_PARA_WALKING_SPEED		0.035f
+#define KOOPAS_WALKING_SPEED			0.03f
+#define KOOPAS_PARA_WALKING_SPEED		0.3f
 #define KOOPAS_JUMP_SPEED				0.35f
 #define KOOPAS_RED_SPEED				0.03f
 #define KOOPAS_GRAVITY					0.002f
@@ -20,6 +20,7 @@
 #define KOOPAS_STATE_SPINNING	300
 #define KOOPAS_STATE_IN_SHELL	400
 #define KOOPAS_STATE_DEATH		500
+#define KOOPAS_STATE_SHAKE		600
 
 #define KOOPAS_REVIVE_TIME		2000
 #define KOOPAS_SHELL_TIME		5000
@@ -43,6 +44,7 @@
 #define KOOPAS_RED_PARA		3
 
 #define KOOPAS_TURN_DIFF	4
+
 
 class CKoopas : public CGameObject
 {

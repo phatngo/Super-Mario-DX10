@@ -84,7 +84,6 @@ public:
 	int GetState() { return this->state; }
 	void SetTag(int tag) { this->tag = tag; }
 	void SetType(int type) { this->type = type; }
-	//virtual void SetTag (int objTag) = 0;
 
 	void RenderBoundingBox(int alpha = 32);
 

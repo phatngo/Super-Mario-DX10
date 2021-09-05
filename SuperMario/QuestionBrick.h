@@ -39,7 +39,6 @@ public:
 	void CreateCoin();
 	void CreateMushroom();
 	void CreateLeaf();
-	void CreatePoint();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
 

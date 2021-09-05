@@ -6,6 +6,7 @@
 #include "PlayScence.h"
 #include "EffectPoint.h"
 #include "Block.h"
+#include "Mario.h"
 
 CGoomba::CGoomba(int tag)
 {
@@ -117,11 +118,12 @@ void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				if (e->ny < 0)
 				{
 					vy = GOOMBA_DIE_DEFLECT_SPEED;
-					if (state != GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS) {
+					if (state != GOOMBA_STATE_FALLING_KILLED_BY_KOOPAS) {
 						vy = 0;
 					}
 					else {
 						y = y0 + dy;
+						x = x0 + dx;
 					}
 					ay = GOOMBA_GRAVITY;
 				}
@@ -162,9 +164,9 @@ void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			}
 			else if (dynamic_cast<CBlock*>(e->obj)) {
 				if (e->ny != 0) {
-					if (state == GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS); {
-						y = y0+dy; 
-					}
+					vy += ay * dt;
+					y += dy;
+					x += dx;
 				}
 			}
 		}
@@ -266,6 +268,7 @@ void CGoomba::updateRedGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 void CGoomba::Render()
 {
+	CMario* player = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
 	int ani = -1;
 	if (tag == GOOMBA_TAG_YELLOW) {
 		ani = GOOMBA_ANI_YELLOW_WALKING;
@@ -273,7 +276,7 @@ void CGoomba::Render()
 			//After being killed, goomba becomes dead then delay for a while, then disappears
 			if (this->transformToNonExistTimer.ElapsedTime() >= GOOMBA_DELAY_TIME && this->transformToNonExistTimer.IsStarted()) {
 				this->SetState(GOOMBA_STATE_NON_EXIST);
-				CreatePoint();
+				player->AddPoint(this->x, this->y - GOOMBA_BBOX_NORMAL_HEIGHT);
 				transformToNonExistTimer.Reset();
 			}
 			ani = GOOMBA_ANI_YELLOW_DIE;
@@ -321,7 +324,7 @@ void CGoomba::Render()
 				//After being killed, goomba becomes dead then delay for a while, then disappears
 				if (transformToNonExistTimer.ElapsedTime() >= GOOMBA_DELAY_TIME && transformToNonExistTimer.IsStarted()) {
 					this->SetState(GOOMBA_STATE_NON_EXIST);
-					CreatePoint(EFFECT_POINT_800);
+					player->AddPoint(this->x, this->y - GOOMBA_BBOX_NORMAL_HEIGHT,EFFECT_POINT_800);
 				}
 				ani = GOOMBA_ANI_RED_DIE;
 				break;
@@ -456,36 +459,16 @@ void CGoomba::SetState(int state)
 		vy = 0;
 		break;
 	case GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS:
-		vy = -GOOMBA_DIE_DEFLECT_SPEED;
-		vx = -vx;
-		ay = GOOMBA_GRAVITY;
+		vy = -GOOMBA_JUMPING_LOW_SPEED_Y;
+		vx = -this->killingKoopasDirection*GOOMBA_JUMPING_LOW_SPEED_X;
+		ay = -GOOMBA_GRAVITY;
 		break;
 	case GOOMBA_STATE_FALLING_KILLED_BY_KOOPAS:
-		vy = -GOOMBA_JUMPING_HIGH_SPEED_Y;
-		ay = -GOOMBA_GRAVITY;
-		vx = GOOMBA_JUMPING_LOW_SPEED_Y;
+		vy = GOOMBA_JUMPING_LOW_SPEED_Y;
+		ay = GOOMBA_GRAVITY;
+		vx = -this->killingKoopasDirection*GOOMBA_JUMPING_LOW_SPEED_X;
 		break;
 	}
 	CGameObject::SetState(state);
 }
 
-void CGoomba::CreatePoint(int point) {
-	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-	LPANIMATION_SET tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_100);
-	switch (point)
-	{
-	case EFFECT_POINT_400:
-		tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_400);
-		break;
-	case EFFECT_POINT_800:
-		tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_800);
-		break;
-	default:
-		break;
-	}
-	EffectPoint* effectPoint = new EffectPoint();
-	effectPoint->SetPosition(this->x, this->y - GOOMBA_BBOX_NORMAL_HEIGHT);
-	effectPoint->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(effectPoint);
-}

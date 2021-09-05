@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "PlayScence.h"
 #include "EffectPoint.h"
+#include "Mario.h"
 
 void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt, coObjects);
@@ -17,6 +18,7 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 
 void CQuestionBrick::Render() {
+	CMario* player = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
 	int ani = -1;
 	switch (this->state)
 	{
@@ -36,7 +38,8 @@ void CQuestionBrick::Render() {
 		if (tag == COIN_TAG) {
 			//Delay until coin disappears => Effect point appears
 			if (pointAppearanceTimer.ElapsedTime() >= TIME_UNTIL_POINT_APPEAR && pointAppearanceTimer.IsStarted()) {
-				CreatePoint();
+				player->AddPoint(this->x, this->y - BRICK_BBOX_HEIGHT);
+				player->AddMoney();
 				pointAppearanceTimer.Reset();
 			}
 		}
@@ -135,16 +138,6 @@ void CQuestionBrick::CreateLeaf() {
 	leaf->SetPosition(this->x, this->y);
 	leaf->SetAnimationSet(tmp_ani_set);
 	scene->AddObjects(leaf);
-}
-
-void CQuestionBrick::CreatePoint() {
-	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-	LPANIMATION_SET tmp_ani_set = animation_sets->Get(ANI_SET_ID_POINT_100);
-	EffectPoint* effectPoint = new EffectPoint();
-	effectPoint->SetPosition(this->x, this->y - BRICK_BBOX_HEIGHT);
-	effectPoint->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(effectPoint);
 }
 
 

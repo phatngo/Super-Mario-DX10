@@ -16,7 +16,7 @@ void EffectPoint::Render() {
 				SetState(EFFECT_POINT_STATE_NON_EXIST);
 			}
 		}
-	animation_set->at(0)->Render(x, y);
+	animation_set->at(POINT_GENERAL_ANI)->Render(x, y);
 }
 
 void EffectPoint::SetState(int state) {

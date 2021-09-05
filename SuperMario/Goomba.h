@@ -63,16 +63,16 @@ class CGoomba : public CGameObject
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
 	int lowFallingTime;
+	int killingKoopasDirection;
 	bool isOnGround;
 	Timer transformToNonExistTimer;
 	Timer redWalkWingTimer;
 	bool isQuestionBrickAboveTouched;
 	void updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void updateRedGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-
 public: 	
 	CGoomba(int tag);
 	virtual void SetState(int state);
 	int GetTag() { return this->tag; }
-	void CreatePoint(int point = 100);
+	void SetKillingKoopasDiretion(int koopasNx) { this->killingKoopasDirection = koopasNx; }
 };

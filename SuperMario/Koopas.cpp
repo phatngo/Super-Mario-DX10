@@ -10,6 +10,7 @@
 #include "Timer.h"
 #include "PlayScence.h"
 #include "Game.h"
+#include "Mario.h"
 #include "EffectPoint.h"
 
 CKoopas::CKoopas(int tag)
@@ -26,7 +27,7 @@ void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &botto
 	left = x;
 	top = y;
 	right = x + KOOPAS_BBOX_WIDTH;
-	if (state == KOOPAS_STATE_IN_SHELL || state == KOOPAS_STATE_SPINNING || state == KOOPAS_STATE_SHELL_UP)
+	if (state == KOOPAS_STATE_IN_SHELL || state == KOOPAS_STATE_SPINNING || state == KOOPAS_STATE_SHELL_UP || state == KOOPAS_STATE_SHAKE)
 	{
 		bottom = y + KOOPAS_BBOX_SHELL_HEIGHT;
 	}
@@ -37,6 +38,7 @@ void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &botto
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	CMario* mario = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -88,7 +90,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					if (tag == KOOPAS_GREEN_PARA)
 						tag = KOOPAS_GREEN;
 					this->SetState(KOOPAS_STATE_DEATH);
-					//mario->AddScore(x, y, 100, true);
 				}
 				else
 				{
@@ -119,16 +120,19 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				{
 					if (goomba->GetState() != GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS) {
 						goomba->SetState(GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS);
+						goomba->SetKillingKoopasDiretion(this->nx);
 					}
 					vy = 0;
 					ay = KOOPAS_GRAVITY;
+					mario->AddPoint(x, y, EFFECT_POINT_400);
 				}
 				if (e->ny > 0) {
-					DebugOut(L"Touched Above \n");
 					vy = 0;
 					ay = 0;
+					goomba->SetState(GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS);
 				}
 				vx += ax * dt;
+				x = x0 + dx;
 			}
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
@@ -230,7 +234,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				{
 					vy = 0;
 					ay = KOOPAS_GRAVITY;
-					if (state == KOOPAS_STATE_SHELL_UP)
+					if (state == KOOPAS_STATE_SHELL_UP || state == KOOPAS_STATE_SHAKE)
 						vx = 0;
 					if (tag == KOOPAS_RED && state == KOOPAS_STATE_WALKING)
 					{
@@ -338,8 +342,13 @@ void CKoopas::Render()
 		ani = KOOPAS_ANI_SHELL_UP;
 		this->SetState(KOOPAS_STATE_IN_SHELL);
 	}
-	else if (state == KOOPAS_STATE_IN_SHELL)
+	else if (state == KOOPAS_STATE_IN_SHELL) {
+		if (shellTimer.ElapsedTime() >= KOOPAS_SHELL_TIME && shellTimer.IsStarted()) {
+			SetState(KOOPAS_STATE_SHAKE);
+			shellTimer.Reset();
+		}
 		ani = KOOPAS_ANI_SHELL;
+	}
 	else if (state == KOOPAS_STATE_SPINNING)
 	{
 		if (vx < 0)
@@ -359,12 +368,12 @@ void CKoopas::Render()
 			ani = KOOPAS_ANI_PARA_LEFT;
 		else
 			ani = KOOPAS_ANI_PARA_RIGHT;
-	if (revivingTimer.IsStarted())
-	{
-		if (state == KOOPAS_STATE_IN_SHELL)
-			ani = KOOPAS_ANI_SHAKE;
-		if (state == KOOPAS_STATE_SHELL_UP)
-			ani = KOOPAS_ANI_SHAKE_UP;
+	if (state == KOOPAS_STATE_SHAKE) {
+		if (respawnTimer.ElapsedTime() >= KOOPPAS_RESPAWN_TIME && respawnTimer.IsStarted()) {
+			SetState(KOOPAS_STATE_WALKING);
+			respawnTimer.Reset();
+		}
+		ani = KOOPAS_ANI_SHAKE;
 	}
 	animation_set->at(ani)->Render(x, y);
 
@@ -380,14 +389,26 @@ void CKoopas::SetState(int state)
 	{
 	
 	case KOOPAS_STATE_WALKING:
+		y -= KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_SHELL_HEIGHT;
 		if (tag == KOOPAS_GREEN_PARA)
-			vx = nx * KOOPAS_PARA_WALKING_SPEED;
+		{
+			float marioX, marioY;
+			player->GetPosition(marioX, marioY);
+			if (marioX <= this->x) {
+				vx = -KOOPAS_PARA_WALKING_SPEED;
+				nx = -1;
+			}
+			else {
+				vx = -KOOPAS_PARA_WALKING_SPEED;
+				nx = 1;
+			}
+		}
 		if (tag == KOOPAS_RED_PARA)
 		{
 			vx = 0;
 			vy = KOOPAS_RED_SPEED;
 		}
-		if (tag == KOOPAS_RED || tag == KOOPAS_GREEN)
+		if (tag == KOOPAS_GREEN || tag == KOOPAS_RED)
 			vx = nx * KOOPAS_WALKING_SPEED;
 		ay = KOOPAS_GRAVITY;
 		break;
@@ -398,14 +419,17 @@ void CKoopas::SetState(int state)
 		y += KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_SHELL_HEIGHT;
 		vx = 0;
 		shellTimer.Start();
-		revivingTimer.Reset();
 		vy = 0;
 		break;
 	case KOOPAS_STATE_DEATH:
 		vy = 0;
 		vx = 0;
 		SetType(IGNORE_DEFINE);
+		break;
+	case KOOPAS_STATE_SHAKE:
+		vx = 0;
 		respawnTimer.Start();
+		vy = 0;
 		break;
 	default:
 		break;
