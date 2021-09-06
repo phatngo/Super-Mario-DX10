@@ -21,7 +21,6 @@ CKoopas::CKoopas(int tag)
 	this->SetType(MOVING);
 
 }
-
 void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	left = x;
@@ -35,10 +34,12 @@ void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &botto
 		bottom = y + KOOPAS_BBOX_HEIGHT;
 
 }
-
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CMario* mario = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
+	float marioX, marioY;
+	mario->GetPosition(marioX, marioY);
+
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -147,6 +148,13 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						y = e->obj->y - KOOPAS_BBOX_HEIGHT;
 						vy = -KOOPAS_JUMP_SPEED;
+						if (marioX <= x) {
+							this->nx = -1;
+						}
+						else {
+							this->nx = 1;
+						}
+						vx = this->nx * KOOPAS_WALKING_SPEED;
 					}
 				}
 				if (e->nx != 0)
@@ -255,8 +263,15 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						y = e->obj->y - KOOPAS_BBOX_HEIGHT;
 						vy = -KOOPAS_JUMP_SPEED;
-					}
+						if (marioX <= x) {
+							this->nx = -1;
+						}
+						else {
+							this->nx = 1;
+						}
+						vx = this->nx * KOOPAS_WALKING_SPEED;
 
+					}
 				}
 				else
 				{
@@ -334,7 +349,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 
 }
-
 void CKoopas::Render()
 {
 	int ani = -1;
@@ -379,7 +393,6 @@ void CKoopas::Render()
 
 	RenderBoundingBox(75);
 }
-
 void CKoopas::SetState(int state)
 {
 
@@ -390,19 +403,6 @@ void CKoopas::SetState(int state)
 	
 	case KOOPAS_STATE_WALKING:
 		y -= KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_SHELL_HEIGHT;
-		if (tag == KOOPAS_GREEN_PARA)
-		{
-			float marioX, marioY;
-			player->GetPosition(marioX, marioY);
-			if (marioX <= this->x) {
-				vx = -KOOPAS_PARA_WALKING_SPEED;
-				nx = -1;
-			}
-			else {
-				vx = -KOOPAS_PARA_WALKING_SPEED;
-				nx = 1;
-			}
-		}
 		if (tag == KOOPAS_RED_PARA)
 		{
 			vx = 0;
@@ -436,8 +436,6 @@ void CKoopas::SetState(int state)
 	}
 	CGameObject::SetState(state);
 }
-
-
 bool CKoopas::CalRevivable()
 {
 	/*Camera* cam = Camera::GetInstance();
@@ -446,7 +444,6 @@ bool CKoopas::CalRevivable()
 	respawnTimer.Start();
 	return true;
 }
-
 bool CKoopas::CalTurnable(LPGAMEOBJECT object, vector<LPGAMEOBJECT>* coObjects)
 {
 	/*Camera* cam = Camera::GetInstance();

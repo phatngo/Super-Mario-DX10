@@ -70,4 +70,5 @@ public:
 	void Reset();
 	bool CalRevivable();
 	bool CalTurnable(LPGAMEOBJECT object, vector<LPGAMEOBJECT>* coObjects);
+	int GetTag() { return this->tag; }
 };

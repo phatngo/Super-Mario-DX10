@@ -459,14 +459,14 @@ void CGoomba::SetState(int state)
 		vy = 0;
 		break;
 	case GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS:
-		vy = -GOOMBA_JUMPING_LOW_SPEED_Y;
-		vx = -this->killingKoopasDirection*GOOMBA_JUMPING_LOW_SPEED_X;
+		vy = -GOOMBA_JUMPING_KILLED_BY_KOOPAS_SPEED_Y;
+		vx = -this->killingKoopasDirection* GOOMBA_JUMPING_KILLED_BY_KOOPAS_SPEED_X;
 		ay = -GOOMBA_GRAVITY;
 		break;
 	case GOOMBA_STATE_FALLING_KILLED_BY_KOOPAS:
-		vy = GOOMBA_JUMPING_LOW_SPEED_Y;
+		vy = GOOMBA_FALLING_KILLED_BY_KOOPAS_SPEED_Y;
 		ay = GOOMBA_GRAVITY;
-		vx = -this->killingKoopasDirection*GOOMBA_JUMPING_LOW_SPEED_X;
+		vx = -this->killingKoopasDirection* GOOMBA_FALLING_KILLED_BY_KOOPAS_SPEED_X;
 		break;
 	}
 	CGameObject::SetState(state);

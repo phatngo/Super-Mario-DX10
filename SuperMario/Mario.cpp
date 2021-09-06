@@ -155,51 +155,63 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 
 				// jump on top >> kill Goomba and deflect a bit 
-				if (e->ny < 0)
-				{
-					if (koopas->GetState() != KOOPAS_STATE_DEATH)
+				if (koopas->GetTag() == KOOPAS_RED || koopas->GetTag() == KOOPAS_GREEN) {
+					if (e->ny < 0)
 					{
-						if (koopas->GetState() == KOOPAS_STATE_IN_SHELL) {
-							koopas->SetState(KOOPAS_STATE_SPINNING);
-							vy = -MARIO_JUMP_DEFLECT_SPEED;
-							AddPoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT);
+						if (koopas->GetState() != KOOPAS_STATE_DEATH)
+						{
+							if (koopas->GetState() == KOOPAS_STATE_IN_SHELL) {
+								koopas->SetState(KOOPAS_STATE_SPINNING);
+								vy = -MARIO_JUMP_DEFLECT_SPEED;
+								AddPoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT);
+							}
+							else {
+								koopas->SetState(KOOPAS_STATE_IN_SHELL);
+								vy = -MARIO_JUMP_DEFLECT_SPEED;
+								AddPoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT, EFFECT_POINT_200);
+							}
 						}
-						else {
-							koopas->SetState(KOOPAS_STATE_IN_SHELL);
-							vy = -MARIO_JUMP_DEFLECT_SPEED;
-							AddPoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT, EFFECT_POINT_200);
+					}
+					else if (e->nx != 0)
+					{
+						//If mario is touchable
+						if (untouchable == 0)
+						{
+							//If koopas is not dead
+							if (koopas->GetState() == KOOPAS_STATE_IN_SHELL)
+							{
+								if (state == MARIO_STATE_WALKING_LEFT || state == MARIO_STATE_WALKING_RIGHT) {
+									isKickingKoopas = true;
+									koopas->SetState(KOOPAS_STATE_SPINNING);
+								}
+							}
+							else if (KOOPAS_STATE_SPINNING) {
+								if (level > MARIO_LEVEL_SMALL)
+								{
+									if (level == MARIO_LEVEL_TAIL) {
+										level = MARIO_LEVEL_TRANSFORM_BIG;
+										this->transformTimer.Start();
+									}
+									else {
+										level = MARIO_LEVEL_TRANSFORM_SMALL;
+										this->transformTimer.Start();
+									}
+									StartUntouchable();
+								}
+								else
+									//Makes mario die
+									SetState(MARIO_STATE_DIE);
+							}
 						}
 					}
 				}
-				else if (e->nx != 0)
-				{
-					//If mario is touchable
-					if (untouchable == 0)
-					{
-						//If koopas is not dead
-						if (koopas->GetState() != KOOPAS_STATE_DEATH && koopas->GetState()!=KOOPAS_STATE_SPINNING)
+				else {
+					if (e->ny != 0) {
+						if (koopas->GetState() != KOOPAS_STATE_DEATH)
 						{
-							if (state == MARIO_STATE_WALKING_LEFT || state == MARIO_STATE_WALKING_RIGHT) {
-								isKickingKoopas = true;
-								koopas->SetState(KOOPAS_STATE_SPINNING);
-							}
-						}
-						else if (KOOPAS_STATE_SPINNING) {
-							if (level > MARIO_LEVEL_SMALL)
-							{
-								if (level == MARIO_LEVEL_TAIL) {
-									level = MARIO_LEVEL_TRANSFORM_BIG;
-									this->transformTimer.Start();
-								}
-								else {
-									level = MARIO_LEVEL_TRANSFORM_SMALL;
-									this->transformTimer.Start();
-								}
-								StartUntouchable();
-							}
-							else
-								//Makes mario die
-								SetState(MARIO_STATE_DIE);
+							koopas->SetTag(KOOPAS_GREEN);
+							vy = -MARIO_JUMP_DEFLECT_SPEED;
+							AddPoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT);
 						}
 					}
 				}
