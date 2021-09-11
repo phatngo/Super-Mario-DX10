@@ -4,10 +4,15 @@
 #include "EffectPoint.h"
 #include "Utils.h"
 
-#define MARIO_WALKING_SPEED		0.15f 
-#define MARIO_JUMP_SPEED_Y		0.43f 
-#define MARIO_JUMP_DEFLECT_SPEED 0.3f 
-#define MARIO_GRAVITY			0.002f
+#define MARIO_WALKING_SPEED_MAX		0.2f
+#define MARIO_RUNNING_SPEED_MAX		0.3f
+
+#define MARIO_JUMP_SPEED_Y		    0.43f 
+#define MARIO_JUMP_DEFLECT_SPEED    0.3f
+
+#define MARIO_GRAVITY			    0.002f
+#define MARIO_ACCEL_WALK_X	        0.0007f
+
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
 
 #define MARIO_STATE_IDLE			0
@@ -16,28 +21,41 @@
 #define MARIO_STATE_JUMP			300
 #define MARIO_STATE_DIE				400
 #define MARIO_STATE_TRANSFORMING    500
+#define MARIO_STATE_RELEASE_JUMP    600
 
-#define MARIO_ANI_BIG_IDLE_RIGHT		14
-#define MARIO_ANI_BIG_IDLE_LEFT			22
-#define MARIO_ANI_BIG_WALKING_RIGHT		15
-#define MARIO_ANI_BIG_WALKING_LEFT		23
-#define MARIO_ANI_BIG_KICK_RIGHT        69
-#define MARIO_ANI_BIG_KICK_LEFT         73
+#define MARIO_ANI_BIG_IDLE_RIGHT		        14
+#define MARIO_ANI_BIG_IDLE_LEFT			        22
+#define MARIO_ANI_BIG_WALKING_RIGHT		        15
+#define MARIO_ANI_BIG_WALKING_FAST_RIGHT		15
+#define MARIO_ANI_BIG_WALKING_LEFT		        23
+#define MARIO_ANI_BIG_WALKING_FAST_LEFT		    24
+#define MARIO_ANI_BIG_KICK_RIGHT                69
+#define MARIO_ANI_BIG_KICK_LEFT                 73
+#define MARIO_ANI_BIG_BRAKING_RIGHT			    20
+#define MARIO_ANI_BIG_BRAKING_LEFT			    28
 
-#define MARIO_ANI_SMALL_IDLE_RIGHT		0
-#define MARIO_ANI_SMALL_IDLE_LEFT	    7
-#define MARIO_ANI_SMALL_WALKING_RIGHT	1
-#define MARIO_ANI_SMALL_WALKING_LEFT	8
-#define MARIO_ANI_SMALL_KICK_RIGHT      62
-#define MARIO_ANI_SMALL_KICK_LEFT       61
+#define MARIO_ANI_SMALL_IDLE_RIGHT		    0
+#define MARIO_ANI_SMALL_IDLE_LEFT	        7
+#define MARIO_ANI_SMALL_WALKING_RIGHT	    1
+#define MARIO_ANI_SMALL_WALKING_FAST_RIGHT	2
+#define MARIO_ANI_SMALL_WALKING_LEFT	    8
+#define MARIO_ANI_SMALL_WALKING_FAST_LEFT	9
+#define MARIO_ANI_SMALL_KICK_RIGHT          62
+#define MARIO_ANI_SMALL_KICK_LEFT           61
+#define MARIO_ANI_SMALL_BRAKING_RIGHT		6
+#define MARIO_ANI_SMALL_BRAKING_LEFT		13
 
 
-#define MARIO_ANI_TAIL_IDLE_RIGHT		30
-#define MARIO_ANI_TAIL_IDLE_LEFT		38
-#define MARIO_ANI_TAIL_WALKING_RIGHT	31
-#define MARIO_ANI_TAIL_WALKING_LEFT	    39
-#define MARIO_ANI_TAIL_KICK_RIGHT       77
-#define MARIO_ANI_TAIL_KICK_LEFT        81
+#define MARIO_ANI_TAIL_IDLE_RIGHT		    30
+#define MARIO_ANI_TAIL_IDLE_LEFT		    38
+#define MARIO_ANI_TAIL_WALKING_RIGHT	    31
+#define MARIO_ANI_TAIL_WALKING_FAST_RIGHT	32
+#define MARIO_ANI_TAIL_WALKING_LEFT	        39
+#define MARIO_ANI_TAIL_WALKING_FAST_LEFT	40
+#define MARIO_ANI_TAIL_KICK_RIGHT           77
+#define MARIO_ANI_TAIL_KICK_LEFT            81
+#define MARIO_ANI_TAIL_BRAKING_RIGHT		36
+#define MARIO_ANI_TAIL_BRAKING_LEFT			44
 
 #define MARIO_ANI_TRANSFORM_BIG_RIGHT	    115
 #define MARIO_ANI_TRANSFORM_BIG_LEFT	    116
@@ -72,6 +90,8 @@ class CMario : public CGameObject
 	int untouchable;
 	DWORD untouchable_start;
 	DWORD marioDT;
+	float maxVx;
+	int ani;
 
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
@@ -79,6 +99,7 @@ class CMario : public CGameObject
 	int totalPoint;
 	int totalMoney;
 	bool isKickingKoopas;
+	bool isOnGround;
 public: 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT>* objects=NULL);

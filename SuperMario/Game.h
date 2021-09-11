@@ -6,6 +6,8 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include "Utils.h"
+#include <d3d10.h>
+#include <d3dx10.h>
 
 
 #define DIRECTINPUT_VERSION 0x0800
@@ -19,6 +21,10 @@ using namespace std;
 
 class CGame
 {
+	IDXGISwapChain* pSwapChain = NULL;
+	ID3D10RenderTargetView* pRenderTargetView = NULL;
+	ID3D10BlendState* pBlendStateAlpha = NULL;
+
 	static CGame * __instance;
 	HWND hWnd;									// Window handle
 

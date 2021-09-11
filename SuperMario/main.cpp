@@ -14,6 +14,8 @@
 #include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
+#include <d3d10.h>
+#include <d3dx10.h>
 
 #include "Utils.h"
 #include "Game.h"
@@ -54,13 +56,14 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	Update world status for this frame
 	dt: time period between beginning of last frame and beginning of this frame
 */
+//Remain unchanged
 void Update(DWORD dt)
 {
 	CGame::GetInstance()->GetCurrentScene()->Update(dt);
 }
 
 /*
-	Render a frame 
+	Codebase update  - need to change 
 */
 void Render()
 {
@@ -85,6 +88,7 @@ void Render()
 	d3ddv->Present(NULL, NULL, NULL, NULL);
 }
 
+//Remain unchanged
 HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int ScreenHeight)
 {
 	WNDCLASSEX wc;
@@ -132,11 +136,12 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 	return hWnd;
 }
 
+//Remain unchanged
 int Run()
 {
 	MSG msg;
 	int done = 0;
-	DWORD frameStart = GetTickCount();
+	ULONGLONG frameStart = GetTickCount64();
 	DWORD tickPerFrame = 1000 / MAX_FRAME_RATE;
 
 	while (!done)
@@ -149,7 +154,7 @@ int Run()
 			DispatchMessage(&msg);
 		}
 
-		DWORD now = GetTickCount();
+		ULONGLONG now = GetTickCount64();
 
 		// dt: the time between (beginning of last frame) and now
 		// this frame: the frame we are about to render
@@ -171,7 +176,11 @@ int Run()
 	return 1;
 }
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+//Codebase update - need to changed
+int WINAPI WinMain( _In_ HINSTANCE hInstance, 
+	_In_ HINSTANCE hPrevInstance, 
+	_In_ LPSTR lpCmdLine, 
+	_In_ int nCmdShow)
 {
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
