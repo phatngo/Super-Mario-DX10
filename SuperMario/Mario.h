@@ -4,8 +4,12 @@
 #include "EffectPoint.h"
 #include "Utils.h"
 
-#define MARIO_WALKING_SPEED_MAX		0.2f
-#define MARIO_RUNNING_SPEED_MAX		0.3f
+#define MARIO_WALKING_SPEED_START	0.0001f 
+#define MARIO_WALKING_SPEED_MAX		0.15f
+#define MARIO_RUNNING_SPEED_MAX		0.2f
+#define MARIO_SPEED_MAX				0.25f
+#define MARIO_ACCELERATION			0.0007f
+#define MARIO_WALKING_SPEED_MIN		0.05f
 
 #define MARIO_JUMP_SPEED_Y		    0.43f 
 #define MARIO_JUMP_DEFLECT_SPEED    0.3f

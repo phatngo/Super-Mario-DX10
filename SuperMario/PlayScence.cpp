@@ -437,9 +437,6 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
 	switch (KeyCode)
 	{
-	case DIK_S:
-		mario->SetState(MARIO_STATE_RELEASE_JUMP);
-		break;
 	default:
 		break;
 	}
