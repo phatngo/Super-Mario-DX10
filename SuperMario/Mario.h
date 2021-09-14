@@ -33,8 +33,8 @@
 #define MARIO_ANI_BIG_WALKING_FAST_RIGHT		15
 #define MARIO_ANI_BIG_WALKING_LEFT		        23
 #define MARIO_ANI_BIG_WALKING_FAST_LEFT		    24
-#define MARIO_ANI_BIG_KICK_RIGHT                69
-#define MARIO_ANI_BIG_KICK_LEFT                 73
+#define MARIO_ANI_BIG_KICK_RIGHT				74
+#define MARIO_ANI_BIG_KICK_LEFT				78
 #define MARIO_ANI_BIG_BRAKING_RIGHT			    20
 #define MARIO_ANI_BIG_BRAKING_LEFT			    28
 #define MARIO_ANI_BIG_JUMPINGUP_RIGHT		18
@@ -48,8 +48,8 @@
 #define MARIO_ANI_SMALL_WALKING_FAST_RIGHT	2
 #define MARIO_ANI_SMALL_WALKING_LEFT	    8
 #define MARIO_ANI_SMALL_WALKING_FAST_LEFT	9
-#define MARIO_ANI_SMALL_KICK_RIGHT          62
-#define MARIO_ANI_SMALL_KICK_LEFT           61
+#define MARIO_ANI_SMALL_KICK_RIGHT		66
+#define MARIO_ANI_SMALL_KICK_LEFT		70
 #define MARIO_ANI_SMALL_BRAKING_RIGHT		6
 #define MARIO_ANI_SMALL_BRAKING_LEFT		13
 #define MARIO_ANI_SMALL_JUMPINGUP_RIGHT		4
@@ -63,8 +63,8 @@
 #define MARIO_ANI_TAIL_WALKING_FAST_RIGHT	32
 #define MARIO_ANI_TAIL_WALKING_LEFT	        39
 #define MARIO_ANI_TAIL_WALKING_FAST_LEFT	40
-#define MARIO_ANI_TAIL_KICK_RIGHT           77
-#define MARIO_ANI_TAIL_KICK_LEFT            81
+#define MARIO_ANI_TAIL_KICK_RIGHT			82
+#define MARIO_ANI_TAIL_KICK_LEFT				86
 #define MARIO_ANI_TAIL_BRAKING_RIGHT		36
 #define MARIO_ANI_TAIL_BRAKING_LEFT			44
 #define MARIO_ANI_TAIL_JUMPINGUP_RIGHT		34
@@ -100,6 +100,7 @@
 
 #define ALPHA             255
 #define UNTOUCHABLE_ALPHA 128
+#define KICK_TIME 300
 
 
 class CMario : public CGameObject
@@ -118,6 +119,8 @@ class CMario : public CGameObject
 	int totalMoney;
 	bool isKickingKoopas;
 	bool isOnGround;
+	Timer kickTimer;
+	bool isChangeDirection;
 public: 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT>* objects=NULL);

@@ -40,7 +40,10 @@ CMario::CMario(float x, float y) : CGameObject()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> *objects)
 {
-
+	if (kickTimer.IsStarted() && kickTimer.ElapsedTime() >= KICK_TIME && isKickingKoopas) {
+		isKickingKoopas = false;
+		kickTimer.Reset();
+	}
 	vx += ax * dt;
 
 	if (vx >= MARIO_RUNNING_SPEED_MAX) {
@@ -49,7 +52,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 	else if (vx <= -MARIO_RUNNING_SPEED_MAX) {
 		vx = -MARIO_RUNNING_SPEED_MAX;
 	}
-
 
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
@@ -194,12 +196,32 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 							//If koopas is not dead
 							if (koopas->GetState() == KOOPAS_STATE_IN_SHELL)
 							{
-								if (state == MARIO_STATE_WALKING_LEFT || state == MARIO_STATE_WALKING_RIGHT) {
+								if (state != MARIO_STATE_DIE) {
 									isKickingKoopas = true;
 									koopas->SetState(KOOPAS_STATE_SPINNING);
+									kickTimer.Start();
 								}
 							}
-							else if (KOOPAS_STATE_SPINNING) {
+							else if (koopas->GetState() == KOOPAS_STATE_SPINNING) {
+								if (!isKickingKoopas) {
+									if (level > MARIO_LEVEL_SMALL)
+									{
+										if (level == MARIO_LEVEL_TAIL) {
+											level = MARIO_LEVEL_TRANSFORM_BIG;
+											this->transformTimer.Start();
+										}
+										else {
+											level = MARIO_LEVEL_TRANSFORM_SMALL;
+											this->transformTimer.Start();
+										}
+										StartUntouchable();
+									}
+									else
+										//Makes mario die
+										SetState(MARIO_STATE_DIE);
+								}
+							}
+							else{
 								if (level > MARIO_LEVEL_SMALL)
 								{
 									if (level == MARIO_LEVEL_TAIL) {
@@ -458,6 +480,12 @@ void CMario::Render()
 		}
 		else if (level == MARIO_LEVEL_TAIL)
 		{
+			if (vy < 0) {
+				if (nx > 0)
+					ani = MARIO_ANI_TAIL_JUMPINGUP_RIGHT;
+				else
+					ani = MARIO_ANI_TAIL_JUMPINGUP_LEFT;
+			}
 			if (vx == 0)
 			{
 				if (nx > 0) {
@@ -484,16 +512,9 @@ void CMario::Render()
 			else if (vx > 0) {
 				if (isKickingKoopas) {
 					ani = MARIO_ANI_TAIL_KICK_RIGHT;
-					isKickingKoopas = false;
 				}
 				else {
-					if (vy < 0) {
-						if (state == MARIO_STATE_JUMP)
-							ani = MARIO_ANI_TAIL_JUMPINGUP_RIGHT;
-						else
-							ani = MARIO_ANI_TAIL_JUMPINGDOWN_RIGHT;
-					}
-					else if (ax < 0 && nx < 0) {
+					if (ax < 0 && nx < 0) {
 						ani = MARIO_ANI_TAIL_BRAKING_LEFT;
 					}
 					else {
@@ -509,16 +530,9 @@ void CMario::Render()
 			else {
 				if (isKickingKoopas) {
 					ani = MARIO_ANI_TAIL_KICK_LEFT;
-					isKickingKoopas = false;
 				}
 				else {
-					if (vy < 0) {
-						if (state == MARIO_STATE_JUMP)
-							ani = MARIO_ANI_TAIL_JUMPINGUP_LEFT;
-						else
-							ani = MARIO_ANI_TAIL_JUMPINGDOWN_LEFT;
-					}
-					else if (ax > 0 && nx > 0)
+					if (ax > 0 && nx > 0)
 						ani = MARIO_ANI_TAIL_BRAKING_RIGHT;
 					else {
 						if (vx > MARIO_WALKING_SPEED_MAX) {
@@ -533,7 +547,15 @@ void CMario::Render()
 		}
 		else if (level == MARIO_LEVEL_BIG)
 		{
-			if (vx == 0)
+		if (vy < 0) {
+			if (nx > 0) {
+				ani = MARIO_ANI_BIG_JUMPINGUP_RIGHT;
+			}
+			if (nx < 0) {
+				ani = MARIO_ANI_BIG_JUMPINGUP_LEFT;
+			}
+		}
+			else if (vx == 0)
 			{
 				if (nx > 0) 
 				{
@@ -563,17 +585,10 @@ void CMario::Render()
 				if (isKickingKoopas) 
 				{
 					ani = MARIO_ANI_BIG_KICK_RIGHT;
-					isKickingKoopas = false;
 				}
 				else 
 				{
-					if (vy < 0) {
-						if (state == MARIO_STATE_JUMP)
-							ani = MARIO_ANI_BIG_JUMPINGUP_RIGHT;
-						else
-							ani = MARIO_ANI_BIG_JUMPINGDOWN_RIGHT;
-					}
-					else if (ax < 0 && nx < 0) {
+					if (ax < 0 && nx < 0) {
 						ani = MARIO_ANI_BIG_BRAKING_LEFT;
 					}
 					else{
@@ -589,16 +604,9 @@ void CMario::Render()
 			else {
 				if (isKickingKoopas) {
 					ani = MARIO_ANI_BIG_KICK_LEFT;
-					isKickingKoopas = false;
 				}
 				else {
-					if (vy < 0) {
-						if (state == MARIO_STATE_JUMP)
-							ani = MARIO_ANI_BIG_JUMPINGUP_LEFT;
-						else
-							ani = MARIO_ANI_BIG_JUMPINGDOWN_LEFT;
-					}
-					else if(ax > 0 && nx > 0){
+					if(ax > 0 && nx > 0){
 						ani = MARIO_ANI_BIG_BRAKING_RIGHT;
 					}
 					else{
@@ -638,7 +646,6 @@ void CMario::Render()
 			else if (vx > 0) {
 				if (isKickingKoopas) {
 					ani = MARIO_ANI_SMALL_KICK_RIGHT;
-					isKickingKoopas = false;
 				}
 				else {
 					if (vy < 0) {
@@ -663,7 +670,6 @@ void CMario::Render()
 			else {
 				if (isKickingKoopas) {
 					ani = MARIO_ANI_SMALL_KICK_LEFT;
-					isKickingKoopas = false;
 				}
 				else {
 					if (vy < 0) {
