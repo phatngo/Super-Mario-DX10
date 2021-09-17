@@ -20,6 +20,8 @@ CGoomba::CGoomba(int tag)
 		lowFallingTime = 0;
 		isOnGround = false;
 		isQuestionBrickAboveTouched = false;
+		isTouchedAnotherGoomba = false;
+		isQuestionBrickBelowTouched = false;
 	}
 }
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -60,9 +62,9 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 
-	if (tag == GOOMBA_TAG_YELLOW) 
+	if (tag == GOOMBA_TAG_YELLOW)
 		updateYellowGoomba(dt, coObjects);
-	else 
+	else
 		updateRedGoomba(dt, coObjects);
 }
 void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
@@ -137,7 +139,7 @@ void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				}
 
 			}
-			else if (dynamic_cast<CQuestionBrick*>(e->obj)) {
+			if (dynamic_cast<CQuestionBrick*>(e->obj)) {
 				float oLeft, oTop, oRight, oBottom;
 				CQuestionBrick* object = dynamic_cast<CQuestionBrick*>(e->obj);
 				object->GetBoundingBox(oLeft, oTop, oRight, oBottom);
@@ -156,13 +158,17 @@ void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 					}
 				}
 			}
-			else if (dynamic_cast<CGoomba*>(e->obj)) {
+			if (dynamic_cast<CGoomba*>(e->obj)) {
 				//When goomba touches each other
 				if (e->nx != 0) {
 					x += dx;
 				}
+				else if (e->ny != 0) {
+					y = start_Y;
+					x += dx;
+				}
 			}
-			else if (dynamic_cast<CBlock*>(e->obj)) {
+			if (dynamic_cast<CBlock*>(e->obj)) {
 				if (e->ny != 0) {
 					vy += ay * dt;
 					y += dy;
@@ -242,9 +248,13 @@ void CGoomba::updateRedGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				float oLeft, oTop, oRight, oBottom;
 				CQuestionBrick* object = dynamic_cast<CQuestionBrick*>(e->obj);
 				object->GetBoundingBox(oLeft, oTop, oRight, oBottom);
-				if (e->ny != 0)
+				if (e->ny > 0)
 				{
 					isQuestionBrickAboveTouched = true;;
+				}
+				if (e->ny < 0) {
+					isQuestionBrickBelowTouched = true;
+					touchedBrickTop = oTop;
 				}
 				if (e->nx != 0)
 				{
@@ -259,6 +269,9 @@ void CGoomba::updateRedGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				//When goomba touches each other
 				if (e->nx != 0) {
 					x += dx;
+				}
+				if (e->ny != 0) {
+					isTouchedAnotherGoomba = true;
 				}
 			}
 		}
@@ -288,7 +301,7 @@ void CGoomba::Render()
 	}
 	else {
 		ani = GOOMBA_ANI_RED_JUMPING;
-		if (isOnGround) 
+		if (isOnGround)
 		{
 			//when red goomba is on the ground
 			switch (state)
@@ -308,6 +321,10 @@ void CGoomba::Render()
 				this->SetState(GOOMBA_STATE_RED_WALK_WING);
 				ani = GOOMBA_ANI_RED_JUMPING;
 				break;
+			case GOOMBA_STATE_FALLING_AWAY_FROM_QUESTION_BRICK:
+				this->SetState(GOOMBA_STATE_RED_WALK_WING);
+				ani = GOOMBA_ANI_RED_JUMPING;
+				break;
 			case GOOMBA_STATE_RED_WALK_WING:
 				//After falling down from a high jump, red goomba will walk with a wing for a while then have a low jump
 				//Timer is for measuring the time for walking with a wing
@@ -324,7 +341,7 @@ void CGoomba::Render()
 				//After being killed, goomba becomes dead then delay for a while, then disappears
 				if (transformToNonExistTimer.ElapsedTime() >= GOOMBA_DELAY_TIME && transformToNonExistTimer.IsStarted()) {
 					this->SetState(GOOMBA_STATE_NON_EXIST);
-					player->AddPoint(this->x, this->y - GOOMBA_BBOX_NORMAL_HEIGHT,EFFECT_POINT_800);
+					player->AddPoint(this->x, this->y - GOOMBA_BBOX_NORMAL_HEIGHT, EFFECT_POINT_800);
 				}
 				ani = GOOMBA_ANI_RED_DIE;
 				break;
@@ -349,11 +366,32 @@ void CGoomba::Render()
 			}
 			isQuestionBrickAboveTouched = false;
 		}
+		else if (isQuestionBrickBelowTouched) {
+			ani = GOOMBA_ANI_RED_JUMPING;
+			SetState(GOOMBA_STATE_JUMPING_AWAY_FROM_QUESTION_BRICK);
+			isQuestionBrickBelowTouched = false;
+		}
+		else if (isTouchedAnotherGoomba) {
+			switch (this->state)
+			{
+			case GOOMBA_STATE_FALLING_HIGH:
+				SetState(GOOMBA_STATE_JUMPING_HIGH);
+				ani = GOOMBA_ANI_RED_JUMPING;
+				break;
+			case GOOMBA_STATE_FALLING_LOW:
+				SetState(GOOMBA_STATE_JUMPING_HIGH);
+				ani = GOOMBA_ANI_RED_JUMPING;
+				break;
+			default:
+				break;
+			}
+			isTouchedAnotherGoomba = false;
+		}
 		else {
 			//When red goomba is flying
 			switch (this->state)
 			{
-			case GOOMBA_STATE_JUMPING_HIGH:			
+			case GOOMBA_STATE_JUMPING_HIGH:
 				if (this->start_Y - this->y >= GOOMBA_MAX_JUMP_HIGH_DY)
 				{
 					this->SetState(GOOMBA_STATE_FALLING_HIGH);
@@ -364,6 +402,13 @@ void CGoomba::Render()
 				if (this->start_Y - this->y >= GOOMBA_MAX_JUMP_LOW_DY)
 				{
 					this->SetState(GOOMBA_STATE_FALLING_LOW);
+				}
+				ani = GOOMBA_ANI_RED_JUMPING;
+				break;
+			case GOOMBA_STATE_JUMPING_AWAY_FROM_QUESTION_BRICK:
+				if (this->touchedBrickTop - this->y >= GOOMBA_MAX_JUMP_HIGH_DY)
+				{
+					this->SetState(GOOMBA_STATE_FALLING_AWAY_FROM_QUESTION_BRICK);
 				}
 				ani = GOOMBA_ANI_RED_JUMPING;
 				break;
@@ -394,30 +439,30 @@ void CGoomba::SetState(int state)
 		ay = GOOMBA_GRAVITY;
 		break;
 	case GOOMBA_STATE_FALLING_LOW:
-		if (mario_X < this->x) 
+		if (mario_X < this->x)
 			vx = -GOOMBA_FALLING_LOW_SPEED_X;
-		else 
+		else
 			vx = GOOMBA_FALLING_LOW_SPEED_X;
 		vy = GOOMBA_FALLING_LOW_SPEED_Y;
 		break;
 	case GOOMBA_STATE_JUMPING_LOW:
-		if (mario_X < this->x) 
+		if (mario_X < this->x)
 			vx = -GOOMBA_JUMPING_LOW_SPEED_X;
-		else 
+		else
 			vx = GOOMBA_JUMPING_LOW_SPEED_X;
 		vy = -GOOMBA_JUMPING_LOW_SPEED_Y;
 		break;
 	case GOOMBA_STATE_FALLING_HIGH:
-		if (mario_X < this->x) 
+		if (mario_X < this->x)
 			vx = -GOOMBA_FALLING_HIGH_SPEED_X;
-		else 
+		else
 			vx = GOOMBA_FALLING_HIGH_SPEED_X;
 		vy = GOOMBA_FALLING_HIGH_SPEED_Y;
 		break;
 	case GOOMBA_STATE_JUMPING_HIGH:
-		if (mario_X < this->x) 
+		if (mario_X < this->x)
 			vx = -GOOMBA_JUMPING_HIGH_SPEED_X;
-		else 
+		else
 			vx = GOOMBA_JUMPING_HIGH_SPEED_X;
 		vy = -GOOMBA_JUMPING_HIGH_SPEED_Y;
 		break;
@@ -436,10 +481,10 @@ void CGoomba::SetState(int state)
 	}
 	case GOOMBA_STATE_RED_WALKING:
 	{
-		if(this->state!=GOOMBA_STATE_RED_WALK_WING)
-			y += GOOMBA_BBOX_RED_UNWALK_HEIGHT-GOOMBA_BBOX_NORMAL_HEIGHT;
-		else 
-			y += GOOMBA_BBOX_RED_WALK_WING_HEIGHT-GOOMBA_BBOX_NORMAL_HEIGHT;
+		if (this->state != GOOMBA_STATE_RED_WALK_WING)
+			y += GOOMBA_BBOX_RED_UNWALK_HEIGHT - GOOMBA_BBOX_NORMAL_HEIGHT;
+		else
+			y += GOOMBA_BBOX_RED_WALK_WING_HEIGHT - GOOMBA_BBOX_NORMAL_HEIGHT;
 		if (!isOnGround)
 			vy = GOOMBA_FALLING_HIGH_SPEED_Y;
 		else
@@ -460,15 +505,22 @@ void CGoomba::SetState(int state)
 		break;
 	case GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS:
 		vy = -GOOMBA_JUMPING_KILLED_BY_KOOPAS_SPEED_Y;
-		vx = -this->killingKoopasDirection* GOOMBA_JUMPING_KILLED_BY_KOOPAS_SPEED_X;
+		vx = -this->killingKoopasDirection * GOOMBA_JUMPING_KILLED_BY_KOOPAS_SPEED_X;
 		ay = -GOOMBA_GRAVITY;
 		break;
 	case GOOMBA_STATE_FALLING_KILLED_BY_KOOPAS:
 		vy = GOOMBA_FALLING_KILLED_BY_KOOPAS_SPEED_Y;
 		ay = GOOMBA_GRAVITY;
-		vx = -this->killingKoopasDirection* GOOMBA_FALLING_KILLED_BY_KOOPAS_SPEED_X;
+		vx = -this->killingKoopasDirection * GOOMBA_FALLING_KILLED_BY_KOOPAS_SPEED_X;
+		break;
+	case GOOMBA_STATE_JUMPING_AWAY_FROM_QUESTION_BRICK:
+		vx = GOOMBA_JUMPING_LOW_SPEED_X;
+		vy = -GOOMBA_JUMPING_LOW_SPEED_Y;
+		break;
+	case GOOMBA_STATE_FALLING_AWAY_FROM_QUESTION_BRICK:
+		vx = GOOMBA_JUMPING_LOW_SPEED_X;
+		vy = GOOMBA_JUMPING_LOW_SPEED_Y;
 		break;
 	}
 	CGameObject::SetState(state);
 }
-

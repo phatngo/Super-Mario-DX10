@@ -243,4 +243,7 @@
       <Filter>Map Objects\EffectPoint</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
 </Project>

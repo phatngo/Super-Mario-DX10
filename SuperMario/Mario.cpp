@@ -122,7 +122,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				CGoomba *goomba = dynamic_cast<CGoomba *>(e->obj);
 
 				// jump on top >> kill Goomba and deflect a bit 
-				if (e->ny < 0)
+				if (e->ny < 0 && goomba->GetState() != GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS)
 				{
 					if(goomba->GetTag()==GOOMBA_TAG_YELLOW){
 						if (goomba->GetState() != GOOMBA_STATE_DIE)
@@ -141,6 +141,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 						}
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
+				}
+				else if (e->ny < 0 && goomba->GetState() != GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS) {
+					goomba->SetState(GOOMBA_STATE_FALLING_KILLED_BY_KOOPAS);
 				}
 				else if (e->nx != 0)
 				{

@@ -45,6 +45,9 @@
 #define GOOMBA_STATE_RED_DIE               1000
 #define GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS     1100
 #define GOOMBA_STATE_FALLING_KILLED_BY_KOOPAS     1200
+#define GOOMBA_STATE_JUMPING_AWAY_FROM_QUESTION_BRICK     1300
+#define GOOMBA_STATE_FALLING_AWAY_FROM_QUESTION_BRICK     1400
+
 
 #define GOOMBA_ANI_YELLOW_WALKING          0
 #define GOOMBA_ANI_YELLOW_DIE              1
@@ -60,6 +63,8 @@
 
 #define GOOMBA_MAX_JUMP_LOW_DY             15
 #define GOOMBA_MAX_JUMP_HIGH_DY            35
+#define GOOMBA_MAX_JUMP_KILLED_BY_KOOPAS_DY 25
+
 
 
 class CGoomba : public CGameObject
@@ -73,11 +78,18 @@ class CGoomba : public CGameObject
 	Timer transformToNonExistTimer;
 	Timer redWalkWingTimer;
 	bool isQuestionBrickAboveTouched;
+	bool isTouchedByKoopas;
 	void updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void updateRedGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	bool isTouchedByLeaf;
+	bool isQuestionBrickBelowTouched;
+	bool isTouchedAnotherGoomba;
+	float touchedBrickTop;
 public: 	
 	CGoomba(int tag);
 	virtual void SetState(int state);
 	int GetTag() { return this->tag; }
 	void SetKillingKoopasDiretion(int koopasNx) { this->killingKoopasDirection = koopasNx; }
+	void SetIsTouchedByKoopas() { isTouchedByKoopas = true; }
+	bool IsTouchedByKoopas() { return isTouchedByKoopas; }
 };

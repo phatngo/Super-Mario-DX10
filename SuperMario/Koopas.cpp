@@ -125,7 +125,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 					vy = 0;
 					ay = KOOPAS_GRAVITY;
-					mario->AddPoint(x, y, EFFECT_POINT_400);
+					if (!goomba->IsTouchedByKoopas()) {
+						mario->AddPoint(x, y, EFFECT_POINT_400);
+					}
+					goomba->SetIsTouchedByKoopas();
 				}
 				if (e->ny > 0) {
 					vy = 0;
