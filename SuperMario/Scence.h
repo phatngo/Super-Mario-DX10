@@ -14,7 +14,8 @@ protected:
 	int id;
 	LPCWSTR sceneFilePath;
 	bool isCameraAutoMove = false;
-
+	bool isSceneDone;
+	int mapWidth;
 public: 
 	CScene(int id, LPCWSTR filePath);
 
@@ -27,6 +28,9 @@ public:
 	virtual vector<LPGAMEOBJECT> GetSceneObjects();
 	virtual void  SetSceneObjects(vector<LPGAMEOBJECT> objects)=0;
 	virtual CMario* GetPlayer() = 0;
+	virtual void SetSceneDone() { this->isSceneDone = true; }
+	bool GetSceneDone() { return isSceneDone; }
+	int GetMapWidth() { return mapWidth; }
 };
 typedef CScene * LPSCENE;
 

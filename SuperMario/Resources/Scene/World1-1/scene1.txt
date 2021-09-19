@@ -647,6 +647,8 @@ Resources\Tilemap\world1-1.txt
 5066	50058	100	10999	100
 5067	50061	100	10999	100
 5068	50064	100	10999	100
+# ==== COURSE CLEAR ====
+5069	50070	100
 # ==== Mario =========
 #Type Level State Direction
 # Type: 1 = Mario
@@ -1111,5 +1113,7 @@ Resources\Tilemap\world1-1.txt
 71	7200	7201	7210	7211	1420
 # Red FirePiranhaPlant
 72	7100	7101	7110	7111	1420
+# COURSE CLEAR
+73	5069
 [OBJECTS]
 Resources\Scene\World1-1\world1-1.txt

@@ -9,24 +9,24 @@ CCamera* CCamera::GetInstance() {
 	return __instance;
 }
 
-void CCamera::SetCameraPosition(int maxCX, int cx) {
-	if (cx < MARIO_MINIMUM_POSITION_X) {
+void CCamera::SetCameraPosition(float marioX, int mapWidth) {
+
+	if ((int)marioX < playerStartX) {
 		cameraPositionX = 0;
 		cameraPositionY = CAMERA_POSITION_Y;
-		
+
 	}
-	else if (cx >= MARIO_MINIMUM_POSITION_X && cx < maxCX) {
-		cameraPositionX = (int)cx - MARIO_MINIMUM_POSITION_X;
+	else if ((int)marioX + CGame::GetInstance()->GetScreenWidth() <= CAMERA_FURTHEST_RIGHT_COORD) {
+		cameraPositionX = (int)marioX - playerStartX;
 		cameraPositionY = CAMERA_POSITION_Y;
-		
+
 	}
-	else if (cx >= maxCX) {
-		cameraPositionX = (int)maxCX;
+	else {
+		cameraPositionX = CAMERA_FURTHEST_RIGHT_COORD - CGame::GetInstance()->GetScreenWidth() - (CAMERA_FURTHEST_RIGHT_COORD - mapWidth);
 		cameraPositionY = CAMERA_POSITION_Y;
-		
 	}
 
-	CGame::GetInstance()->SetCamPos(cameraPositionX,cameraPositionY);
+	CGame::GetInstance()->SetCamPos(cameraPositionX, cameraPositionY);
 }
 
 D3DXVECTOR3 CCamera::GetPositionInCamera(D3DXVECTOR3 position)

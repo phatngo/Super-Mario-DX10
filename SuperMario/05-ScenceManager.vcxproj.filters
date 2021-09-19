@@ -58,6 +58,9 @@
     <Filter Include="Map Objects\EffectPoint">
       <UniqueIdentifier>{b056c96b-f7b2-430d-8968-5095b3496379}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Objects\Card">
+      <UniqueIdentifier>{43bdbb55-61b2-457f-8c7d-cb8362306467}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -149,6 +152,12 @@
     </ClCompile>
     <ClCompile Include="EffectPoint.cpp">
       <Filter>Map Objects\EffectPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Card.cpp">
+      <Filter>Map Objects\Card</Filter>
+    </ClCompile>
+    <ClCompile Include="CourseClear.cpp">
+      <Filter>Map Objects\Card</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -242,8 +251,11 @@
     <ClInclude Include="EffectPoint.h">
       <Filter>Map Objects\EffectPoint</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="Card.h">
+      <Filter>Map Objects\Card</Filter>
+    </ClInclude>
+    <ClInclude Include="CourseClear.h">
+      <Filter>Map Objects\Card</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

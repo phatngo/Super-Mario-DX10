@@ -20,6 +20,8 @@
 #include "Game.h"
 #include "PlayScence.h"
 #include "FlashAnimationBrick.h"
+#include "Card.h"
+#include "Scence.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -78,10 +80,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 	// No collision occured, proceed normally
 	if (coEvents.size()==0)
 	{	
-		if (x >= 0) 
-			x += dx;
-		else
+		if (x <= 0) {
 			x = 0;
+		}
+		else if (x >= MARIO_MAX_COORDINATE_X && !CGame::GetInstance()->GetCurrentScene()->GetSceneDone()) {
+			x = MARIO_MAX_COORDINATE_X;
+		}
+		else {
+			x += dx;
+		}
 		y += dy;
 	}
 	else
@@ -294,9 +301,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			else if (dynamic_cast<CBrick*>(e->obj)) {
 				if (e->ny < 0) {
 					isOnGround = true;
-					if (state == MARIO_STATE_RELEASE_JUMP)
-					{
-						SetState(MARIO_STATE_IDLE);
+					if (CGame::GetInstance()->GetCurrentScene()->GetSceneDone()) {
+						vx = MARIO_WALKING_SPEED_MAX;
 					}
 				}
 			}
@@ -432,6 +438,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				CPortal *p = dynamic_cast<CPortal *>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
+			else if (dynamic_cast<Card*>(e->obj)) {
+			Card* card = dynamic_cast<Card*>(e->obj);
+			if (e->ny > 0) {
+				card->SetState(CARD_STATE_FLY_UP);
+				CGame::GetInstance()->GetCurrentScene()->SetSceneDone();
+			}
+            }
 		}
 	}
 	// clean up collision events

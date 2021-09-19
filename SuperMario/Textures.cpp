@@ -5,7 +5,7 @@
 
 #include "Utils.h"
 #include "Game.h"
-#include "textures.h"
+#include "Textures.h"
 
 CTextures * CTextures::__instance = NULL;
 

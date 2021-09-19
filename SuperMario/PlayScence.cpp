@@ -22,14 +22,15 @@
 #include "HUD.h"
 #include "EffectPoint.h"
 #include "FireBullet.h"
-
+#include "Card.h"
+#include "Camera.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
-	
+	isSceneDone = false;
 }
 
 /*
@@ -57,6 +58,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_FIRE_PIRANHA_PLANT 70
 #define OBJECT_TYPE_COIN 6
 #define OBJECT_TYPE_HUD 58
+#define OBJECT_TYPE_CARD 57
 
 
 
@@ -105,7 +107,7 @@ void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
 	current_map = new CMap(ID, rowMap, columnMap, rowTile, columnTile, totalTiles);
 	current_map->ExtractTileFromTileSet();
 	current_map->SetTileMapData(TileMapData);
-	maxCx = current_map->GetMapWidth() - CGame::GetInstance()->GetScreenWidth();
+	mapWidth = current_map->GetMapWidth();
 	DebugOut(L"[INFO] _ParseSection_TILEMAP_DATA done:: \n");
 
 }
@@ -271,9 +273,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				break;
 			}
 		}
+		case OBJECT_TYPE_CARD: {
+			obj = new Card();
+			break; 
+		}
 		case OBJECT_TYPE_HUD: {
 			obj = new HUD();
-			DebugOut(L"[INFO] HUD created!\n");
 			break;
 		}
 		default:
@@ -362,8 +367,9 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
-
-	CCamera::GetInstance()->SetCameraPosition(maxCx,cx);
+	float playerStartX = player->GetStartX();
+	CCamera::GetInstance()->SetPlayerStartX(playerStartX);
+	CCamera::GetInstance()->SetCameraPosition(cx, mapWidth);
 }
 
 void CPlayScene::Render()
@@ -400,6 +406,7 @@ void CPlayScene::Unload()
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
+
 
 vector<LPGAMEOBJECT> CPlayScene::GetSceneObjects()
 {
@@ -442,6 +449,8 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	}
 }
 
+
+
 void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame *game = CGame::GetInstance();
@@ -449,9 +458,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 
 	// disable control key when Mario die 
 	if (mario->GetState() == MARIO_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT))
+	if (game->IsKeyDown(DIK_RIGHT)&&!CGame::GetInstance()->GetCurrentScene()->GetSceneDone())
 		mario->SetState(MARIO_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT))
+	else if (game->IsKeyDown(DIK_LEFT)&& !CGame::GetInstance()->GetCurrentScene()->GetSceneDone())
 		mario->SetState(MARIO_STATE_WALKING_LEFT);
 	else
 		mario->SetState(MARIO_STATE_IDLE);

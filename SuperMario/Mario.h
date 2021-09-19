@@ -11,6 +11,7 @@
 #define MARIO_ACCELERATION			0.0007f
 #define MARIO_WALKING_SPEED_MIN		0.05f
 
+
 #define MARIO_JUMP_SPEED_Y		    0.43f 
 #define MARIO_JUMP_DEFLECT_SPEED    0.3f
 
@@ -101,6 +102,7 @@
 #define ALPHA             255
 #define UNTOUCHABLE_ALPHA 128
 #define KICK_TIME 300
+#define MARIO_MAX_COORDINATE_X		2802
 
 
 class CMario : public CGameObject

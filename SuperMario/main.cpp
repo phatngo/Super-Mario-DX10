@@ -14,13 +14,13 @@
 #include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
-#include <d3d10.h>
-#include <d3dx10.h>
+
 
 #include "Utils.h"
 #include "Game.h"
 #include "GameObject.h"
 #include "Textures.h"
+
 
 #include "Mario.h"
 #include "Brick.h"
@@ -70,6 +70,7 @@ void Render()
 	LPDIRECT3DDEVICE9 d3ddv = game->GetDirect3DDevice();
 	LPDIRECT3DSURFACE9 bb = game->GetBackBuffer();
 	LPD3DXSPRITE spriteHandler = game->GetSpriteHandler();
+
 
 	if (d3ddv->BeginScene())
 	{
