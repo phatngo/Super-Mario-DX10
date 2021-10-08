@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Windows.h>
-#include <d3dx9.h>
+#include <d3dx10.h>
 #include <vector>
 
 #include "Sprites.h"
@@ -9,6 +9,7 @@
 
 
 using namespace std;
+
 #define STATIC	0
 #define MOVING	1
 #define IGNORE_DEFINE	2
@@ -88,6 +89,13 @@ public:
 	void RenderBoundingBox(int alpha = 32);
 
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
+	virtual void Render() = 0;
+	virtual void SetState(int state) { this->state = state; }
+	virtual bool isColliding(float friend_left, float friend_top, float friend_right, float friend_bottom);
+
+	//Collision
 
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
@@ -102,14 +110,6 @@ public:
 		float &rdy);
 
 	CGameObject();
-
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects = NULL);
-	virtual void Render() = 0;
-	virtual void SetState(int state) { this->state = state; }
-	virtual bool isColliding(float friend_left, float friend_top, float friend_right, float friend_bottom);
-
-
 	~CGameObject();
 };
 

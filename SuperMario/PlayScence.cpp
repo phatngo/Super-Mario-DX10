@@ -2,9 +2,9 @@
 #include <fstream>
 
 #include "PlayScence.h"
-#include "Utils.h"
 #include "Textures.h"
 #include "Sprites.h"
+#include "Utils.h"
 #include "Portal.h"
 #include "QuestionBrick.h"
 #include "FlashAnimationBrick.h"
@@ -24,6 +24,7 @@
 #include "FireBullet.h"
 #include "Card.h"
 #include "Camera.h"
+#include "Textures.h"
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):
@@ -79,7 +80,7 @@ void CPlayScene::_ParseSection_TEXTURES(string line)
 	int G = atoi(tokens[3].c_str());
 	int B = atoi(tokens[4].c_str());
 
-	CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
+	CTextures::GetInstance()->Add(texID, path.c_str());
 }
 
 void CPlayScene::_ParseSection_TILEMAP_DATA(string line)
@@ -125,7 +126,7 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	int b = atoi(tokens[4].c_str());
 	int texID = atoi(tokens[5].c_str());
 
-	LPDIRECT3DTEXTURE9 tex = CTextures::GetInstance()->Get(texID);
+	LPTEXTURE tex = CTextures::GetInstance()->Get(texID);
 	if (tex == NULL)
 	{
 		DebugOut(L"[ERROR] Texture ID %d not found!\n", texID);
@@ -339,7 +340,7 @@ void CPlayScene::Load()
 	}
 
 	f.close();
-	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
+	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png");
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }

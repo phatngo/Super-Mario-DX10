@@ -1,4 +1,4 @@
-#include <d3dx9.h>
+#include <d3dx10.h>
 #include <algorithm>
 
 
@@ -120,7 +120,7 @@ void CGameObject::RenderBoundingBox(int alpha)
 	D3DXVECTOR3 p(x, y, 0);
 	RECT rect;
 
-	LPDIRECT3DTEXTURE9 bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
+	LPTEXTURE bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
 
 	float l, t, r, b;
 

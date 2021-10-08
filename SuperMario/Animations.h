@@ -1,6 +1,6 @@
 #pragma once
 #include <Windows.h>
-#include <d3dx9.h>
+#include <d3dx10.h>
 #include <unordered_map>
 
 #include "Sprites.h"

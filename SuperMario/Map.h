@@ -1,6 +1,7 @@
 #pragma once
 #include "Sprites.h"
 #include <d3d9.h>
+#include "Textures.h"
 
 #define TILE_WIDTH 16
 #define TILE_HEIGHT 16
@@ -9,7 +10,7 @@ class CMap
 	int TotalRowsOfMap, TotalColumnsOfMap;
 	int TotalRowsOfTileSet, TotalColumnsOfTileSet;
 	int TotalTiles;	//total tiles of tile set
-	LPDIRECT3DTEXTURE9 TileSet; //sceneX_bank.png
+	LPTEXTURE TileSet; //sceneX_bank.png
 	vector<LPSPRITE> Tiles;
 	int** TileMap;
 public:

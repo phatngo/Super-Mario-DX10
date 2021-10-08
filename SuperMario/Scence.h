@@ -1,6 +1,6 @@
 #pragma once
 
-#include <d3dx9.h>
+#include <d3dx10.h>
 #include "KeyEventHandler.h"
 #include <vector>
 #include "GameObject.h"

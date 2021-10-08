@@ -1,19 +1,6 @@
-/* =============================================================
-	INTRODUCTION TO GAME PROGRAMMING SE102
-	
-	SAMPLE 05 - SCENCE MANAGER
-
-	This sample illustrates how to:
-
-		1/ Implement a scence manager 
-		2/ Load scene from "database", add/edit/remove scene without changing code 
-		3/ Dynamically move between scenes without hardcode logic 
-		
-================================================================ */
-
 #include <windows.h>
-#include <d3d9.h>
-#include <d3dx9.h>
+#include <d3d10.h>
+#include <d3dx10.h>
 
 
 #include "Utils.h"
@@ -30,10 +17,9 @@
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"SAMPLE 05 - SCENCE MANAGER"
+#define BACKGROUND_COLOR D3DXCOLOR(200.0f/255, 200.0f/255, 255.0f/255, 0.0f)
 
-#define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
-#define SCREEN_WIDTH 272
-#define SCREEN_HEIGHT 256
+
 
 #define MAX_FRAME_RATE 120
 
@@ -67,26 +53,24 @@ void Update(DWORD dt)
 */
 void Render()
 {
-	LPDIRECT3DDEVICE9 d3ddv = game->GetDirect3DDevice();
-	LPDIRECT3DSURFACE9 bb = game->GetBackBuffer();
-	LPD3DXSPRITE spriteHandler = game->GetSpriteHandler();
+	CGame* g = CGame::GetInstance();
 
+	ID3D10Device* pD3DDevice = g->GetDirect3DDevice();
+	IDXGISwapChain* pSwapChain = g->GetSwapChain();
+	ID3D10RenderTargetView* pRenderTargetView = g->GetRenderTargetView();
+	ID3DX10Sprite* spriteHandler = g->GetSpriteHandler();
 
-	if (d3ddv->BeginScene())
-	{
-		// Clear back buffer with a color
-		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
+	pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);
 
-		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
+	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
 
-		CGame::GetInstance()->GetCurrentScene()->Render();
+	FLOAT NewBlendFactor[4] = { 0,0,0,0 };
+	pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
 
-		spriteHandler->End();
-		d3ddv->EndScene();
-	}
+	CGame::GetInstance()->GetCurrentScene()->Render();
 
-	// Display back buffer content to the screen
-	d3ddv->Present(NULL, NULL, NULL, NULL);
+	spriteHandler->End();
+	pSwapChain->Present(0, 0);
 }
 
 //Remain unchanged
@@ -179,14 +163,14 @@ int Run()
 
 //Codebase update - need to changed
 int WINAPI WinMain( _In_ HINSTANCE hInstance, 
-	_In_ HINSTANCE hPrevInstance, 
+	_In_opt_ HINSTANCE hPrevInstance, 
 	_In_ LPSTR lpCmdLine, 
 	_In_ int nCmdShow)
 {
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	game = CGame::GetInstance();
-	game->Init(hWnd);
+	game->Init(hWnd, hInstance);
 	game->InitKeyboard();
 
 	game->Load(L"Resources\\Scene\\mario-sample.txt");

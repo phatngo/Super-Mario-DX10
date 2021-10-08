@@ -33,6 +33,8 @@ public:
 	virtual void Render();
 	virtual void Unload();
 	virtual vector<LPGAMEOBJECT> GetSceneObjects();
+
+	//Added by myself
 	virtual void  SetSceneObjects(vector<LPGAMEOBJECT> objects);
 	void AddObjects(CGameObject* gameObj) { this->objects.insert(this->objects.end()-2, gameObj);}
 	
