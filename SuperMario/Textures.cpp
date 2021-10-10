@@ -27,11 +27,7 @@ void CTextures::Add(int id, LPCWSTR filePath)
 
 LPTEXTURE CTextures::Get(unsigned int id)
 {
-	LPTEXTURE t = textures[id];
-	if (t == NULL)
-		DebugOut(L"[ERROR] Texture Id %d not found !\n", id);
-
-	return t;
+	return textures[id];
 }
 
 /*
