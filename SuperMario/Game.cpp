@@ -212,6 +212,9 @@ void CGame::Draw(float x, float y, LPTEXTURE tex, RECT* rect, float alpha) {
 	// The translation matrix to be created
 	D3DXMATRIX matTranslation;
 
+	x = (FLOAT)floor(x);
+	y = (FLOAT)floor(y);
+
 	D3DXMatrixTranslation(&matTranslation, x - CCamera::GetInstance()->GetCameraX(), this->GetBackBufferHeight() - y + CCamera::GetInstance()->GetCameraY(), 0.1f);
 	D3DXMATRIX matScaling;
 	D3DXMatrixScaling(&matScaling, (FLOAT)spriteWidth, (FLOAT)spriteHeight, 1.0f);

@@ -43,11 +43,11 @@ CSprites *CSprites::GetInstance()
 	return __instance;
 }
 
-void CSprite::Draw(float x, float y)
+void CSprite::Draw(float x, float y, float alpha)
 {
 	//Don't update this
 	CGame * game = CGame::GetInstance();
-	game->Draw(x, y, texture, left, top, right, bottom);
+	game->Draw(x, y, texture, left, top, right, bottom, alpha);
 }
 
 void CSprites::Add(int id, int left, int top, int right, int bottom, LPTEXTURE tex)

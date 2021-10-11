@@ -117,9 +117,7 @@ void CGameObject::FilterCollision(
 
 void CGameObject::RenderBoundingBox(int alpha)
 {
-	D3DXVECTOR3 p(x, y, 0);
 	RECT rect;
-
 	LPTEXTURE bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
 
 	float l, t, r, b;
@@ -130,7 +128,7 @@ void CGameObject::RenderBoundingBox(int alpha)
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	CGame::GetInstance()->Draw(x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, alpha);
+	CGame::GetInstance()->Draw(x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 0.25f);
 }
 
 
