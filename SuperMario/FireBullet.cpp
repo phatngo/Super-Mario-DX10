@@ -40,18 +40,17 @@ void CFireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	y += dy;
 	x += dx;
-}
 
-void CFireBullet::Render()
-{
 	float cameraPositionY = CCamera::GetInstance()->GetCameraY();
 	float screenWidth = CGame::GetInstance()->GetScreenHeight();
 	if (this->y < cameraPositionY || this->y > cameraPositionY + screenWidth) {
 		SetState(FIRE_BULLET_STATE_NON_EXIST);
 	}
-	else {
-		animation_set->at(this->ani)->Render(x, y);
-	}
+}
+
+void CFireBullet::Render()
+{
+	animation_set->at(this->ani)->Render(x, y);
 }
 
 void CFireBullet::SetState(int state)
