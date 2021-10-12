@@ -3,8 +3,8 @@
 
 #define LEAF_ANI_SET_ID 36
 
-#define LEAF_ANI_A 0
-#define LEAF_ANI_B 1
+#define LEAF_ANI_FLY_LEFT 0
+#define LEAF_ANI_FLY_RIGHT 1
 
 #define LEAF_SPEED_Y 0.05f
 #define LEAF_SPEED_X 0.05f

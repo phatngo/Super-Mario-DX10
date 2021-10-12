@@ -17,11 +17,7 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	x += dx;
 	y += dy;
-}
 
-void CLeaf::Render()
-{
-	int ani = LEAF_ANI_A;
 	switch (this->state)
 	{
 	case LEAF_STATE_FLY_UP:
@@ -38,7 +34,22 @@ void CLeaf::Render()
 		if (start_X - x >= 25) {
 			this->SetState(LEAF_STATE_FLY_DOWN_RIGHT);
 		}
-		ani = LEAF_ANI_B;
+		break;
+	default:
+		break;
+	}
+}
+
+void CLeaf::Render()
+{
+	int ani = LEAF_ANI_FLY_LEFT;
+	switch (this->state)
+	{
+	case LEAF_STATE_FLY_DOWN_LEFT:
+		if (start_X - x >= 25) {
+			this->SetState(LEAF_STATE_FLY_DOWN_RIGHT);
+		}
+		ani = LEAF_ANI_FLY_RIGHT;
 		break;
 	default:
 		break;
