@@ -26,6 +26,55 @@ void CFirePiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 	y += dy;
+
+	switch (state)
+	{
+	case FIRE_PIRANHA_STATE_UP:
+	{
+		switch (this->tag)
+		{
+		case TAG_FIRE_PIRANHA_RED:
+			if (start_Y - y >= RED_FIRE_PIRANHA_HIGHEST_DY) {
+				this->SetState(FIRE_PIRANHA_STATE_SHOOT);
+				y = start_Y - RED_FIRE_PIRANHA_HIGHEST_DY;
+			}
+			break;
+		case TAG_FIRE_PIRANHA_GREEN:
+			if (start_Y - y >= GREEN_FIRE_PIRANHA_HIGHEST_DY) {
+				this->SetState(FIRE_PIRANHA_STATE_SHOOT);
+				y = start_Y - GREEN_FIRE_PIRANHA_HIGHEST_DY;
+			}
+			break;
+		default:
+			break;
+		}
+		break;
+	}
+	case FIRE_PIRANHA_STATE_SHOOT:
+		if (shoot_Timer.ElapsedTime() >= SHOOT_DELAY_TIME && shoot_Timer.IsStarted()) {
+			CreateFireBullet();
+			shoot_Timer.Reset();
+			down_Timer.Start();
+		}
+		else if (down_Timer.ElapsedTime() >= DOWN_DELAY_TIME && down_Timer.IsStarted()) {
+			this->SetState(FIRE_PIRANHA_STATE_DOWN);
+			down_Timer.Reset();
+		}
+		break;
+	case FIRE_PIRANHA_STATE_DOWN:
+		if (start_Y <= y) {
+			if (up_Timer.ElapsedTime() >= UP_DELAY_TIME && up_Timer.IsStarted()) {
+				this->SetState(FIRE_PIRANHA_STATE_UP);
+				up_Timer.Reset();
+			}
+			else {
+				y = start_Y;
+			}
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void CFirePiranhaPlant::Render()
@@ -59,47 +108,8 @@ void CFirePiranhaPlant::Render()
 				this->ani = FIRE_PIRANHA_ANI_DOWN_RIGHT;
 			}
 		}
-
-		switch (this->tag)
-		{
-		case TAG_FIRE_PIRANHA_RED:
-			if (start_Y - y >= RED_FIRE_PIRANHA_HIGHEST_DY) {
-				this->SetState(FIRE_PIRANHA_STATE_SHOOT);
-				y = start_Y - RED_FIRE_PIRANHA_HIGHEST_DY;
-			}
-			break;
-		case TAG_FIRE_PIRANHA_GREEN:
-			if (start_Y - y >= GREEN_FIRE_PIRANHA_HIGHEST_DY) {
-				this->SetState(FIRE_PIRANHA_STATE_SHOOT);
-				y = start_Y - GREEN_FIRE_PIRANHA_HIGHEST_DY;
-			}
-			break;
-		default:
-			break;
-		}
 		break;
 	}
-	case FIRE_PIRANHA_STATE_SHOOT:
-		if (shoot_Timer.ElapsedTime() >= SHOOT_DELAY_TIME && shoot_Timer.IsStarted()) {
-			CreateFireBullet();
-			shoot_Timer.Reset();
-			down_Timer.Start();
-		}else if (down_Timer.ElapsedTime() >= DOWN_DELAY_TIME && down_Timer.IsStarted()) {
-			this->SetState(FIRE_PIRANHA_STATE_DOWN);
-			down_Timer.Reset();
-		}
-		break;
-	case FIRE_PIRANHA_STATE_DOWN:
-		if (start_Y <= y) {
-			if (up_Timer.ElapsedTime() >= UP_DELAY_TIME && up_Timer.IsStarted()) {
-				this->SetState(FIRE_PIRANHA_STATE_UP);
-				up_Timer.Reset();
-			}
-			else {
-				y = start_Y;
-			}
-		}
-		break;
 	default:
 		break;
 	}
