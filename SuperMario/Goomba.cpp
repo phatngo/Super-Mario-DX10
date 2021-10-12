@@ -66,6 +66,124 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		updateYellowGoomba(dt, coObjects);
 	else
 		updateRedGoomba(dt, coObjects);
+
+	CMario* player = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
+	if (tag == GOOMBA_TAG_YELLOW) {
+		if (state == GOOMBA_STATE_DIE) {
+			//After being killed, goomba becomes dead then delay for a while, then disappears
+			if (this->transformToNonExistTimer.ElapsedTime() >= GOOMBA_DELAY_TIME && this->transformToNonExistTimer.IsStarted()) {
+				this->SetState(GOOMBA_STATE_NON_EXIST);
+				player->AddPoint(this->x, this->y - GOOMBA_BBOX_NORMAL_HEIGHT);
+				transformToNonExistTimer.Reset();
+			}
+		}
+		if (state == GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS) {
+			if (start_Y - y >= 25)
+				this->SetState(GOOMBA_STATE_FALLING_KILLED_BY_KOOPAS);
+		}
+	}
+	else {
+		if (isOnGround)
+		{
+			//when red goomba is on the ground
+			switch (state)
+			{
+			case GOOMBA_STATE_FALLING_LOW:
+				if (lowFallingTime > MAX_LOW_FALLING_TIME) {
+					lowFallingTime = 0;
+					this->SetState(GOOMBA_STATE_JUMPING_HIGH);
+				}
+				else {
+					this->SetState(GOOMBA_STATE_JUMPING_LOW);
+				}
+				isOnGround = false;
+				break;
+			case GOOMBA_STATE_FALLING_HIGH:
+				this->SetState(GOOMBA_STATE_RED_WALK_WING);
+				break;
+			case GOOMBA_STATE_FALLING_AWAY_FROM_QUESTION_BRICK:
+				this->SetState(GOOMBA_STATE_RED_WALK_WING);
+				break;
+			case GOOMBA_STATE_RED_WALK_WING:
+				//After falling down from a high jump, red goomba will walk with a wing for a while then have a low jump
+				//Timer is for measuring the time for walking with a wing
+				if (redWalkWingTimer.ElapsedTime() >= GOOMBA_WALK_WING_TIME && redWalkWingTimer.IsStarted()) {
+					this->SetState(GOOMBA_STATE_JUMPING_LOW);
+					isOnGround = false;
+				}
+				break;
+			case GOOMBA_STATE_RED_DIE:
+				//After being killed, goomba becomes dead then delay for a while, then disappears
+				if (transformToNonExistTimer.ElapsedTime() >= GOOMBA_DELAY_TIME && transformToNonExistTimer.IsStarted()) {
+					this->SetState(GOOMBA_STATE_NON_EXIST);
+					player->AddPoint(this->x, this->y - GOOMBA_BBOX_NORMAL_HEIGHT, EFFECT_POINT_800);
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		else if (isQuestionBrickAboveTouched) {
+			//when red goomba touches the question brick above its head
+			switch (this->state)
+			{
+			case GOOMBA_STATE_JUMPING_HIGH:
+				this->SetState(GOOMBA_STATE_FALLING_HIGH);
+				break;
+			case GOOMBA_STATE_JUMPING_LOW:
+				this->SetState(GOOMBA_STATE_FALLING_LOW);
+				break;
+			default:
+				break;
+			}
+			isQuestionBrickAboveTouched = false;
+		}
+		else if (isQuestionBrickBelowTouched) {
+			SetState(GOOMBA_STATE_JUMPING_AWAY_FROM_QUESTION_BRICK);
+			isQuestionBrickBelowTouched = false;
+		}
+		else if (isTouchedAnotherGoomba) {
+			switch (this->state)
+			{
+			case GOOMBA_STATE_FALLING_HIGH:
+				SetState(GOOMBA_STATE_JUMPING_HIGH);
+				break;
+			case GOOMBA_STATE_FALLING_LOW:
+				SetState(GOOMBA_STATE_JUMPING_HIGH);
+				break;
+			default:
+				break;
+			}
+			isTouchedAnotherGoomba = false;
+		}
+		else {
+			//When red goomba is flying
+			switch (this->state)
+			{
+			case GOOMBA_STATE_JUMPING_HIGH:
+				if (this->start_Y - this->y >= GOOMBA_MAX_JUMP_HIGH_DY)
+				{
+					this->SetState(GOOMBA_STATE_FALLING_HIGH);
+				}
+				break;
+			case GOOMBA_STATE_JUMPING_LOW:
+				if (this->start_Y - this->y >= GOOMBA_MAX_JUMP_LOW_DY)
+				{
+					this->SetState(GOOMBA_STATE_FALLING_LOW);
+				}
+				break;
+			case GOOMBA_STATE_JUMPING_AWAY_FROM_QUESTION_BRICK:
+				if (this->touchedBrickTop - this->y >= GOOMBA_MAX_JUMP_HIGH_DY)
+				{
+					this->SetState(GOOMBA_STATE_FALLING_AWAY_FROM_QUESTION_BRICK);
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
 }
 void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -281,22 +399,11 @@ void CGoomba::updateRedGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 void CGoomba::Render()
 {
-	CMario* player = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
 	int ani = -1;
 	if (tag == GOOMBA_TAG_YELLOW) {
 		ani = GOOMBA_ANI_YELLOW_WALKING;
 		if (state == GOOMBA_STATE_DIE) {
-			//After being killed, goomba becomes dead then delay for a while, then disappears
-			if (this->transformToNonExistTimer.ElapsedTime() >= GOOMBA_DELAY_TIME && this->transformToNonExistTimer.IsStarted()) {
-				this->SetState(GOOMBA_STATE_NON_EXIST);
-				player->AddPoint(this->x, this->y - GOOMBA_BBOX_NORMAL_HEIGHT);
-				transformToNonExistTimer.Reset();
-			}
 			ani = GOOMBA_ANI_YELLOW_DIE;
-		}
-		if (state == GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS) {
-			if (start_Y - y >= 25)
-				this->SetState(GOOMBA_STATE_FALLING_KILLED_BY_KOOPAS);
 		}
 	}
 	else {
@@ -307,42 +414,21 @@ void CGoomba::Render()
 			switch (state)
 			{
 			case GOOMBA_STATE_FALLING_LOW:
-				if (lowFallingTime > MAX_LOW_FALLING_TIME) {
-					lowFallingTime = 0;
-					this->SetState(GOOMBA_STATE_JUMPING_HIGH);
-				}
-				else {
-					this->SetState(GOOMBA_STATE_JUMPING_LOW);
-				}
-				isOnGround = false;
 				ani = GOOMBA_ANI_RED_JUMPING;
 				break;
 			case GOOMBA_STATE_FALLING_HIGH:
-				this->SetState(GOOMBA_STATE_RED_WALK_WING);
 				ani = GOOMBA_ANI_RED_JUMPING;
 				break;
 			case GOOMBA_STATE_FALLING_AWAY_FROM_QUESTION_BRICK:
-				this->SetState(GOOMBA_STATE_RED_WALK_WING);
 				ani = GOOMBA_ANI_RED_JUMPING;
 				break;
 			case GOOMBA_STATE_RED_WALK_WING:
-				//After falling down from a high jump, red goomba will walk with a wing for a while then have a low jump
-				//Timer is for measuring the time for walking with a wing
-				if (redWalkWingTimer.ElapsedTime() >= GOOMBA_WALK_WING_TIME && redWalkWingTimer.IsStarted()) {
-					this->SetState(GOOMBA_STATE_JUMPING_LOW);
-					isOnGround = false;
-				}
 				ani = GOOMBA_ANI_RED_WALK_WING;
 				break;
 			case GOOMBA_STATE_RED_WALKING:
 				ani = GOOMBA_ANI_RED_WALK;
 				break;
 			case GOOMBA_STATE_RED_DIE:
-				//After being killed, goomba becomes dead then delay for a while, then disappears
-				if (transformToNonExistTimer.ElapsedTime() >= GOOMBA_DELAY_TIME && transformToNonExistTimer.IsStarted()) {
-					this->SetState(GOOMBA_STATE_NON_EXIST);
-					player->AddPoint(this->x, this->y - GOOMBA_BBOX_NORMAL_HEIGHT, EFFECT_POINT_800);
-				}
 				ani = GOOMBA_ANI_RED_DIE;
 				break;
 			default:
@@ -354,11 +440,9 @@ void CGoomba::Render()
 			switch (this->state)
 			{
 			case GOOMBA_STATE_JUMPING_HIGH:
-				this->SetState(GOOMBA_STATE_FALLING_HIGH);
 				ani = GOOMBA_ANI_RED_JUMPING;
 				break;
 			case GOOMBA_STATE_JUMPING_LOW:
-				this->SetState(GOOMBA_STATE_FALLING_LOW);
 				ani = GOOMBA_ANI_RED_JUMPING;
 				break;
 			default:
@@ -368,48 +452,31 @@ void CGoomba::Render()
 		}
 		else if (isQuestionBrickBelowTouched) {
 			ani = GOOMBA_ANI_RED_JUMPING;
-			SetState(GOOMBA_STATE_JUMPING_AWAY_FROM_QUESTION_BRICK);
-			isQuestionBrickBelowTouched = false;
 		}
 		else if (isTouchedAnotherGoomba) {
 			switch (this->state)
 			{
 			case GOOMBA_STATE_FALLING_HIGH:
-				SetState(GOOMBA_STATE_JUMPING_HIGH);
 				ani = GOOMBA_ANI_RED_JUMPING;
 				break;
 			case GOOMBA_STATE_FALLING_LOW:
-				SetState(GOOMBA_STATE_JUMPING_HIGH);
 				ani = GOOMBA_ANI_RED_JUMPING;
 				break;
 			default:
 				break;
 			}
-			isTouchedAnotherGoomba = false;
 		}
 		else {
 			//When red goomba is flying
 			switch (this->state)
 			{
 			case GOOMBA_STATE_JUMPING_HIGH:
-				if (this->start_Y - this->y >= GOOMBA_MAX_JUMP_HIGH_DY)
-				{
-					this->SetState(GOOMBA_STATE_FALLING_HIGH);
-				}
 				ani = GOOMBA_ANI_RED_JUMPING;
 				break;
 			case GOOMBA_STATE_JUMPING_LOW:
-				if (this->start_Y - this->y >= GOOMBA_MAX_JUMP_LOW_DY)
-				{
-					this->SetState(GOOMBA_STATE_FALLING_LOW);
-				}
 				ani = GOOMBA_ANI_RED_JUMPING;
 				break;
 			case GOOMBA_STATE_JUMPING_AWAY_FROM_QUESTION_BRICK:
-				if (this->touchedBrickTop - this->y >= GOOMBA_MAX_JUMP_HIGH_DY)
-				{
-					this->SetState(GOOMBA_STATE_FALLING_AWAY_FROM_QUESTION_BRICK);
-				}
 				ani = GOOMBA_ANI_RED_JUMPING;
 				break;
 			default:
