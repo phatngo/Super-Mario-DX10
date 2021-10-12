@@ -15,6 +15,28 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	else
 	    y += dy;
 	
+	CMario* player = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
+	switch (this->state)
+	{
+	case QUESTION_BRICK_STATE_JUMPING:
+		this->SetState(QUESTION_BRICK_STATE_FALLING);
+		break;
+	case QUESTION_BRICK_STATE_FALLING:
+		this->SetState(QUESTION_BRICK_STATE_STOP);
+		break;
+	case QUESTION_BRICK_STATE_STOP:
+		if (tag == COIN_TAG) {
+			//Delay until coin disappears => Effect point appears
+			if (pointAppearanceTimer.ElapsedTime() >= TIME_UNTIL_POINT_APPEAR && pointAppearanceTimer.IsStarted()) {
+				player->AddPoint(this->x, this->y - BRICK_BBOX_HEIGHT);
+				player->AddMoney();
+				pointAppearanceTimer.Reset();
+			}
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void CQuestionBrick::Render() {
@@ -24,25 +46,15 @@ void CQuestionBrick::Render() {
 	{
 	case QUESTION_BRICK_STATE_JUMPING:
 		ani = QUESTION_BRICK_ANI_STOP;
-		this->SetState(QUESTION_BRICK_STATE_FALLING);
 		break;
 	case QUESTION_BRICK_STATE_FALLING:
 		ani = QUESTION_BRICK_ANI_STOP;
-		this->SetState(QUESTION_BRICK_STATE_STOP);
 		break;
 	case QUESTION_BRICK_STATE_IDLE:
 		ani = QUESTION_BRICK_ANI_SPINNING;
 		break;
 	case QUESTION_BRICK_STATE_STOP:
 		ani = QUESTION_BRICK_ANI_STOP;
-		if (tag == COIN_TAG) {
-			//Delay until coin disappears => Effect point appears
-			if (pointAppearanceTimer.ElapsedTime() >= TIME_UNTIL_POINT_APPEAR && pointAppearanceTimer.IsStarted()) {
-				player->AddPoint(this->x, this->y - BRICK_BBOX_HEIGHT);
-				player->AddMoney();
-				pointAppearanceTimer.Reset();
-			}
-		}
 		break;
 	default:
 		break;
