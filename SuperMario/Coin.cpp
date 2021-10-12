@@ -31,32 +31,29 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	    CGameObject::Update(dt, coObjects);
 		y += dy;
+
+		if (this->tag == TAG_COIN_IN_BRICK) {
+			switch (this->state)
+			{
+			case COIN_STATE_JUMPING:
+				if (start_Y - y >= COIN_JUMP_MAX_DY) {
+					this->SetState(COIN_STATE_FALLING);
+				}
+				break;
+			case COIN_STATE_FALLING:
+				if (start_Y - y <= COIN_JUMP_DISAPPEAR_DY) {
+					this->SetState(COIN_STATE_NON_EXIST);
+				}
+			default:
+				break;
+			}
+		}
 }
 
 void CCoin::Render()
 {
-	if (this->tag == TAG_COIN_IN_BRICK) {
-		switch (this->state)
-		{
-		case COIN_STATE_JUMPING:
-			if (start_Y - y >= COIN_JUMP_MAX_DY) {
-				this->SetState(COIN_STATE_FALLING);
-			}
-			break;
-		case COIN_STATE_FALLING:
-			if (start_Y - y <= COIN_JUMP_DISAPPEAR_DY) {
-				this->SetState(COIN_STATE_NON_EXIST);
-			}
-		default:
-			break;
-		}
 		animation_set->at(COIN_ANI_GENERAL)->Render(x, y);
-		RenderBoundingBox();
-	}
-	else if (this->state == COIN_STATE_EXIST) {
-		animation_set->at(COIN_ANI_GENERAL)->Render(x, y);
-		RenderBoundingBox();
-	}
+		RenderBoundingBox();	
 }
 
 void CCoin::SetState(int state)

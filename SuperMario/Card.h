@@ -13,8 +13,6 @@
 
 #define CARD_FLY_UP_SPEED_Y  0.05f
 
-//Remember to take a look at GetCurrentFrame() in Animation class before moving to new codebase
-//Remember to take a look at GetGameDone()/SetGameDone in Scence/Mario class before moving to new codebase
 class Card: public CGameObject
 {
 	int currentFrame;
