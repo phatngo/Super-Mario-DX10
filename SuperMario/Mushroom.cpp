@@ -64,26 +64,22 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		// clean up collision events
 		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
+		switch (this->state) {
+		case MUSHROOM_STATE_IDLE:
+			if (start_Y - y >= MUSHROOM_BBOX_HEIGHT) {
+				this->SetState(MUSHROOM_STATE_MOVING);
+			}
+			break;
+		default:
+			break;
+		}
 }
 
 void CMushroom::Render()
 {
 	int ani = MUSHROOM_ANI_NORMAL;
-	switch (this->state) {
-	case MUSHROOM_STATE_IDLE:
-		if (start_Y - y >= MUSHROOM_BBOX_HEIGHT) {
-			this->SetState(MUSHROOM_STATE_MOVING);
-		}
-		animation_set->at(ani)->Render(x, y);
-		RenderBoundingBox();
-		break;
-	case MUSHROOM_STATE_MOVING:
-		animation_set->at(ani)->Render(x, y);
-		RenderBoundingBox();
-		break;
-	default:
-		break;
-	}
+	animation_set->at(ani)->Render(x, y);
 	RenderBoundingBox();
 }
 
