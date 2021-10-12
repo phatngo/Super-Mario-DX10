@@ -17,11 +17,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 	y += dy;
-}
 
-void CPiranhaPlant::Render()
-{
-	int ani = PIRANHA_ANI_NORMAL;
 	switch (state)
 	{
 	case PIRANHA_STATE_UP:
@@ -37,6 +33,11 @@ void CPiranhaPlant::Render()
 	default:
 		break;
 	}
+}
+
+void CPiranhaPlant::Render()
+{
+	int ani = PIRANHA_ANI_NORMAL;
 	animation_set->at(ani)->Render(x, y);
 }
 
