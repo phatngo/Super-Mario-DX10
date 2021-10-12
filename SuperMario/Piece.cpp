@@ -26,16 +26,17 @@ void CPiece::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	x += dx;
 	y += dy;
+
+	switch (this->state) {
+	    case PIECE_STATE_FLYING:
+		    if (appearanceTimer.ElapsedTime() >= PIECE_TIME && appearanceTimer.IsStarted()) {
+			      this->SetState(PIECE_STATE_NON_EXIST);
+		}
+	}
 }
 
 void CPiece::Render()
 {
-	switch (this->state) {
-	case PIECE_STATE_FLYING:
-		if (appearanceTimer.ElapsedTime() >= PIECE_TIME && appearanceTimer.IsStarted()) {
-			this->SetState(PIECE_STATE_NON_EXIST);
-		}
-	}
 	animation_set->at(PIECE_ANI_FLYING)->Render(x,y);
 	RenderBoundingBox();
 }
