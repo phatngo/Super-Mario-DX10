@@ -10,7 +10,7 @@ HUD::HUD() {
 
 }
 void HUD::Render() {
-	animation_set->at(0)->Render(CCamera::GetInstance()->GetCameraX(),this->start_Y);
+	animation_set->at(0)->Render(this->x+CGame::GetInstance()->GetCamPosX(),this->start_Y);
 }
 
 

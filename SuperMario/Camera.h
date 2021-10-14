@@ -1,9 +1,9 @@
 #pragma once
 #include "Game.h"
 
-
+//Normal Height: 206
 #define MARIO_MINIMUM_POSITION_X 80
-#define CAMERA_POSITION_Y 214
+#define CAMERA_POSITION_Y 238
 #define CAMERA_FURTHEST_RIGHT_COORD 2894
 
 class CCamera

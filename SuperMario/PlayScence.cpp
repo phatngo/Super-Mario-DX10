@@ -230,7 +230,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 				DebugOut(L"[ERROR] MARIO object was created before!\n");
 				return;
 			}
-			obj = new CMario(x, y-HUD_HEIGHT);
+			obj = new CMario(x, y);
 			player = (CMario*)obj;
 			break;
 		case OBJECT_TYPE_BRICK:
@@ -286,7 +286,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CBrick();
 		}
 		if (obj != NULL) {
-			y -= HUD_HEIGHT;
+			//y -= HUD_HEIGHT;
 			obj->SetPosition(x, y);
 			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 			obj->SetAnimationSet(ani_set);
