@@ -264,7 +264,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			}
 			else if (dynamic_cast<CBlock*>(e->obj)) 
 			{
-			DebugOut(L"y2: %f \n", y);
 				CBlock* block = dynamic_cast<CBlock*>(e->obj);
 				float bTop, bLeft, bRight, bBottom;
 				block->GetBoundingBox(bLeft, bTop, bRight, bBottom);
@@ -334,7 +333,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 						else if(level == MARIO_LEVEL_BIG) {
 							level = MARIO_LEVEL_TRANSFORM_SMALL;
 							this->transformTimer.Start();
-							DebugOut(L"y1: %f \n", y);
 						}
 						StartUntouchable();
 					}

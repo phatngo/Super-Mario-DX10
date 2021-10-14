@@ -1,4 +1,4 @@
-﻿  HUD.cpp
+﻿  Card.cpp
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dxgitype.h(12,1): warning C4005: 'DXGI_STATUS_OCCLUDED': macro redefinition
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\winerror.h(56388): message : see previous definition of 'DXGI_STATUS_OCCLUDED'
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dxgitype.h(13,1): warning C4005: 'DXGI_STATUS_CLIPPED': macro redefinition
@@ -48,7 +48,7 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\winerror.h(56
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\d3d10.h(609,1): warning C4005: 'D3D10_ERROR_FILE_NOT_FOUND': macro redefinition
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\winerror.h(56850): message : see previous definition of 'D3D10_ERROR_FILE_NOT_FOUND'
 D:\school\game\gamee\Super-Mario-DX10\SuperMario\Mario.h(132,79): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
-  PlayScence.cpp
+  CourseClear.cpp
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dxgitype.h(12,1): warning C4005: 'DXGI_STATUS_OCCLUDED': macro redefinition
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\winerror.h(56388): message : see previous definition of 'DXGI_STATUS_OCCLUDED'
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dxgitype.h(13,1): warning C4005: 'DXGI_STATUS_CLIPPED': macro redefinition
@@ -97,14 +97,5 @@ C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\d3d10.h(608,1):
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\winerror.h(56841): message : see previous definition of 'D3D10_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS'
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\d3d10.h(609,1): warning C4005: 'D3D10_ERROR_FILE_NOT_FOUND': macro redefinition
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\winerror.h(56850): message : see previous definition of 'D3D10_ERROR_FILE_NOT_FOUND'
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\Mario.h(132,79): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\PlayScence.cpp(150,20): warning C4018: '<': signed/unsigned mismatch
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\PlayScence.cpp(173,20): warning C4018: '<': signed/unsigned mismatch
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\PlayScence.cpp(206,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\PlayScence.cpp(207,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\PlayScence.cpp(223,19): warning C4101: 'ani_set_of_obj': unreferenced local variable
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\PlayScence.cpp(381,20): warning C4018: '<': signed/unsigned mismatch
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\PlayScence.cpp(402,20): warning C4018: '<': signed/unsigned mismatch
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\PlayScence.cpp(450,2): warning C4065: switch statement contains 'default' but no 'case' labels
   Generating Code...
   SuperMario.vcxproj -> D:\school\game\gamee\Super-Mario-DX10\Debug\PhatNgo_SuperMarioBros3.exe

@@ -2,7 +2,8 @@
 #include "GameObject.h"
 
 #define COURSE_CLEAR_ANI_SET_ID 73
-#define COURSE_CLEAR_Y_COORDINATE 225
+#define COURSE_CLEAR_Y_COORDINATE 265
+#define COURSE_CLEAR_DX_FROM_CARD 5
 #define COURSE_CLEAR_ANI_GENERAL 0
 class CourseClear : public CGameObject
 {
