@@ -20,6 +20,8 @@
 
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
 
+#define MARIO_TRANSFORM_DY_FROM_SMALL_TO_BIG 6.5f
+
 #define MARIO_STATE_IDLE			0
 #define MARIO_STATE_WALKING_RIGHT	100
 #define MARIO_STATE_WALKING_LEFT	200
@@ -100,7 +102,7 @@
 #define MARIO_TRANSFORMING_TIME		400
 
 #define ALPHA             1.0f
-#define UNTOUCHABLE_ALPHA 0.5f
+#define UNTOUCHABLE_ALPHA 1.0f
 #define KICK_TIME 300
 #define MARIO_MAX_COORDINATE_X		2802
 
@@ -123,6 +125,7 @@ class CMario : public CGameObject
 	bool isOnGround;
 	Timer kickTimer;
 	bool isChangeDirection;
+	float postion_y;
 public: 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT>* objects=NULL);

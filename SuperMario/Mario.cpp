@@ -449,10 +449,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 	}
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	if (level != MARIO_LEVEL_SMALL && level != MARIO_LEVEL_TRANSFORM_SMALL && state != MARIO_STATE_DIE)
+		postion_y = y + MARIO_TRANSFORM_DY_FROM_SMALL_TO_BIG;
+	else
+		postion_y = y;
+
 }
 
 void CMario::Render()
 {
+	int alpha = ALPHA;
+	if (untouchable) alpha = UNTOUCHABLE_ALPHA;
 	ani = -1;
 	if (state == MARIO_STATE_DIE) 
 	{
@@ -709,11 +716,7 @@ void CMario::Render()
 			}
 		}
 	}
-	int alpha = ALPHA;
-	if (untouchable) alpha = UNTOUCHABLE_ALPHA;
-
-	animation_set->at(ani)->Render(x, y, alpha);
-
+	animation_set->at(ani)->Render(x, postion_y, alpha);
 	RenderBoundingBox();
 }
 
