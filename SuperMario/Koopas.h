@@ -45,6 +45,10 @@
 
 #define KOOPAS_TURN_DIFF	4
 
+#define KOOPAS_EXTRA_SPEED 5
+#define KOOPAS_DY_TRANSFROM_FROM_WALKING_TO_IN_SHELL 4.0f
+
+
 
 class CKoopas : public CGameObject
 {
@@ -54,6 +58,7 @@ class CKoopas : public CGameObject
 	Timer dyingTimer;
 	Timer respawnTimer;
 	int temp = 0;
+	float koopas_y;
 public:
 	bool isHold = false;
 	bool isKillable = false;

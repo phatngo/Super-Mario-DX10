@@ -1,4 +1,4 @@
-﻿  Mario.cpp
+﻿  Koopas.cpp
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dxgitype.h(12,1): warning C4005: 'DXGI_STATUS_OCCLUDED': macro redefinition
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\winerror.h(56388): message : see previous definition of 'DXGI_STATUS_OCCLUDED'
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dxgitype.h(13,1): warning C4005: 'DXGI_STATUS_CLIPPED': macro redefinition
@@ -48,7 +48,5 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\winerror.h(56
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\d3d10.h(609,1): warning C4005: 'D3D10_ERROR_FILE_NOT_FOUND': macro redefinition
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\winerror.h(56850): message : see previous definition of 'D3D10_ERROR_FILE_NOT_FOUND'
 D:\school\game\gamee\Super-Mario-DX10\SuperMario\Mario.h(135,79): warning C4244: '=': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\Mario.cpp(461,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\Mario.cpp(462,27): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\Mario.cpp(719,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  LINK : D:\school\game\gamee\Super-Mario-DX10\Debug\PhatNgo_SuperMarioBros3.exe not found or not built by the last incremental link; performing full link
   SuperMario.vcxproj -> D:\school\game\gamee\Super-Mario-DX10\Debug\PhatNgo_SuperMarioBros3.exe

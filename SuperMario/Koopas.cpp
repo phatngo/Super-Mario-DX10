@@ -342,7 +342,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if (state == KOOPAS_STATE_SPINNING)
 		{
 			this->nx = -this->nx;
-			vx = this->nx * KOOPAS_WALKING_SPEED * 5;
+			vx = this->nx * KOOPAS_WALKING_SPEED * KOOPAS_EXTRA_SPEED;
 		}
 		else {
 			this->nx = -this->nx;
@@ -350,6 +350,23 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 	}
 
+	if (state == KOOPAS_STATE_IN_SHELL) {
+		if (shellTimer.ElapsedTime() >= KOOPAS_SHELL_TIME && shellTimer.IsStarted()) {
+			SetState(KOOPAS_STATE_SHAKE);
+			shellTimer.Reset();
+		}
+	}
+    else if (state == KOOPAS_STATE_SHAKE) {
+		if (respawnTimer.ElapsedTime() >= KOOPPAS_RESPAWN_TIME && respawnTimer.IsStarted()) {
+			SetState(KOOPAS_STATE_WALKING);
+			respawnTimer.Reset();
+		}
+	}
+
+	if (state != KOOPAS_STATE_WALKING)
+		koopas_y = y;
+	else
+		koopas_y = y + KOOPAS_DY_TRANSFROM_FROM_WALKING_TO_IN_SHELL;
 
 }
 void CKoopas::Render()
@@ -360,10 +377,6 @@ void CKoopas::Render()
 		this->SetState(KOOPAS_STATE_IN_SHELL);
 	}
 	else if (state == KOOPAS_STATE_IN_SHELL) {
-		if (shellTimer.ElapsedTime() >= KOOPAS_SHELL_TIME && shellTimer.IsStarted()) {
-			SetState(KOOPAS_STATE_SHAKE);
-			shellTimer.Reset();
-		}
 		ani = KOOPAS_ANI_SHELL;
 	}
 	else if (state == KOOPAS_STATE_SPINNING)
@@ -386,15 +399,10 @@ void CKoopas::Render()
 		else
 			ani = KOOPAS_ANI_PARA_RIGHT;
 	if (state == KOOPAS_STATE_SHAKE) {
-		if (respawnTimer.ElapsedTime() >= KOOPPAS_RESPAWN_TIME && respawnTimer.IsStarted()) {
-			SetState(KOOPAS_STATE_WALKING);
-			respawnTimer.Reset();
-		}
 		ani = KOOPAS_ANI_SHAKE;
 	}
-	animation_set->at(ani)->Render(x, y);
-
-	RenderBoundingBox(75);
+	animation_set->at(ani)->Render(x, koopas_y);
+	RenderBoundingBox();
 }
 void CKoopas::SetState(int state)
 {
