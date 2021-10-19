@@ -317,7 +317,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			{
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
 				vy = -MARIO_JUMP_SPEED_Y/2;
-				coin->SetState(COIN_STATE_NON_EXIST);
+				coin->SetIsDestroyed();
 				AddMoney();
 			}
 			else if (dynamic_cast<CFireBullet*>(e->obj)) {
