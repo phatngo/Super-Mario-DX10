@@ -111,8 +111,8 @@ class CMario : public CGameObject
 {
 	int level;
 	int untouchable;
-	DWORD untouchable_start;
-	DWORD marioDT;
+	ULONGLONG untouchable_start;
+	ULONGLONG marioDT;
 	float maxVx;
 	int ani;
 

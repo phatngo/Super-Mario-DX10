@@ -347,9 +347,6 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
-	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way 
-
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
@@ -360,12 +357,9 @@ void CPlayScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-
 	
-	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
 
-	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
 	float playerStartX = player->GetStartX();
@@ -388,8 +382,8 @@ void CPlayScene::Render()
 			||(dynamic_cast<CPiece*>(objects[i]) && objects[i]->GetState() == PIECE_STATE_NON_EXIST)
 			||(dynamic_cast<EffectPoint*>(objects[i]) && objects[i]->GetState() == EFFECT_POINT_STATE_NON_EXIST)
 			||(dynamic_cast<CFireBullet*>(objects[i]) && objects[i]->GetState() == FIRE_BULLET_STATE_NON_EXIST)) {
+			objects[i]->SetIsDestroyed();
 			objects.erase(objects.begin() + i);
-
 		}
 	}
 }

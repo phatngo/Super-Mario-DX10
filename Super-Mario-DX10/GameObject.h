@@ -68,7 +68,7 @@ public:
 	int type;
 	int nx;
 	int ny;
-
+	bool isDestroyed;
 	int state;
 
 	DWORD dt; 
@@ -94,6 +94,8 @@ public:
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }
 	virtual bool isColliding(float friend_left, float friend_top, float friend_right, float friend_bottom);
+	bool IsDestroyed() { return isDestroyed; }
+	void SetIsDestroyed() { isDestroyed = true; }
 
 	//Collision
 

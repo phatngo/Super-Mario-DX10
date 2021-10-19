@@ -14,6 +14,7 @@ CGameObject::CGameObject()
 	vx = vy = 0;
 	ax = ay = 0;
 	nx = 1;	
+	isDestroyed = false;
 }
 
 void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)

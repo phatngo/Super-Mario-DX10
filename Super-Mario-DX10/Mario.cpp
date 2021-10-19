@@ -71,7 +71,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 		CalcPotentialCollisions(coObjects, coEvents);
 
 	// reset untouchable timer if untouchable time has passed
-	if ( GetTickCount() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
+	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -458,7 +458,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 
 void CMario::Render()
 {
-	int alpha = ALPHA;
+	float alpha = ALPHA;
 	if (untouchable) alpha = UNTOUCHABLE_ALPHA;
 	ani = -1;
 	if (state == MARIO_STATE_DIE) 
