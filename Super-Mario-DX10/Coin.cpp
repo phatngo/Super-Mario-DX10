@@ -19,7 +19,9 @@ CCoin::CCoin(int tag)
 
 void CCoin::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	
+	if (isDestroyed)
+		return;
+
 		left = x;
 		top = y;
 		right = x + COIN_BBOX_WIDTH;
@@ -29,6 +31,9 @@ void CCoin::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isDestroyed)
+		return;
+
 	    CGameObject::Update(dt, coObjects);
 		y += dy;
 
@@ -42,7 +47,7 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				break;
 			case COIN_STATE_FALLING:
 				if (start_Y - y <= COIN_JUMP_DISAPPEAR_DY) {
-					this->SetState(COIN_STATE_NON_EXIST);
+					isDestroyed = true;
 				}
 			default:
 				break;
@@ -52,6 +57,9 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CCoin::Render()
 {
+	if (isDestroyed)
+		return;
+
 		animation_set->at(COIN_ANI_GENERAL)->Render(x, y);
 		RenderBoundingBox();	
 }
