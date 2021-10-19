@@ -5,14 +5,18 @@
 #include "FireBullet.h"
 
 void CFlashAnimationBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (isDestroyed)
+		return;
 	CGameObject::Update(dt, coObjects);
 }
 
 void CFlashAnimationBrick::Render() {
+	if (isDestroyed)
+		return;
 	if (this->state == FLASH_BRICK_STATE_FLASHING) {
-		animation_set->at(FLASH_BRICK_ANI_FLASHING)->Render(x, y);
-		RenderBoundingBox();
-	}
+			animation_set->at(FLASH_BRICK_ANI_FLASHING)->Render(x, y);
+			RenderBoundingBox();
+		}
 }
 
 CFlashAnimationBrick::CFlashAnimationBrick() {
@@ -35,10 +39,12 @@ void CFlashAnimationBrick::SetState(int state) {
 
 void CFlashAnimationBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
-	l = x;
-	t = y;
-	r = x + BRICK_BBOX_WIDTH;
-	b = y + BRICK_BBOX_HEIGHT;
+	if (!isDestroyed) {
+		l = x;
+		t = y;
+		r = x + BRICK_BBOX_WIDTH;
+		b = y + BRICK_BBOX_HEIGHT;
+	}
 }
 
 void CFlashAnimationBrick::CreatePieces() {

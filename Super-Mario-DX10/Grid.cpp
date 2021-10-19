@@ -138,7 +138,7 @@ void Grid::Move(Unit* unit, float x, float y)
 	Add(unit);
 }
 
-void Grid::Get(vector<Unit*>& listUnits)
+void Grid::Get(CCamera* cam, vector<Unit*>& listUnits)
 {
 
 	float cam_x = CCamera::GetInstance()->GetCameraX();

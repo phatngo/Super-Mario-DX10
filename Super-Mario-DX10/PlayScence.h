@@ -16,12 +16,18 @@ class CPlayScene: public CScene
 protected: 
 	CMario *player;					// A play scene has to have player, right? 
 	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> objectsRenderFirst;
+	vector<LPGAMEOBJECT> objectsRenderSecond;
+	vector<LPGAMEOBJECT> objectsRenderThird;
 	CMap* current_map = NULL;
 
 	//Grid
 	vector<Unit*> units;
 	Unit* unit;
 	Grid* grid;
+
+	//Camera
+	CCamera* cam;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_TILEMAP_DATA(string line);

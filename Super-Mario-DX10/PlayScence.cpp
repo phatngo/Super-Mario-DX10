@@ -47,7 +47,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 
-
+#define OBJECT_TYPE_GRID    999
 #define OBJECT_TYPE_MARIO	0
 #define OBJECT_TYPE_BRICK	1
 #define OBJECT_TYPE_GOOMBA	2
@@ -194,6 +194,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	DebugOut(L"[INFO] Start object resources from : %s \n", path.c_str());
 	f.open(path.c_str());
 	char str[MAX_SCENE_LINE];
+
 	while (f.getline(str, MAX_SCENE_LINE))
 	{
 		string line(str);
@@ -204,9 +205,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		if (tokens.size() <= 3) continue;
 
 		int object_type = atoi(tokens[0].c_str());
-		float x = atof(tokens[1].c_str());
-		float y = atof(tokens[2].c_str());
-		int ani_set_id = atoi(tokens[3].c_str());
+
+		float x, y;
+		int ani_set_id;
+		if (object_type != OBJECT_TYPE_GRID) {
+			x = atof(tokens[1].c_str());
+			y = atof(tokens[2].c_str());
+			ani_set_id = atoi(tokens[3].c_str());
+		}
 
 		int tag = -1;
 		int objectInsideTag = -1;
@@ -283,18 +289,33 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new HUD();
 			break;
 		}
+		case OBJECT_TYPE_GRID: {
+			int gridCols = atoi(tokens[1].c_str());
+			int gridRows = atoi(tokens[2].c_str());
+			grid = new Grid(gridCols, gridRows);
+			//DebugOut(L"\nParseSection_GRID: Done\n");
+			break;
+		}
 		default:
 			obj = new CBrick();
 		}
-		if (obj != NULL) {
-			//y -= HUD_HEIGHT;
+		if (obj != NULL && object_type != OBJECT_TYPE_GRID) {
 			obj->SetPosition(x, y);
 			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 			obj->SetAnimationSet(ani_set);
 			objects.push_back(obj);
 		}
+
+		if (object_type != OBJECT_TYPE_MARIO && object_type != OBJECT_TYPE_GRID)
+		{
+			int gridCol = (int)atoi(tokens[tokens.size() - 1].c_str());
+			int gridRow = (int)atoi(tokens[tokens.size() - 2].c_str());
+			//add unit into grid
+			Unit* unit = new Unit(grid, obj, gridRow, gridCol);
+		}
 	}
 	f.close();
+	grid->Out();
 }
 
 void CPlayScene::Load()
@@ -349,6 +370,50 @@ void CPlayScene::Load()
 void CPlayScene::Update(DWORD dt)
 {
 	vector<LPGAMEOBJECT> coObjects;
+	cam = CCamera::GetInstance();
+	//units.clear();
+	objectsRenderFirst.clear();
+	objectsRenderSecond.clear();
+	objectsRenderThird.clear();
+	//objects.clear();
+	//grid->Get(cam, units);
+
+	/*
+	for (UINT i = 0; i < units.size(); i++)
+	{
+		
+		LPGAMEOBJECT obj = units[i]->GetObj();
+		objects.push_back(obj);
+		//CalRevivable
+		
+		for each (auto object in objects)
+		{
+			if (dynamic_cast<CKoopas*>(object) && !dynamic_cast<CKoopas*>(object)->CalRevivable()
+				&& object->isEnable == false)
+				object->isEnable = true;
+			
+		}
+
+		if (dynamic_cast<CGoomba*> (obj) || dynamic_cast<CKoopas*> (obj)
+			|| dynamic_cast<CPiranhaPlant*> (obj)
+			|| dynamic_cast<CFirePiranhaPlant*> (obj)
+			|| dynamic_cast<CCoin*> (obj)
+			|| dynamic_cast<CMushroom*> (obj) && obj->state == MUSHROOM_STATE_MOVING
+			|| dynamic_cast<CLeaf*> (obj) && (obj->state == LEAF_STATE_FLY_UP)
+			|| dynamic_cast<CSwitch*> (obj))
+			objectsRenderFirst.push_back(obj);
+		else if (dynamic_cast<CBrick*> (obj) //&& obj->tag != WOOD && obj->tag != PLATFORM
+			|| (dynamic_cast<CQuestionBrick*> (obj) || (dynamic_cast<CFlashAnimationBrick*> (obj)))
+			|| dynamic_cast<CBrick*>(obj))
+			objectsRenderSecond.push_back(obj);
+		else if (dynamic_cast<CFireBullet*> (obj)
+			|| dynamic_cast<CMushroom*>(obj) && obj->state == MUSHROOM_STATE_MOVING
+			|| dynamic_cast<CLeaf*> (obj) && (obj->state == LEAF_STATE_FLY_DOWN_LEFT || obj->state == LEAF_STATE_FLY_DOWN_RIGHT)
+			|| dynamic_cast<EffectPoint*>(obj) || dynamic_cast<CPiece*>(obj)
+			|| dynamic_cast<Card*>(obj))
+			objectsRenderThird.push_back(obj);
+	}*/
+
 	for (size_t i = 1; i < objects.size(); i++)
 	{
 		coObjects.push_back(objects[i]);
@@ -358,34 +423,42 @@ void CPlayScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
-	
-	if (player == NULL) return; 
 
 	float cx, cy;
+	if (player == NULL) return;
 	player->GetPosition(cx, cy);
 	float playerStartX = player->GetStartX();
-	CCamera::GetInstance()->SetPlayerStartX(playerStartX);
-	CCamera::GetInstance()->SetCameraPosition(cx, mapWidth);
+	cam->SetPlayerStartX(playerStartX);
+	cam->SetCameraPosition(cx, mapWidth);
+	//grid->UpdateGrid(units);
 }
 
 void CPlayScene::Render()
 {
+
 	if (player == NULL) return;
 	current_map->Render();
 	player->Render();
+	/*
 	for (int i = 0; i < objects.size(); i++) {
+		if(!objects[i]->IsDestroyed()){
 		objects[i]->Render();
-		if ((dynamic_cast<CGoomba*>(objects[i])&&objects[i]->GetState()== GOOMBA_STATE_NON_EXIST)
-			||(dynamic_cast<CCoin*>(objects[i]) && objects[i]->GetState() == COIN_STATE_NON_EXIST)
-			||(dynamic_cast<CMushroom*>(objects[i]) && objects[i]->GetState() == MUSHROOM_STATE_NON_EXIST)
-			||(dynamic_cast<CLeaf*>(objects[i]) && objects[i]->GetState() == LEAF_STATE_NON_EXIST)
-			||(dynamic_cast<CFlashAnimationBrick*>(objects[i]) && objects[i]->GetState() == FLASH_BRICK_STATE_NON_EXIST)
-			||(dynamic_cast<CPiece*>(objects[i]) && objects[i]->GetState() == PIECE_STATE_NON_EXIST)
-			||(dynamic_cast<EffectPoint*>(objects[i]) && objects[i]->GetState() == EFFECT_POINT_STATE_NON_EXIST)
-			||(dynamic_cast<CFireBullet*>(objects[i]) && objects[i]->GetState() == FIRE_BULLET_STATE_NON_EXIST)) {
+		if ((dynamic_cast<CGoomba*>(objects[i]) && objects[i]->GetState() == GOOMBA_STATE_NON_EXIST)
+			|| (dynamic_cast<CCoin*>(objects[i]) && objects[i]->GetState() == COIN_STATE_NON_EXIST)
+			|| (dynamic_cast<CMushroom*>(objects[i]) && objects[i]->GetState() == MUSHROOM_STATE_NON_EXIST)
+			|| (dynamic_cast<CLeaf*>(objects[i]) && objects[i]->GetState() == LEAF_STATE_NON_EXIST)
+			|| (dynamic_cast<CFlashAnimationBrick*>(objects[i]) && objects[i]->GetState() == FLASH_BRICK_STATE_NON_EXIST)
+			|| (dynamic_cast<CPiece*>(objects[i]) && objects[i]->GetState() == PIECE_STATE_NON_EXIST)
+			|| (dynamic_cast<EffectPoint*>(objects[i]) && objects[i]->GetState() == EFFECT_POINT_STATE_NON_EXIST)
+			|| (dynamic_cast<CFireBullet*>(objects[i]) && objects[i]->GetState() == FIRE_BULLET_STATE_NON_EXIST)) {
 			objects[i]->SetIsDestroyed();
 			objects.erase(objects.begin() + i);
 		}
+	 }
+	}
+	*/
+	for (int i = 0; i < objects.size(); i++) {
+		objects[i]->Render();
 	}
 }
 
@@ -438,11 +511,13 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
-	switch (KeyCode)
+	
+	/*switch (KeyCode)
 	{
 	default:
 		break;
 	}
+	*/
 }
 
 

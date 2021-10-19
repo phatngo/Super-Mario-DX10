@@ -15,14 +15,18 @@ CPiece::CPiece(float ax, float ay)
 
 void CPiece::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
-	top = y;
-	right = x + PIECE_BBOX_WIDTH;
-	bottom = y + PIECE_BBOX_HEIGHT;	
+	if (!isDestroyed) {
+		left = x;
+		top = y;
+		right = x + PIECE_BBOX_WIDTH;
+		bottom = y + PIECE_BBOX_HEIGHT;
+	}
 }
 
 void CPiece::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isDestroyed)
+		return;
 	CGameObject::Update(dt, coObjects);
 	x += dx;
 	y += dy;
@@ -37,6 +41,8 @@ void CPiece::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CPiece::Render()
 {
+	if (isDestroyed)
+		return;
 	animation_set->at(PIECE_ANI_FLYING)->Render(x,y);
 	RenderBoundingBox();
 }
@@ -53,6 +59,7 @@ void CPiece::SetState(int state)
 	case PIECE_STATE_NON_EXIST:
 		vy = 0;
 		vx = 0;
+		isDestroyed = true;
 		break;
 	default:
 		break;
