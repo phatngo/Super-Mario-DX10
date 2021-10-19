@@ -26,6 +26,8 @@ CGoomba::CGoomba(int tag)
 }
 void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
+	if (isDestroyed)
+		return;
 	left = x;
 	top = y;
 
@@ -60,6 +62,8 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 }
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isDestroyed)
+		return;
 	CGameObject::Update(dt);
 
 	if (tag == GOOMBA_TAG_YELLOW)
@@ -72,7 +76,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (state == GOOMBA_STATE_DIE) {
 			//After being killed, goomba becomes dead then delay for a while, then disappears
 			if (this->transformToNonExistTimer.ElapsedTime() >= GOOMBA_DELAY_TIME && this->transformToNonExistTimer.IsStarted()) {
-				this->SetState(GOOMBA_STATE_NON_EXIST);
+				//this->SetState(GOOMBA_STATE_NON_EXIST);
+				isDestroyed = true;
 				player->AddPoint(this->x, this->y - GOOMBA_BBOX_NORMAL_HEIGHT);
 				transformToNonExistTimer.Reset();
 			}
@@ -115,7 +120,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			case GOOMBA_STATE_RED_DIE:
 				//After being killed, goomba becomes dead then delay for a while, then disappears
 				if (transformToNonExistTimer.ElapsedTime() >= GOOMBA_DELAY_TIME && transformToNonExistTimer.IsStarted()) {
-					this->SetState(GOOMBA_STATE_NON_EXIST);
+					//this->SetState(GOOMBA_STATE_NON_EXIST);
+					isDestroyed = true;
 					player->AddPoint(this->x, this->y - GOOMBA_BBOX_NORMAL_HEIGHT, EFFECT_POINT_800);
 				}
 				break;
@@ -399,6 +405,8 @@ void CGoomba::updateRedGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 void CGoomba::Render()
 {
+	if (isDestroyed)
+		return;
 	int ani = -1;
 	if (tag == GOOMBA_TAG_YELLOW) {
 		ani = GOOMBA_ANI_YELLOW_WALKING;
