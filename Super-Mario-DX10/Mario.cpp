@@ -814,5 +814,5 @@ void CMario::AddPoint(float x, float y, int point) {
 	EffectPoint* effectPoint = new EffectPoint();
 	effectPoint->SetPosition(x, y);
 	effectPoint->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(effectPoint);
+	scene->GetUnit()->AddUnit(effectPoint, scene->GetGrid());
 }
