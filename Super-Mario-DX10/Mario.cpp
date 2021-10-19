@@ -395,7 +395,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			else if (dynamic_cast<CMushroom*>(e->obj)) 
             {
 			CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
-			mushroom->SetState(MUSHROOM_STATE_NON_EXIST);
+			mushroom->SetIsDestroyed();
 			if (e->ny > 0) {
 				//Change the rendering y to the y of big mario
 				y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT);

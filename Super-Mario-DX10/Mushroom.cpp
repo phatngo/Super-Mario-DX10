@@ -13,6 +13,8 @@ CMushroom::CMushroom()
 
 void CMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
+	if (isDestroyed)
+		return;
 	left = x;
 	top = y;
 	right = x + MUSHROOM_BBOX_WIDTH;
@@ -21,6 +23,8 @@ void CMushroom::GetBoundingBox(float& left, float& top, float& right, float& bot
 
 void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isDestroyed)
+		return;
 	CGameObject::Update(dt);
 
 		vector<LPCOLLISIONEVENT> coEvents;
@@ -78,6 +82,8 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMushroom::Render()
 {
+	if (isDestroyed)
+		return;
 	int ani = MUSHROOM_ANI_NORMAL;
 	animation_set->at(ani)->Render(x, y);
 	RenderBoundingBox();
