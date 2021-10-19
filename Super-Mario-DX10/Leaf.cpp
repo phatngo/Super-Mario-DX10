@@ -6,6 +6,8 @@ CLeaf::CLeaf()
 
 void CLeaf::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
+	if (isDestroyed)
+		return;
 	left = x;
 	top = y;
 	right = x + LEAF_BBOX_WIDTH;
@@ -14,6 +16,8 @@ void CLeaf::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isDestroyed)
+		return;
 	CGameObject::Update(dt, coObjects);
 	x += dx;
 	y += dy;
@@ -42,6 +46,8 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CLeaf::Render()
 {
+	if (isDestroyed)
+		return;
 	int ani = LEAF_ANI_FLY_LEFT;
 	switch (this->state)
 	{

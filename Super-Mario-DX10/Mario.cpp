@@ -411,7 +411,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			}
 			else if (dynamic_cast<CLeaf*>(e->obj)) {
 			CLeaf* leaf = dynamic_cast<CLeaf*>(e->obj);
-			leaf->SetState(LEAF_STATE_NON_EXIST);
+			leaf->SetIsDestroyed();
 			if (e->ny > 0) {
 				//Change the rendering y to the y of big mario
 				if (this->level == MARIO_LEVEL_SMALL) {
