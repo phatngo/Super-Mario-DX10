@@ -129,7 +129,7 @@ void CQuestionBrick::CreateCoin() {
 	CCoin* coin = new CCoin(TAG_COIN_IN_BRICK);
 	coin->SetPosition(this->x, this->y);
 	coin->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(coin);
+	scene->GetUnit()->AddUnit(coin, scene->GetGrid());
 }
 
 void CQuestionBrick::CreateMushroom() {
@@ -139,7 +139,7 @@ void CQuestionBrick::CreateMushroom() {
 	CMushroom* mushroom = new CMushroom();
 	mushroom->SetPosition(this->x, this->y);
 	mushroom->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(mushroom);
+	scene->GetUnit()->AddUnit(mushroom, scene->GetGrid());
 }
 
 void CQuestionBrick::CreateLeaf() {
@@ -149,7 +149,7 @@ void CQuestionBrick::CreateLeaf() {
 	CLeaf* leaf = new CLeaf();
 	leaf->SetPosition(this->x, this->y);
 	leaf->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(leaf);
+	scene->GetUnit()->AddUnit(leaf, scene->GetGrid());
 }
 
 
