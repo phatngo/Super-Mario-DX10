@@ -55,21 +55,26 @@ void CFlashAnimationBrick::CreatePieces() {
 	CPiece* piece_left_up = new CPiece(PIECE_LEFT, PIECE_UP);
 	piece_left_up->SetPosition(x, y);
 	piece_left_up->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(piece_left_up);
+	//scene->AddObjects(piece_left_up);
 
 	CPiece* piece_left_down = new CPiece(PIECE_LEFT, PIECE_DOWN);
 	piece_left_down->SetPosition(x, y + PIECE_BBOX_HEIGHT);
 	piece_left_down->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(piece_left_down);
+	//scene->AddObjects(piece_left_down);
 
 	CPiece* piece_right_up = new CPiece(PIECE_RIGHT, PIECE_UP);
 	piece_right_up->SetPosition(x+PIECE_BBOX_WIDTH, y);
 	piece_right_up->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(piece_right_up);
+	//scene->AddObjects(piece_right_up);
 
 	CPiece* piece_right_down = new CPiece(PIECE_RIGHT, PIECE_DOWN);
 	piece_right_down->SetPosition(x + PIECE_BBOX_WIDTH, y + PIECE_BBOX_HEIGHT);
 	piece_right_down->SetAnimationSet(tmp_ani_set);
-	scene->AddObjects(piece_right_down);
+	//scene->AddObjects(piece_right_down);
+
+	scene->GetUnit()->AddUnit(piece_left_up, scene->GetGrid());
+	scene->GetUnit()->AddUnit(piece_left_down, scene->GetGrid());
+	scene->GetUnit()->AddUnit(piece_right_up, scene->GetGrid());
+	scene->GetUnit()->AddUnit(piece_right_down, scene->GetGrid());
 }
 

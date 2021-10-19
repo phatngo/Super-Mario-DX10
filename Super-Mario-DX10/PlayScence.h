@@ -10,6 +10,7 @@
 #include "Map.h"
 #include "Camera.h"
 #include "Grid.h"
+#include "HUD.h"
 
 class CPlayScene: public CScene
 {
@@ -20,11 +21,13 @@ protected:
 	vector<LPGAMEOBJECT> objectsRenderSecond;
 	vector<LPGAMEOBJECT> objectsRenderThird;
 	CMap* current_map = NULL;
+	HUD* hud;
 
 	//Grid
 	vector<Unit*> units;
 	Unit* unit;
 	Grid* grid;
+
 
 	//Camera
 	CCamera* cam;
@@ -47,8 +50,14 @@ public:
 	virtual vector<LPGAMEOBJECT> GetSceneObjects();
 
 	//Added by myself
+	Unit* GetUnit() { return unit; }
+	Grid* GetGrid() { return grid; }
+
+	//Added by myself
 	virtual void  SetSceneObjects(vector<LPGAMEOBJECT> objects);
-	void AddObjects(CGameObject* gameObj) { this->objects.insert(this->objects.end()-2, gameObj);}
+	void AddObjects(CGameObject* gameObj) { 
+		this->objects.insert(this->objects.end()-2, gameObj);
+	}
 	
 
 	virtual CMario * GetPlayer() { return player; } 

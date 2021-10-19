@@ -141,10 +141,10 @@ void Grid::Move(Unit* unit, float x, float y)
 void Grid::Get(CCamera* cam, vector<Unit*>& listUnits)
 {
 
-	float cam_x = CCamera::GetInstance()->GetCameraX();
-	float cam_y = CCamera::GetInstance()->GetCameraY();
+	float cam_x = cam->GetCameraX();
+	float cam_y = cam->GetCameraY();
 
-	/*int startCol = (int)((cam_x - VIEWPORT_PUSHBACK * 2) / CELL_WIDTH);
+	int startCol = (int)((cam_x - VIEWPORT_PUSHBACK * 2) / CELL_WIDTH);
 	int endCol = (int)ceil((cam_x + SCREEN_WIDTH + VIEWPORT_PUSHBACK * 2) / CELL_WIDTH);
 	int ENDCOL = (int)ceil((mapWidth) / CELL_WIDTH);
 	if (endCol > ENDCOL)
@@ -188,7 +188,6 @@ void Grid::Get(CCamera* cam, vector<Unit*>& listUnits)
 			}
 		}
 	}
-	*/
 }
 
 void Grid::UpdateGrid(vector<Unit*>& units)

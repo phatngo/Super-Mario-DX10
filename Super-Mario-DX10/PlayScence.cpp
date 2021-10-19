@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-
 #include "PlayScence.h"
 #include "Textures.h"
 #include "Sprites.h"
@@ -286,27 +285,33 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			break; 
 		}
 		case OBJECT_TYPE_HUD: {
-			obj = new HUD();
+			hud = new HUD();
 			break;
 		}
 		case OBJECT_TYPE_GRID: {
 			int gridCols = atoi(tokens[1].c_str());
 			int gridRows = atoi(tokens[2].c_str());
 			grid = new Grid(gridCols, gridRows);
-			//DebugOut(L"\nParseSection_GRID: Done\n");
+			DebugOut(L"\nParseSection_GRID: Done\n");
 			break;
 		}
 		default:
-			obj = new CBrick();
+			obj = NULL;
+			break;
 		}
-		if (obj != NULL && object_type != OBJECT_TYPE_GRID) {
+		if (obj != NULL && object_type != OBJECT_TYPE_GRID && object_type != OBJECT_TYPE_HUD) {
 			obj->SetPosition(x, y);
 			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 			obj->SetAnimationSet(ani_set);
 			objects.push_back(obj);
 		}
-
-		if (object_type != OBJECT_TYPE_MARIO && object_type != OBJECT_TYPE_GRID)
+		if (hud != NULL)
+		{
+			hud->SetPosition(x, y);
+			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+			hud->SetAnimationSet(ani_set);
+		}
+		if (obj != NULL && object_type != OBJECT_TYPE_MARIO && object_type != OBJECT_TYPE_GRID && object_type != OBJECT_TYPE_HUD)
 		{
 			int gridCol = (int)atoi(tokens[tokens.size() - 1].c_str());
 			int gridRow = (int)atoi(tokens[tokens.size() - 2].c_str());
@@ -371,14 +376,14 @@ void CPlayScene::Update(DWORD dt)
 {
 	vector<LPGAMEOBJECT> coObjects;
 	cam = CCamera::GetInstance();
-	//units.clear();
+	units.clear();
 	objectsRenderFirst.clear();
 	objectsRenderSecond.clear();
 	objectsRenderThird.clear();
-	//objects.clear();
-	//grid->Get(cam, units);
+	objects.clear();
+	grid->Get(cam, units);
 
-	/*
+	
 	for (UINT i = 0; i < units.size(); i++)
 	{
 		
@@ -388,10 +393,10 @@ void CPlayScene::Update(DWORD dt)
 		
 		for each (auto object in objects)
 		{
-			if (dynamic_cast<CKoopas*>(object) && !dynamic_cast<CKoopas*>(object)->CalRevivable()
+			/*if (dynamic_cast<CKoopas*>(object) && !dynamic_cast<CKoopas*>(object)->CalRevivable()
 				&& object->isEnable == false)
 				object->isEnable = true;
-			
+			*/
 		}
 
 		if (dynamic_cast<CGoomba*> (obj) || dynamic_cast<CKoopas*> (obj)
@@ -412,8 +417,9 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<EffectPoint*>(obj) || dynamic_cast<CPiece*>(obj)
 			|| dynamic_cast<Card*>(obj))
 			objectsRenderThird.push_back(obj);
-	}*/
+	}
 
+	
 	for (size_t i = 1; i < objects.size(); i++)
 	{
 		coObjects.push_back(objects[i]);
@@ -430,7 +436,7 @@ void CPlayScene::Update(DWORD dt)
 	float playerStartX = player->GetStartX();
 	cam->SetPlayerStartX(playerStartX);
 	cam->SetCameraPosition(cx, mapWidth);
-	//grid->UpdateGrid(units);
+	grid->UpdateGrid(units);
 }
 
 void CPlayScene::Render()
@@ -439,27 +445,18 @@ void CPlayScene::Render()
 	if (player == NULL) return;
 	current_map->Render();
 	player->Render();
+	hud->Render();
+
 	/*
 	for (int i = 0; i < objects.size(); i++) {
-		if(!objects[i]->IsDestroyed()){
 		objects[i]->Render();
-		if ((dynamic_cast<CGoomba*>(objects[i]) && objects[i]->GetState() == GOOMBA_STATE_NON_EXIST)
-			|| (dynamic_cast<CCoin*>(objects[i]) && objects[i]->GetState() == COIN_STATE_NON_EXIST)
-			|| (dynamic_cast<CMushroom*>(objects[i]) && objects[i]->GetState() == MUSHROOM_STATE_NON_EXIST)
-			|| (dynamic_cast<CLeaf*>(objects[i]) && objects[i]->GetState() == LEAF_STATE_NON_EXIST)
-			|| (dynamic_cast<CFlashAnimationBrick*>(objects[i]) && objects[i]->GetState() == FLASH_BRICK_STATE_NON_EXIST)
-			|| (dynamic_cast<CPiece*>(objects[i]) && objects[i]->GetState() == PIECE_STATE_NON_EXIST)
-			|| (dynamic_cast<EffectPoint*>(objects[i]) && objects[i]->GetState() == EFFECT_POINT_STATE_NON_EXIST)
-			|| (dynamic_cast<CFireBullet*>(objects[i]) && objects[i]->GetState() == FIRE_BULLET_STATE_NON_EXIST)) {
-			objects[i]->SetIsDestroyed();
-			objects.erase(objects.begin() + i);
-		}
-	 }
-	}
 	*/
-	for (int i = 0; i < objects.size(); i++) {
-		objects[i]->Render();
-	}
+	for (unsigned int i = 0; i < objectsRenderFirst.size(); i++)
+		objectsRenderFirst[i]->Render();
+	for (unsigned int i = 0; i < objectsRenderSecond.size(); i++)
+		objectsRenderSecond[i]->Render();
+	for (unsigned int i = 0; i < objectsRenderThird.size(); i++)
+		objectsRenderThird[i]->Render();
 }
 
 /*
