@@ -61,6 +61,9 @@
     <Filter Include="Map Objects\Card">
       <UniqueIdentifier>{43bdbb55-61b2-457f-8c7d-cb8362306467}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Grid">
+      <UniqueIdentifier>{d6b79e2f-6be1-4358-bb11-a2ec2fce72e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -159,6 +162,9 @@
     <ClCompile Include="CourseClear.cpp">
       <Filter>Map Objects\Card</Filter>
     </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Grid</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -256,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="CourseClear.h">
       <Filter>Map Objects\Card</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Grid</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

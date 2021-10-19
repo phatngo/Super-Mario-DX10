@@ -138,6 +138,7 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 
 void CPlayScene::_ParseSection_ANIMATIONS(string line)
 {
+	CCamera::GetInstance()->GetCameraX();
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time

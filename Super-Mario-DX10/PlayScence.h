@@ -9,6 +9,7 @@
 #include "Koopas.h"
 #include "Map.h"
 #include "Camera.h"
+#include "Grid.h"
 
 class CPlayScene: public CScene
 {
@@ -16,6 +17,11 @@ protected:
 	CMario *player;					// A play scene has to have player, right? 
 	vector<LPGAMEOBJECT> objects;
 	CMap* current_map = NULL;
+
+	//Grid
+	vector<Unit*> units;
+	Unit* unit;
+	Grid* grid;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_TILEMAP_DATA(string line);
