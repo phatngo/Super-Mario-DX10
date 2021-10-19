@@ -29,6 +29,8 @@ CFireBullet::CFireBullet(float x, float y, int FirePiranhaPlant_CurrentState)
 
 void CFireBullet::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
+	if (isDestroyed)
+		return;
 	left = x;
 	top = y;
 	right = x + FIRE_BULLET_BBOX_WIDTH;
@@ -37,6 +39,8 @@ void CFireBullet::GetBoundingBox(float& left, float& top, float& right, float& b
 
 void CFireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (isDestroyed)
+		return;
 	CGameObject::Update(dt, coObjects);
 	y += dy;
 	x += dx;
@@ -44,12 +48,14 @@ void CFireBullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	float cameraPositionY = CCamera::GetInstance()->GetCameraY();
 	float screenWidth = CGame::GetInstance()->GetScreenHeight();
 	if (this->y < cameraPositionY || this->y > cameraPositionY + screenWidth) {
-		SetState(FIRE_BULLET_STATE_NON_EXIST);
+		isDestroyed = true;
 	}
 }
 
 void CFireBullet::Render()
 {
+	if (isDestroyed)
+		return;
 	animation_set->at(this->ani)->Render(x, y);
 }
 
