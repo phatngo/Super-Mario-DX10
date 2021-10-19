@@ -6,17 +6,20 @@ EffectPoint::EffectPoint() {
 }
 
 void EffectPoint::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	if (isDestroyed)
+		return;
 	CGameObject::Update(dt, coObjects);
 	y += dy;
 	if (this->state == EFFECT_POINT_STATE_EXIST) {
 		if (start_Y - y >= POINT_FLYING_DY) {
-			SetState(EFFECT_POINT_STATE_NON_EXIST);
+			isDestroyed = true;
 		}
 	}
 }
 
 void EffectPoint::Render() {
-		
+	if (isDestroyed)
+		return;
 	animation_set->at(POINT_GENERAL_ANI)->Render(x, y);
 }
 
