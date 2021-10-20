@@ -393,15 +393,17 @@ void CPlayScene::Update(DWORD dt)
 		
 		for each (auto object in objects)
 		{
-			/*if (dynamic_cast<CKoopas*>(object) && !dynamic_cast<CKoopas*>(object)->CalRevivable()
-				&& object->isEnable == false)
-				object->isEnable = true;
+			/*
+			if (dynamic_cast<CKoopas*>(object) && !dynamic_cast<CKoopas*>(object)->CalRevivable()
+				&& object->isDestroyed == false)
+				object->IsDestroyed = true;
 			*/
 		}
 
 		if (dynamic_cast<CGoomba*> (obj) || dynamic_cast<CKoopas*> (obj)
 			|| dynamic_cast<CPiranhaPlant*> (obj)
 			|| dynamic_cast<CFirePiranhaPlant*> (obj)
+			|| dynamic_cast<CMushroom*>(obj) && obj->state == MUSHROOM_STATE_MOVING
 			|| dynamic_cast<CCoin*> (obj)
 			|| dynamic_cast<CMushroom*> (obj) && obj->state == MUSHROOM_STATE_MOVING
 			|| dynamic_cast<CLeaf*> (obj) && (obj->state == LEAF_STATE_FLY_UP)

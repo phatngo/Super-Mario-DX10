@@ -181,64 +181,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				vx = -vx;
 				this->nx = -this->nx;
 			}
-			/*if (dynamic_cast<CMusicalBrick*>(e->obj) && state == KOOPAS_STATE_SPINNING)
-			{
-				CMusicalBrick* msBrick = dynamic_cast<CMusicalBrick*>(e->obj);
-				this->vx = -this->vx;
-				this->nx = -this->nx;
-				msBrick->SetState(MUSIC_BRICK_STATE_HIT_FROM_TOP);
-			}
-			if (dynamic_cast<CBreakableBrick*>(e->obj) && state == KOOPAS_STATE_SPINNING && e->nx != 0 && ceil(mBottom) != oTop)
-			{
-				CBreakableBrick* tmp = dynamic_cast<CBreakableBrick*>(e->obj);
-				tmp->Break();
-			}*/
-			/*
-			if (dynamic_cast<CQuestionBrick*>(e->obj))
-			{
-				CQuestionBrick* object = dynamic_cast<CQuestionBrick*>(e->obj);
 
-				//object->SetDebugAlpha(255);
-				object->GetBoundingBox(oLeft, oTop, oRight, oBottom);
-				if (e->ny != 0)
-				{
-					vy = 0;
-					if (state == KOOPAS_STATE_SHELL_UP)
-						vx = 0;
-				}
-				if (e->ny < 0)
-				{
-					if (tag == KOOPAS_RED && state == KOOPAS_STATE_WALKING)
-					{
-						//DebugOut(L"[KOOPAS] bx %f x %f nx %d vx %f\n", e->obj->x, x, this->nx, vx);
-						if (this->nx > 0 && x >= e->obj->x + KOOPAS_TURN_DIFF)
-						{
-							if (CalTurnable(e->obj, coObjects))
-							{
-								this->nx = -1;
-								vx = -KOOPAS_WALKING_SPEED;
-							}
-						}
-						if (this->nx < 0 && x <= e->obj->x - KOOPAS_TURN_DIFF)
-							if (CalTurnable(e->obj, coObjects))
-							{
-								this->nx = 1;
-								vx = KOOPAS_WALKING_SPEED;
-							}
-					}
-					if (tag == KOOPAS_GREEN_PARA)
-						vy = -KOOPAS_JUMP_SPEED;
-				}
-				if (e->nx != 0)
-				{
-					if (ceil(mBottom) != oTop)
-					{
-						vx = -vx;
-						this->nx = -this->nx;
-					}
-				}
-
-			}*/
 			if (dynamic_cast<CBlock*>(e->obj))
 			{
 				if (e->ny < 0)
@@ -327,12 +270,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						y = y0 + dy;
 				}
 			}
-			/*if (dynamic_cast<CCoin*>(e->obj)) {
-				if (e->nx != 0)
-					x = x0 + dx;
-				if (state == KOOPAS_STATE_SHELL_UP && e->ny > 0)
-					y = y0 + dy;
-			}*/
 		}
 	}
 	// clean up collision events

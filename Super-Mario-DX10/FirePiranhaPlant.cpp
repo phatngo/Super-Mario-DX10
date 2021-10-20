@@ -75,10 +75,6 @@ void CFirePiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	default:
 		break;
 	}
-	if (state == FIRE_PIRANHA_STATE_UP)
-		firePiranhaPlant_y = y + 5.0f;
-	else
-		firePiranhaPlant_y = y;
 }
 
 void CFirePiranhaPlant::Render()
