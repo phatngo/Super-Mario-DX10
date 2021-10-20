@@ -441,22 +441,17 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-
 	if (player == NULL) return;
 	current_map->Render();
 	player->Render();
 
-	/*
-	for (int i = 0; i < objects.size(); i++) {
-		objects[i]->Render();
-	*/
 	for (unsigned int i = 0; i < objectsRenderFirst.size(); i++)
 		objectsRenderFirst[i]->Render();
 	for (unsigned int i = 0; i < objectsRenderSecond.size(); i++)
 		objectsRenderSecond[i]->Render();
 	for (unsigned int i = 0; i < objectsRenderThird.size(); i++)
 		objectsRenderThird[i]->Render();
-
+	
 	hud->Render();
 }
 

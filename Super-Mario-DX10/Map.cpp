@@ -25,6 +25,7 @@ CMap::~CMap()
 
 void CMap::Render()
 {
+	
 	float mx, my;
 	mx = CGame::GetInstance()->GetCamPosX();
 	my = CGame::GetInstance()->GetCamPosY();
@@ -39,7 +40,7 @@ void CMap::Render()
 		{
 			int index = TileMap[CurrentRow][CurrentColumn] - 1;
 			if (index < TotalTiles)
-				Tiles.at(index)->Draw((float)(CurrentColumn * TILE_WIDTH), (float)(CurrentRow * TILE_HEIGHT));
+				Tiles.at(index)->Draw(CurrentColumn * TILE_WIDTH,(CurrentRow * TILE_HEIGHT));
 		}
 }
 void CMap::SetTileMapData(int** TileMapData)
@@ -55,9 +56,9 @@ void CMap::ExtractTileFromTileSet()
 	for (int TileNum = 0; TileNum < TotalTiles; TileNum++)
 	{
 		int left = TileNum % TotalColumnsOfTileSet * TILE_WIDTH;
-		int top = TileNum / TotalColumnsOfTileSet * TILE_HEIGHT;
-		int right = left + TILE_WIDTH;
-		int bottom = top + TILE_HEIGHT;
+		int  top = TileNum / TotalColumnsOfTileSet * TILE_HEIGHT;
+		int right = left + TILE_WIDTH -1;
+		int bottom = top + TILE_HEIGHT-1;
 		//DebugOut(L"[DETAILS]	left %d top %d right %d bottom %d\n", left, top, right, bottom);
 		LPSPRITE NewTile = new CSprite(TileNum, left, top, right, bottom, TileSet); // get tile from tileset
 		this->Tiles.push_back(NewTile);

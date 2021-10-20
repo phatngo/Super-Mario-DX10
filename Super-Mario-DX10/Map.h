@@ -1,6 +1,6 @@
 #pragma once
 #include "Sprites.h"
-#include <d3d9.h>
+#include <d3d10.h>
 #include "Textures.h"
 
 #define TILE_WIDTH 16
