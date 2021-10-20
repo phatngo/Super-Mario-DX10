@@ -445,7 +445,6 @@ void CPlayScene::Render()
 	if (player == NULL) return;
 	current_map->Render();
 	player->Render();
-	hud->Render();
 
 	/*
 	for (int i = 0; i < objects.size(); i++) {
@@ -457,6 +456,8 @@ void CPlayScene::Render()
 		objectsRenderSecond[i]->Render();
 	for (unsigned int i = 0; i < objectsRenderThird.size(); i++)
 		objectsRenderThird[i]->Render();
+
+	hud->Render();
 }
 
 /*

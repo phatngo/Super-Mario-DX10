@@ -150,7 +150,7 @@ void CFirePiranhaPlant::CreateFireBullet() {
 		LPANIMATION_SET tmp_ani_set = animation_sets->Get(FIRE_BULLET_ANI_SET_ID);
 		CFireBullet* bullet = new CFireBullet(this->x, this->y, this->ani);
 		bullet->SetAnimationSet(tmp_ani_set);
-		scene->AddObjects(bullet);
+		scene->GetUnit()->AddUnit(bullet, scene->GetGrid());
 		isFireBulletCreated = true;
 	}
 }
