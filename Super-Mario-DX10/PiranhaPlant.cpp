@@ -38,7 +38,7 @@ void CPiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CPiranhaPlant::Render()
 {
 	int ani = PIRANHA_ANI_NORMAL;
-	animation_set->at(ani)->Render(x, y);
+	animation_set->at(ani)->Render(x, y+ EXTRA_PIRANHA_DY_MOVING_UP);
 }
 
 void CPiranhaPlant::SetState(int state)

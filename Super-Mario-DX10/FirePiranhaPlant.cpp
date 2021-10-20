@@ -118,7 +118,7 @@ void CFirePiranhaPlant::Render()
 		break;
 	}
 
-	animation_set->at(this->ani)->Render(x, y + 3.5f);
+	animation_set->at(this->ani)->Render(x, y + EXTRA_DY_MOVING_UP);
 }
 
 void CFirePiranhaPlant::SetState(int state)
