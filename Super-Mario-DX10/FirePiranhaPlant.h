@@ -37,6 +37,7 @@ class CFirePiranhaPlant : public CGameObject
 	Timer down_Timer;
 	Timer shoot_Timer;
 	bool isFireBulletCreated;
+	float firePiranhaPlant_y;
 public:
 	CFirePiranhaPlant(int objTag);
 	virtual void SetState(int state);

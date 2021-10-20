@@ -75,6 +75,10 @@ void CFirePiranhaPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	default:
 		break;
 	}
+	if (state == FIRE_PIRANHA_STATE_UP)
+		firePiranhaPlant_y = y + 5.0f;
+	else
+		firePiranhaPlant_y = y;
 }
 
 void CFirePiranhaPlant::Render()
@@ -113,7 +117,8 @@ void CFirePiranhaPlant::Render()
 	default:
 		break;
 	}
-	animation_set->at(this->ani)->Render(x, y);
+
+	animation_set->at(this->ani)->Render(x, y + 3.5f);
 }
 
 void CFirePiranhaPlant::SetState(int state)
@@ -125,6 +130,7 @@ void CFirePiranhaPlant::SetState(int state)
 	case FIRE_PIRANHA_STATE_DOWN:
 		vy = FIRE_PIRANHA_UP_SPEED;
 		up_Timer.Start();
+		
 		isFireBulletCreated = false;
 		break;
 	case FIRE_PIRANHA_STATE_SHOOT:
