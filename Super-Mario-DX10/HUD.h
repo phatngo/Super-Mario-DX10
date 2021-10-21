@@ -1,6 +1,7 @@
 #pragma once
 #include"GameObject.h"
 #include"Sprites.h"
+#include "Font.h"
 #define FONT_BBOX_WIDTH						8
 #define DEFAULT_TIME						300
 
@@ -16,13 +17,18 @@
 
 #define HUD_HEIGHT                          32
 #define HUD_CY                              395
+#define POINT_DIGIT_NUMBER                  7
+#define FIRST_POINT_DIGIT_POSITION_FROM_HUD_X 58
+#define POINT_DIGIT_POSITION_FROM_HUD_Y       4
+
 
 class HUD:public CGameObject
 {
 	int type;
+	vector<Font*>pointDigits;
 public:
 	virtual void Render();
-	virtual void Update(DWORD dt) {};
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void GetBoundingBox(float& oLeft, float& oTop, float& oRight, float& oBottom) {};
 	HUD();
 };

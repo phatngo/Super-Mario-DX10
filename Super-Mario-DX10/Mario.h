@@ -119,8 +119,8 @@ class CMario : public CGameObject
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
 	Timer transformTimer;
-	int totalPoint;
-	int totalMoney;
+	int totalPoint=0;
+	int totalMoney=0;
 	bool isKickingKoopas;
 	bool isOnGround;
 	Timer kickTimer;
@@ -138,4 +138,6 @@ public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	void AddPoint(float x, float y, int point = EFFECT_POINT_100);
 	void AddMoney() { this->totalMoney++; }
+	int GetPoint() { return this->totalPoint; }
+	int GetMoney() { return this->totalMoney; }
 };

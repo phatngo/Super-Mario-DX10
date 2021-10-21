@@ -441,6 +441,7 @@ void CPlayScene::Update(DWORD dt)
 	cam->SetPlayerStartX(playerStartX);
 	cam->SetCameraPosition(cx, mapWidth);
 	grid->UpdateGrid(units);
+	hud->Update(dt);
 }
 
 void CPlayScene::Render()

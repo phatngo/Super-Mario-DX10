@@ -165,6 +165,9 @@
     <ClCompile Include="Grid.cpp">
       <Filter>Grid</Filter>
     </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>HUD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="Grid.h">
       <Filter>Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>HUD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
