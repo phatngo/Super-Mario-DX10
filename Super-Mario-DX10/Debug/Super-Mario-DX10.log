@@ -1,5 +1,23 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (PhatNgo_SuperMarioBros3.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Camera.cpp
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\Camera.cpp(20,33): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\Camera.cpp(29,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\Camera.cpp(29,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Card.cpp
+  FireBullet.cpp
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\FireBullet.cpp(48,24): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\FireBullet.cpp(49,20): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  FirePiranhaPlant.cpp
+  GameObject.cpp
+  Grid.cpp
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\Grid.cpp(144,14): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\Grid.cpp(145,14): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  HUD.cpp
+  Koopas.cpp
+  Map.cpp
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\Map.cpp(43,66): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\Map.cpp(43,41): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Mario.cpp
   PlayScence.cpp
 D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(151,20): warning C4018: '<': signed/unsigned mismatch
 D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(174,20): warning C4018: '<': signed/unsigned mismatch
@@ -7,5 +25,8 @@ D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(212,12): w
 D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(213,12): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(230,19): warning C4101: 'ani_set_of_obj': unreferenced local variable
 D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(467,20): warning C4018: '<': signed/unsigned mismatch
+  Scence.cpp
+  Sprites.cpp
+  Textures.cpp
   Generating Code...
   Super-Mario-DX10.vcxproj -> D:\school\game\gamee\Super-Mario-DX10\Debug\Super-Mario-DX10.exe

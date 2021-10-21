@@ -102,7 +102,7 @@
 #define MARIO_TRANSFORMING_TIME		400
 
 #define ALPHA             1.0f
-#define UNTOUCHABLE_ALPHA 1.0f
+#define UNTOUCHABLE_ALPHA 0.5f
 #define KICK_TIME 300
 #define MARIO_MAX_COORDINATE_X		2802
 
