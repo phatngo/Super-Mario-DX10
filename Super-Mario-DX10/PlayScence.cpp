@@ -23,6 +23,7 @@
 #include "FireBullet.h"
 #include "Card.h"
 #include "Camera.h"
+#include "CourseClear.h"
 #include "Textures.h"
 using namespace std;
 
@@ -417,7 +418,8 @@ void CPlayScene::Update(DWORD dt)
 			|| dynamic_cast<CMushroom*>(obj) && obj->state == MUSHROOM_STATE_MOVING
 			|| dynamic_cast<CLeaf*> (obj) && (obj->state == LEAF_STATE_FLY_DOWN_LEFT || obj->state == LEAF_STATE_FLY_DOWN_RIGHT)
 			|| dynamic_cast<EffectPoint*>(obj) || dynamic_cast<CPiece*>(obj)
-			|| dynamic_cast<Card*>(obj))
+			|| dynamic_cast<Card*>(obj)
+			|| dynamic_cast<CourseClear*>(obj))
 			objectsRenderThird.push_back(obj);
 	}
 

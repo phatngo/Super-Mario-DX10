@@ -66,7 +66,9 @@ void Card::DisplayCourseClear() {
 		LPANIMATION_SET tmp_ani_set = animation_sets->Get(COURSE_CLEAR_ANI_SET_ID);
 		CourseClear* courseClear = new CourseClear(this->x - COURSE_CLEAR_DX_FROM_CARD, COURSE_CLEAR_Y_COORDINATE);
 		courseClear->SetAnimationSet(tmp_ani_set);
-		scene->AddObjects(courseClear);
+		//scene->AddObjects(courseClear);
+		scene->GetUnit()->AddUnit(courseClear, scene->GetGrid());
+
 }
 
 
