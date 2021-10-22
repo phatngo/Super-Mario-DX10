@@ -449,10 +449,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 	}
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
-	if (level != MARIO_LEVEL_SMALL && level != MARIO_LEVEL_TRANSFORM_SMALL && state != MARIO_STATE_DIE)
+
+	
+
+	if (level != MARIO_LEVEL_SMALL && level != MARIO_LEVEL_TRANSFORM_SMALL && state != MARIO_STATE_DIE && !isSitDown)
 		postion_y = y + MARIO_TRANSFORM_DY_FROM_SMALL_TO_BIG;
 	else
 		postion_y = y;
+
+	if (isSitDown && level == MARIO_LEVEL_BIG && vx == 0) {
+		postion_y = y + (MARIO_BIG_BBOX_HEIGHT - MARIO_BIG_BBOX_SIT_HEIGHT) + MARIO_SIT_DOWN_DY;
+	}
 
 }
 
@@ -588,6 +595,9 @@ void CMario::Render()
 						else
 							ani = MARIO_ANI_BIG_JUMPINGDOWN_RIGHT;
 					}
+					else if (state == MARIO_STATE_SIT) {
+						ani = MARIO_ANI_BIG_SIT_RIGHT;
+					}
 					else
 					ani = MARIO_ANI_BIG_IDLE_RIGHT;
 				}
@@ -598,6 +608,9 @@ void CMario::Render()
 							ani = MARIO_ANI_BIG_JUMPINGUP_LEFT;
 						else
 							ani = MARIO_ANI_BIG_JUMPINGDOWN_LEFT;
+					}
+					else if (state == MARIO_STATE_SIT) {
+						ani = MARIO_ANI_BIG_SIT_LEFT;
 					}
 					else
 						ani = MARIO_ANI_BIG_IDLE_LEFT;
@@ -614,7 +627,10 @@ void CMario::Render()
 					if (ax < 0 && nx < 0) {
 						ani = MARIO_ANI_BIG_BRAKING_LEFT;
 					}
-					else{
+					else if (this->state == MARIO_STATE_SIT) {
+						ani = MARIO_ANI_BIG_SIT_RIGHT;
+					}
+					else {
 						if (vx < MARIO_WALKING_SPEED_MAX) {
 							ani = MARIO_ANI_BIG_WALKING_RIGHT;
 						}
@@ -631,6 +647,9 @@ void CMario::Render()
 				else {
 					if(ax > 0 && nx > 0){
 						ani = MARIO_ANI_BIG_BRAKING_RIGHT;
+					}
+					else if (this->state == MARIO_STATE_SIT) {
+						ani = MARIO_ANI_BIG_SIT_LEFT;
 					}
 					else{
 						if (vx > MARIO_WALKING_SPEED_MAX) {
@@ -715,6 +734,7 @@ void CMario::Render()
 				}
 			}
 		}
+		
 	}
 	animation_set->at(ani)->Render(x, postion_y, alpha);
 	RenderBoundingBox();
@@ -749,9 +769,19 @@ void CMario::SetState(int state)
 			vx = 0;
 			ax = 0;
 		}
+		if (this->state == MARIO_STATE_SIT) {
+			isSitDown = false;
+		}
 		break;
 	case MARIO_STATE_DIE:
 		vy = -MARIO_DIE_DEFLECT_SPEED;
+		break;
+	case MARIO_STATE_SIT:
+			isSitDown = true;
+			vx = 0;
+			ax = 0;
+			vy = 0;
+			break;
 		break;
 	}
 	CGameObject::SetState(state);
@@ -773,6 +803,12 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	{
 		right = x + MARIO_TAIL_BBOX_WIDTH;
 		bottom = y + MARIO_TAIL_BBOX_HEIGHT;
+	}
+	else if (isSitDown) {
+		if (level == MARIO_LEVEL_BIG) {
+			right = x + MARIO_BIG_BBOX_WIDTH;
+			bottom = y + MARIO_BIG_BBOX_SIT_HEIGHT;
+		}
 	}
 	else
 	{

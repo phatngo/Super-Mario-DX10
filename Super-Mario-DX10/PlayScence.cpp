@@ -507,14 +507,7 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
-	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
-	
-	/*switch (KeyCode)
-	{
-	default:
-		break;
-	}
-	*/
+
 }
 
 
@@ -526,10 +519,14 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 
 	// disable control key when Mario die 
 	if (mario->GetState() == MARIO_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT)&&!CGame::GetInstance()->GetCurrentScene()->GetSceneDone())
+	if (game->IsKeyDown(DIK_RIGHT) && !CGame::GetInstance()->GetCurrentScene()->GetSceneDone()) {
 		mario->SetState(MARIO_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT)&& !CGame::GetInstance()->GetCurrentScene()->GetSceneDone())
+	}
+	else if (game->IsKeyDown(DIK_LEFT) && !CGame::GetInstance()->GetCurrentScene()->GetSceneDone())
 		mario->SetState(MARIO_STATE_WALKING_LEFT);
+	else if (game->IsKeyDown(DIK_DOWN)) {
+		mario->SetState(MARIO_STATE_SIT);
+	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);
 }

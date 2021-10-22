@@ -21,6 +21,7 @@
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
 
 #define MARIO_TRANSFORM_DY_FROM_SMALL_TO_BIG 6.5f
+#define MARIO_SIT_DOWN_DY 1.0f
 
 #define MARIO_STATE_IDLE			0
 #define MARIO_STATE_WALKING_RIGHT	100
@@ -29,6 +30,7 @@
 #define MARIO_STATE_DIE				400
 #define MARIO_STATE_TRANSFORMING    500
 #define MARIO_STATE_RELEASE_JUMP    600
+#define MARIO_STATE_SIT             700
 
 #define MARIO_ANI_BIG_IDLE_RIGHT		        14
 #define MARIO_ANI_BIG_IDLE_LEFT			        22
@@ -79,6 +81,9 @@
 #define MARIO_ANI_TRANSFORM_BIG_LEFT	    116
 #define MARIO_ANI_TRANSFORM_TAIL 	        117
 
+#define MARIO_ANI_BIG_SIT_RIGHT 	        21
+#define MARIO_ANI_BIG_SIT_LEFT 	            29
+
 
 #define MARIO_ANI_DIE		8
 
@@ -94,6 +99,8 @@
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 27 
+
+#define MARIO_BIG_BBOX_SIT_HEIGHT 18 
 
 #define MARIO_SMALL_BBOX_WIDTH  12
 #define MARIO_SMALL_BBOX_HEIGHT 16
@@ -126,6 +133,8 @@ class CMario : public CGameObject
 	Timer kickTimer;
 	bool isChangeDirection;
 	float postion_y;
+	bool isSitDown;
+	bool isStandUpAgain;
 public: 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT>* objects=NULL);
