@@ -368,7 +368,6 @@ void CPlayScene::Load()
 	}
 
 	f.close();
-	//CTextures::GetInstance()->Add(ID_TEX_BBOX, L"Resources\\Textures\\bbox.png");
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
