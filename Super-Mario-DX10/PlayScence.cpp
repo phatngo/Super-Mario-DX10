@@ -46,6 +46,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define SCENE_SECTION_ANIMATIONS 4
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
+#define SCENE_SECTION_EXTRA_INFORMATION 7
 
 #define OBJECT_TYPE_GRID    999
 #define OBJECT_TYPE_MARIO	0
@@ -60,6 +61,14 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_COIN 6
 #define OBJECT_TYPE_HUD 58
 #define OBJECT_TYPE_CARD 57
+
+#define EXTRA_INFO_FIRST_POINT_IN_HUD_POSITION 1
+#define EXTRA_INFO_LAST_POINT_IN_HUD_POSITION 2
+#define EXTRA_INFO_CAMERA_STANDARD_Y_COORDINATE 3
+#define EXTRA_INFO_CAMERA_FURTHEST_Y_COORDINATE 4
+#define EXTRA_INFO_MARIO_MAX_X_COORDINATE 5
+
+#define UNKNOWN_VALUE -1
 
 
 
@@ -182,6 +191,36 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
 }
 
+void CPlayScene::_ParseSection_EXTRA_INFORMATION(string line)
+{
+	
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 1) return; // skip invalid lines
+
+
+	switch (atoi(tokens[0].c_str()))
+	{
+	case EXTRA_INFO_FIRST_POINT_IN_HUD_POSITION:
+		hud->SetFirstPointPosition(atof(tokens[1].c_str()), atof(tokens[2].c_str()));
+		break;
+	case EXTRA_INFO_LAST_POINT_IN_HUD_POSITION:
+		hud->SetLastMoneyPosition(atof(tokens[1].c_str()), atof(tokens[2].c_str()));
+		break;
+	case EXTRA_INFO_CAMERA_STANDARD_Y_COORDINATE:
+		CCamera::GetInstance()->SetStandardCameraPositionY(atoi(tokens[1].c_str()));
+		break;
+	case EXTRA_INFO_CAMERA_FURTHEST_Y_COORDINATE:
+		CCamera::GetInstance()->SetCameraFurthestPositionY(atoi(tokens[1].c_str()));
+		break;
+	case EXTRA_INFO_MARIO_MAX_X_COORDINATE:
+		player->SetMaxXCoordinate(atoi(tokens[1].c_str()));
+		break;
+	default:
+		break;
+	}
+}
+
 
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
@@ -206,8 +245,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		int object_type = atoi(tokens[0].c_str());
 
-		float x, y;
-		int ani_set_id;
+		float x = UNKNOWN_VALUE, y = UNKNOWN_VALUE;
+		int ani_set_id = UNKNOWN_VALUE;
 		if (object_type != OBJECT_TYPE_GRID) {
 			x = atof(tokens[1].c_str());
 			y = atof(tokens[2].c_str());
@@ -351,6 +390,8 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_ANIMATION_SETS; continue; }
 		if (line == "[OBJECTS]") { 
 			section = SCENE_SECTION_OBJECTS; continue; }
+		if (line == "[EXTRA INFORMATION]") {
+			section = SCENE_SECTION_EXTRA_INFORMATION; continue;}
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -364,6 +405,7 @@ void CPlayScene::Load()
 			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_EXTRA_INFORMATION: _ParseSection_EXTRA_INFORMATION(line); break;
 		}
 	}
 

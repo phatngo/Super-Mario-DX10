@@ -83,8 +83,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 		if (x <= 0) {
 			x = 0;
 		}
-		else if (x >= MARIO_MAX_COORDINATE_X && !CGame::GetInstance()->GetCurrentScene()->GetSceneDone()) {
-			x = MARIO_MAX_COORDINATE_X;
+		else if (x >= maxXcoordinate && !CGame::GetInstance()->GetCurrentScene()->GetSceneDone()) {
+			x = maxXcoordinate;
 		}
 		else {
 			x += dx;

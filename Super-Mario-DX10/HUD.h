@@ -18,10 +18,9 @@
 #define HUD_HEIGHT                          32
 #define HUD_CY                              395
 #define POINT_DIGIT_NUMBER                  7
-#define FIRST_POINT_DIGIT_POSITION_FROM_HUD_X 58
-#define LAST_MONEY_DIGIT_POSITION_FROM_HUD_X 146
-#define POINT_DIGIT_POSITION_FROM_HUD_Y       4
-#define MONEY_DIGIT_POSITION_FROM_HUD_Y       -4
+
+#define UNKNOWN_VALUE -1.0f
+
 
 
 class HUD:public CGameObject
@@ -29,10 +28,16 @@ class HUD:public CGameObject
 	int type;
 	vector<Font*>pointDigits;
 	vector<Font*>moneyDigits;
+	float firstPointPositionX = UNKNOWN_VALUE;
+	float firstPointPositionY = UNKNOWN_VALUE;
+	float lastMoneyPositionX = UNKNOWN_VALUE;
+	float lastMoneyPositionY = UNKNOWN_VALUE;
 public:
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void GetBoundingBox(float& oLeft, float& oTop, float& oRight, float& oBottom) {};
+	void SetFirstPointPosition(float x, float y) { firstPointPositionX = x; firstPointPositionY = y; }
+	void SetLastMoneyPosition(float x, float y) { lastMoneyPositionX = x; lastMoneyPositionY = y; }
 	HUD();
 };
 

@@ -6,16 +6,18 @@
 #include "GameObject.h"
 #include "Mario.h"
 
+#define UNKNOW_VALUE -1 
+
 
 class CScene
 {
 protected:
-	CKeyEventHandler * key_handler;
+	CKeyEventHandler * key_handler = NULL;
 	int id;
 	LPCWSTR sceneFilePath;
 	bool isCameraAutoMove = false;
-	bool isSceneDone;
-	int mapWidth;
+	bool isSceneDone = false;
+	int mapWidth = UNKNOW_VALUE;
 public: 
 	CScene(int id, LPCWSTR filePath);
 

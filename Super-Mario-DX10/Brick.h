@@ -8,7 +8,7 @@
 
 class CBrick : public CGameObject
 {
-	float tag;
+	float tag = -1;
 public:
 	virtual void Render();
 	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);

@@ -135,6 +135,7 @@ class CMario : public CGameObject
 	float postion_y;
 	bool isSitDown;
 	bool isStandUpAgain;
+	float maxXcoordinate;
 public: 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT>* objects=NULL);
@@ -149,4 +150,5 @@ public:
 	void AddMoney() { this->totalMoney++; }
 	int GetPoint() { return this->totalPoint; }
 	int GetMoney() { return this->totalMoney; }
+	void SetMaxXCoordinate(float maxXCoordinate) { this->maxXcoordinate = maxXCoordinate; }
 };

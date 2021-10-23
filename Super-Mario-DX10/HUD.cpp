@@ -23,14 +23,14 @@ void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		Font* font;
 		if (i == 0) {
 			font = new Font(
-				FIRST_POINT_DIGIT_POSITION_FROM_HUD_X, 
-				this->start_Y + POINT_DIGIT_POSITION_FROM_HUD_Y
+				firstPointPositionX, 
+				this->start_Y + firstPointPositionY
 			);
 		}
 		else {
 			float last_font_X, last_font_Y;
 			pointDigits[i-1]->GetPosition(last_font_X, last_font_Y);
-			font = new Font(last_font_X + FONT_WIDTH, this->start_Y + POINT_DIGIT_POSITION_FROM_HUD_Y);
+			font = new Font(last_font_X + FONT_WIDTH, last_font_Y);
 		}
 		pointDigits.push_back(font);
 	}
@@ -85,8 +85,8 @@ void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		Font* font;
 		if (i == 0) {
 			font = new Font(
-				LAST_MONEY_DIGIT_POSITION_FROM_HUD_X,
-				this->start_Y + MONEY_DIGIT_POSITION_FROM_HUD_Y
+				lastMoneyPositionX,
+				this->start_Y + lastMoneyPositionY
 			);
 		}
 		else {
@@ -94,7 +94,7 @@ void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			moneyDigits[i - 1]->GetPosition(last_font_X, last_font_Y);
 			font = new Font(
 				last_font_X - FONT_WIDTH,
-				this->start_Y + MONEY_DIGIT_POSITION_FROM_HUD_Y
+				this->start_Y + lastMoneyPositionY
 			);
 		}
 		switch (digit)
@@ -138,8 +138,8 @@ void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	Font* font;
 	if (moneyDigits.size() == 0) {
 		font = new Font(
-			LAST_MONEY_DIGIT_POSITION_FROM_HUD_X,
-			this->start_Y + MONEY_DIGIT_POSITION_FROM_HUD_Y
+			lastMoneyPositionX,
+			this->start_Y + lastMoneyPositionY
 		);
 		switch (totalMoney)
 		{
@@ -181,7 +181,7 @@ void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		float last_font_X, last_font_Y;
 		moneyDigits[moneyDigits.size() - 1]->GetPosition(last_font_X, last_font_Y);
 		font = new Font(last_font_X - FONT_WIDTH,
-			this->start_Y + MONEY_DIGIT_POSITION_FROM_HUD_Y);
+			this->start_Y + lastMoneyPositionY);
 		switch (totalMoney)
 		{
 		case DIGIT_0:

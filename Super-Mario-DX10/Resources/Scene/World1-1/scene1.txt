@@ -1140,3 +1140,14 @@ Resources\Tilemap\world1-1.txt
 134	8006	8007	8008	8009	8010	8011	8012	8013	8014	8015
 [OBJECTS]
 Resources\Scene\World1-1\world1-1.txt
+[EXTRA INFORMATION]
+# HUD First Point Position
+1	58	4
+# HUD Last Money Position
+2	146	-4
+# Camera standard y coordinate
+3	238	
+# Camera furthest y coordinate
+4	2894
+# Mario's max x coordinate
+5	2802

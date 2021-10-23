@@ -12,10 +12,12 @@
 #include "Grid.h"
 #include "HUD.h"
 
+#define UNKNOWN_VALUE -1
+
 class CPlayScene: public CScene
 {
 protected: 
-	CMario *player;					// A play scene has to have player, right? 
+	CMario *player = NULL;					// A play scene has to have player, right? 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> objectsRenderFirst;
 	vector<LPGAMEOBJECT> objectsRenderSecond;
@@ -25,12 +27,12 @@ protected:
 
 	//Grid
 	vector<Unit*> units;
-	Unit* unit;
-	Grid* grid;
+	Unit* unit = NULL;
+	Grid* grid = NULL;
 
 
 	//Camera
-	CCamera* cam;
+	CCamera* cam = NULL; 
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_TILEMAP_DATA(string line);
@@ -38,6 +40,7 @@ protected:
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_EXTRA_INFORMATION(string line);
 private:
 	
 public: 
