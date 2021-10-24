@@ -499,6 +499,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 
 	if (isSitDown && level == MARIO_LEVEL_BIG && vx == 0) {
 		postion_y = y + (MARIO_BIG_BBOX_HEIGHT - MARIO_BIG_BBOX_SIT_HEIGHT) + MARIO_SIT_DOWN_DY;
+
+	}
+
+	if (isSitDown && level == MARIO_LEVEL_TAIL && vx == 0) {
+			postion_y = y + (MARIO_TAIL_BBOX_HEIGHT - MARIO_TAIL_BBOX_SIT_HEIGHT) + MARIO_SIT_DOWN_DY;
 	}
 
 }
@@ -565,6 +570,9 @@ void CMario::Render()
 						else
 							ani = MARIO_ANI_TAIL_JUMPINGDOWN_RIGHT;
 					}
+					else if (state == MARIO_STATE_SIT) {
+						ani = MARIO_ANI_TAIL_SIT_LEFT;
+					}
 					else
 					    ani = MARIO_ANI_TAIL_IDLE_RIGHT;
 				}
@@ -574,6 +582,9 @@ void CMario::Render()
 							ani = MARIO_ANI_TAIL_JUMPINGUP_LEFT;
 						else
 							ani = MARIO_ANI_TAIL_JUMPINGDOWN_LEFT;
+					}
+					if (state == MARIO_STATE_SIT) {
+						ani = MARIO_ANI_TAIL_SIT_RIGHT;
 					}
 					else
 					ani = MARIO_ANI_TAIL_IDLE_LEFT;
@@ -848,6 +859,10 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		if (level == MARIO_LEVEL_BIG) {
 			right = x + MARIO_BIG_BBOX_WIDTH;
 			bottom = y + MARIO_BIG_BBOX_SIT_HEIGHT;
+		}
+		else if (level == MARIO_LEVEL_TAIL) {
+			right = x + MARIO_TAIL_BBOX_SIT_WIDTH;
+			bottom = y + MARIO_TAIL_BBOX_SIT_HEIGHT;
 		}
 	}
 	else
