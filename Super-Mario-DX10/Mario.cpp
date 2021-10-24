@@ -231,7 +231,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 										SetState(MARIO_STATE_DIE);
 								}
 							}
-							else{
+							else {
 								if (level > MARIO_LEVEL_SMALL)
 								{
 									if (level == MARIO_LEVEL_TAIL) {
@@ -252,12 +252,52 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					}
 				}
 				else {
+					if (e->nx != 0) {
+						if (untouchable == 0) {
+							if (level > MARIO_LEVEL_SMALL)
+							{
+								if (level == MARIO_LEVEL_TAIL) {
+									level = MARIO_LEVEL_TRANSFORM_BIG;
+									this->transformTimer.Start();
+								}
+								else {
+									level = MARIO_LEVEL_TRANSFORM_SMALL;
+									this->transformTimer.Start();
+								}
+								StartUntouchable();
+							}
+							else
+								//Makes mario die
+								SetState(MARIO_STATE_DIE);
+						}
+					}
 					if (e->ny != 0) {
 						if (koopas->GetState() != KOOPAS_STATE_DEATH)
 						{
-							koopas->SetTag(KOOPAS_GREEN);
-							vy = -MARIO_JUMP_DEFLECT_SPEED;
-							AddPoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT);
+							if (e->ny < 0) {
+								koopas->SetTag(KOOPAS_GREEN);
+								vy = -MARIO_JUMP_DEFLECT_SPEED;
+								AddPoint(oLeft, oTop - KOOPAS_BBOX_SHELL_HEIGHT);
+							}
+							else {
+								if (untouchable == 0) {
+									if (level > MARIO_LEVEL_SMALL)
+									{
+										if (level == MARIO_LEVEL_TAIL) {
+											level = MARIO_LEVEL_TRANSFORM_BIG;
+											this->transformTimer.Start();
+										}
+										else {
+											level = MARIO_LEVEL_TRANSFORM_SMALL;
+											this->transformTimer.Start();
+										}
+										StartUntouchable();
+									}
+									else
+										//Makes mario die
+										SetState(MARIO_STATE_DIE);
+								}
+							}
 						}
 					}
 				}
