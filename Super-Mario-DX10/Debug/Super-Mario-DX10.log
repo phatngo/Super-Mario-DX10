@@ -1,5 +1,16 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (PhatNgo_SuperMarioBros3.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  Mario.cpp
+  PlayScence.cpp
 D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.h(15,1): warning C4005: 'UNKNOWN_VALUE': macro redefinition
 D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\HUD.h(22): message : see previous definition of 'UNKNOWN_VALUE'
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(160,20): warning C4018: '<': signed/unsigned mismatch
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(183,20): warning C4018: '<': signed/unsigned mismatch
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(205,59): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(205,34): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(208,58): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(208,33): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(217,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(251,12): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(252,12): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(269,19): warning C4101: 'ani_set_of_obj': unreferenced local variable
+D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.cpp(509,20): warning C4018: '<': signed/unsigned mismatch
   Super-Mario-DX10.vcxproj -> D:\school\game\gamee\Super-Mario-DX10\Debug\Super-Mario-DX10.exe

@@ -226,8 +226,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 {
 
 	wstring path = ToWSTR(line);
-	float longest_y=0.0;
-	float oLeft = -1, oTop = -1, oRight = -1, oBottom = -1;
+	//float longest_y=0.0;
+	//float oLeft = -1, oTop = -1, oRight = -1, oBottom = -1;
 	//float height_of_object_with_longest_y;
 	ifstream f;
 	DebugOut(L"[INFO] Start object resources from : %s \n", path.c_str());
@@ -435,6 +435,7 @@ void CPlayScene::Update(DWORD dt)
 		
 		for each (auto object in objects)
 		{
+			//Still having an error when calling summon koopas related to Grid, so that's why it is commented
 			/*
 			if (dynamic_cast<CKoopas*>(object) && !dynamic_cast<CKoopas*>(object)->CalRevivable()
 				&& object->isDestroyed == false)
@@ -445,18 +446,17 @@ void CPlayScene::Update(DWORD dt)
 		if (dynamic_cast<CGoomba*> (obj) || dynamic_cast<CKoopas*> (obj)
 			|| dynamic_cast<CPiranhaPlant*> (obj)
 			|| dynamic_cast<CFirePiranhaPlant*> (obj)
-			|| dynamic_cast<CMushroom*>(obj) && obj->state == MUSHROOM_STATE_MOVING
 			|| dynamic_cast<CCoin*> (obj)
 			|| dynamic_cast<CMushroom*> (obj) && obj->state == MUSHROOM_STATE_MOVING
 			|| dynamic_cast<CLeaf*> (obj) && (obj->state == LEAF_STATE_FLY_UP)
 			|| dynamic_cast<CSwitch*> (obj))
 			objectsRenderFirst.push_back(obj);
-		else if (dynamic_cast<CBrick*> (obj) //&& obj->tag != WOOD && obj->tag != PLATFORM
+		else if (dynamic_cast<CBrick*> (obj)
 			|| (dynamic_cast<CQuestionBrick*> (obj) || (dynamic_cast<CFlashAnimationBrick*> (obj)))
 			|| dynamic_cast<CBrick*>(obj))
 			objectsRenderSecond.push_back(obj);
 		else if (dynamic_cast<CFireBullet*> (obj)
-			|| dynamic_cast<CMushroom*>(obj) && obj->state == MUSHROOM_STATE_MOVING
+			|| dynamic_cast<CMushroom*>(obj)
 			|| dynamic_cast<CLeaf*> (obj) && (obj->state == LEAF_STATE_FLY_DOWN_LEFT || obj->state == LEAF_STATE_FLY_DOWN_RIGHT)
 			|| dynamic_cast<EffectPoint*>(obj) || dynamic_cast<CPiece*>(obj)
 			|| dynamic_cast<Card*>(obj)
