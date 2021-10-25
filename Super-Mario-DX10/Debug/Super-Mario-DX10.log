@@ -1,7 +1,5 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (PhatNgo_SuperMarioBros3.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  main.cpp
+  Mario.cpp
 D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\PlayScence.h(15,1): warning C4005: 'UNKNOWN_VALUE': macro redefinition
 D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\HUD.h(22): message : see previous definition of 'UNKNOWN_VALUE'
-D:\school\game\gamee\Super-Mario-DX10\Super-Mario-DX10\main.cpp(144,12): warning C4244: 'initializing': conversion from 'ULONGLONG' to 'DWORD', possible loss of data
-  LINK : D:\school\game\gamee\Super-Mario-DX10\Debug\Super-Mario-DX10.exe not found or not built by the last incremental link; performing full link
   Super-Mario-DX10.vcxproj -> D:\school\game\gamee\Super-Mario-DX10\Debug\Super-Mario-DX10.exe

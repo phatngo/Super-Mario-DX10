@@ -798,10 +798,16 @@ void CMario::SetState(int state)
 	case MARIO_STATE_WALKING_RIGHT:
 		ax = MARIO_ACCEL_WALK_X;
 		nx = 1;
+		if (this->state == MARIO_STATE_SIT) {
+			isSitDown = false;
+		}
 		break;
 	case MARIO_STATE_WALKING_LEFT: 
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
+		if (this->state == MARIO_STATE_SIT) {
+			isSitDown = false;
+		}
 		break;
 	case MARIO_STATE_JUMP:
 		if (isOnGround) {
@@ -828,11 +834,11 @@ void CMario::SetState(int state)
 		vy = -MARIO_DIE_DEFLECT_SPEED;
 		break;
 	case MARIO_STATE_SIT:
+		if (level != MARIO_LEVEL_SMALL) {
 			isSitDown = true;
 			vx = 0;
 			ax = 0;
-			vy = 0;
-			break;
+		}
 		break;
 	}
 	CGameObject::SetState(state);
