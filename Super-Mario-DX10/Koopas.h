@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Timer.h"
 
+#define KOOPAS_SPINNING_SPEED			0.25f
 #define KOOPAS_WALKING_SPEED			0.03f
 #define KOOPAS_PARA_WALKING_SPEED		0.3f
 #define KOOPAS_JUMP_SPEED				0.35f

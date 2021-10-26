@@ -299,6 +299,17 @@ void CGoomba::updateYellowGoomba(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 					x += dx;
 				}
 			}
+			if (dynamic_cast<CKoopas*>(e->obj)) {
+				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+				if (e->ny < 0 && koopas->GetState() == KOOPAS_STATE_SPINNING) {
+					DebugOut(L"aaaaaaaaaaaaaaaaaa \n");
+					ay = -ay;
+					if (nx > 1)
+						vx = GOOMBA_WALKING_SPEED;
+					else
+						vx = -GOOMBA_WALKING_SPEED;
+				}
+			}
 		}
 	}
 	// clean up collision events

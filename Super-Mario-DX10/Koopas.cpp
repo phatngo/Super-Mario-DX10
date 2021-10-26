@@ -131,9 +131,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					goomba->SetIsTouchedByKoopas();
 				}
 				if (e->ny > 0) {
-					vy = 0;
+					DebugOut(L"bbbbbbbbbbb \n");
 					ay = 0;
-					goomba->SetState(GOOMBA_STATE_JUMPING_KILLED_BY_KOOPAS);
+					vx += ax * dt;
+					x = x0 + dx;
 				}
 				vx += ax * dt;
 				x = x0 + dx;
@@ -362,7 +363,7 @@ void CKoopas::SetState(int state)
 		ay = KOOPAS_GRAVITY;
 		break;
 	case KOOPAS_STATE_SPINNING:
-		vx = player->nx*KOOPAS_WALKING_SPEED*5;
+		vx = player->nx* KOOPAS_SPINNING_SPEED;
 		break;
 	case KOOPAS_STATE_IN_SHELL:
 		y += KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_SHELL_HEIGHT;
