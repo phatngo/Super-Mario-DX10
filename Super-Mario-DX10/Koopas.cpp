@@ -39,12 +39,13 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	CMario* mario = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
 	float marioX, marioY;
 	mario->GetPosition(marioX, marioY);
+	bool isMarioThrow = mario->IsThrow();
 
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
-	if (state != KOOPAS_STATE_DEATH)
+	if (state != KOOPAS_STATE_DEATH && !isHold)
 		vy += ay * dt;
 
 	coEvents.clear();
@@ -290,9 +291,11 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	if (state == KOOPAS_STATE_IN_SHELL) {
-		if (shellTimer.ElapsedTime() >= KOOPAS_SHELL_TIME && shellTimer.IsStarted()) {
-			SetState(KOOPAS_STATE_SHAKE);
-			shellTimer.Reset();
+		if (!isHold) {
+			if (shellTimer.ElapsedTime() >= KOOPAS_SHELL_TIME && shellTimer.IsStarted()) {
+				SetState(KOOPAS_STATE_SHAKE);
+				shellTimer.Reset();
+			}
 		}
 	}
     else if (state == KOOPAS_STATE_SHAKE) {
@@ -306,6 +309,25 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		koopas_y = y;
 	else
 		koopas_y = y + KOOPAS_DY_TRANSFROM_FROM_WALKING_TO_IN_SHELL;
+
+	if (isHold && !isMarioThrow) {
+		switch (mario->GetLevel())
+		{
+		case MARIO_LEVEL_SMALL:
+			if (mario->nx > 0)
+				this->x = marioX + KOOPAS_BBOX_WIDTH;
+			else
+				this->x = marioX - KOOPAS_BBOX_WIDTH;
+			this->y = marioY - (MARIO_SMALL_BBOX_HEIGHT / 2);
+			break;
+		default:
+			break;
+		}
+	}
+	else if (isHold && isMarioThrow) {
+		this->isHold = false;
+		this->SetState(KOOPAS_STATE_SPINNING);
+	}
 
 }
 void CKoopas::Render()
@@ -368,7 +390,9 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_IN_SHELL:
 		y += KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_SHELL_HEIGHT;
 		vx = 0;
-		shellTimer.Start();
+		if (!isHold) {
+			shellTimer.Start();
+		}
 		vy = 0;
 		break;
 	case KOOPAS_STATE_DEATH:

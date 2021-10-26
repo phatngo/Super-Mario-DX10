@@ -46,13 +46,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 		isKickingKoopas = false;
 		kickTimer.Reset();
 	}
-	vx += ax * dt;
-
-	if (vx >= MARIO_RUNNING_SPEED_MAX) {
-		vx = MARIO_RUNNING_SPEED_MAX;
-	}
-	else if (vx <= -MARIO_RUNNING_SPEED_MAX) {
-		vx = -MARIO_RUNNING_SPEED_MAX;
+	if (!isHold) {
+		vx += ax * dt;
+		if (vx >= MARIO_RUNNING_SPEED_MAX) {
+			vx = MARIO_RUNNING_SPEED_MAX;
+		}
+		else if (vx <= -MARIO_RUNNING_SPEED_MAX) {
+			vx = -MARIO_RUNNING_SPEED_MAX;
+		}
 	}
 
 	// Calculate dx, dy 
@@ -207,9 +208,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 							if (koopas->GetState() == KOOPAS_STATE_IN_SHELL)
 							{
 								if (state != MARIO_STATE_DIE) {
-									isKickingKoopas = true;
-									koopas->SetState(KOOPAS_STATE_SPINNING);
-									kickTimer.Start();
+									if (isHold) {
+										koopas->SetIsHold(true);
+									}
+									else {
+										isKickingKoopas = true;
+										koopas->SetState(KOOPAS_STATE_SPINNING);
+										kickTimer.Start();
+									}
 								}
 							}
 							else if (koopas->GetState() == KOOPAS_STATE_SPINNING) {
@@ -715,8 +721,39 @@ void CMario::Render()
 		}
 		else if (level == MARIO_LEVEL_SMALL)
 		{
+		if (isHold)
+		{
 			if (vx == 0)
 			{
+				if (nx > 0)
+				{
+					if (vy < 0)
+						ani = MARIO_ANI_SMALL_HOLD_JUMP_RIGHT;
+					else
+						ani = MARIO_ANI_SMALL_HOLD_IDLE_RIGHT;
+				}
+				else {
+					if (vy < 0)
+						ani = MARIO_ANI_SMALL_HOLD_JUMP_LEFT;
+					else
+						ani = MARIO_ANI_SMALL_HOLD_IDLE_LEFT;
+				}
+			}
+		else if (vx > 0)
+		{
+				if (vy < 0)
+					ani = MARIO_ANI_SMALL_HOLD_JUMP_RIGHT;
+				else
+					ani = MARIO_ANI_SMALL_HOLD_WALK_RIGHT;
+		}else
+		{
+				if (vy < 0)
+					ani = MARIO_ANI_SMALL_HOLD_JUMP_LEFT;
+				else
+					ani = MARIO_ANI_SMALL_HOLD_WALK_LEFT;
+		}
+	       }else if (vx == 0)
+			  {
 				if (nx > 0) 
 				{
 					if (vy < 0) {
@@ -796,14 +833,24 @@ void CMario::SetState(int state)
 	switch (state)
 	{
 	case MARIO_STATE_WALKING_RIGHT:
-		ax = MARIO_ACCEL_WALK_X;
+		if (!isHold) {
+			ax = MARIO_ACCEL_WALK_X;
+		}
+		else {
+			vx = MARIO_WALKING_SPEED_MAX;
+		}
 		nx = 1;
 		if (this->state == MARIO_STATE_SIT) {
 			isSitDown = false;
 		}
 		break;
 	case MARIO_STATE_WALKING_LEFT: 
-		ax = -MARIO_ACCEL_WALK_X;
+		if (!isHold) {
+			ax = -MARIO_ACCEL_WALK_X;
+		}
+		else {
+			vx = -MARIO_WALKING_SPEED_MAX;
+		}
 		nx = -1;
 		if (this->state == MARIO_STATE_SIT) {
 			isSitDown = false;
@@ -816,10 +863,15 @@ void CMario::SetState(int state)
 		}
 		break; 
 	case MARIO_STATE_IDLE:
-		if (vx > 0)
-			ax = -MARIO_ACCELERATION;
-		if (vx < 0)
-			ax = MARIO_ACCELERATION;
+		if (!isHold) {
+			if (vx > 0)
+				ax = -MARIO_ACCELERATION;
+			if (vx < 0)
+				ax = MARIO_ACCELERATION;
+		}
+		else {
+			vx = 0;
+		}
 		ay = MARIO_GRAVITY;
 		if (abs(vx) <= MARIO_WALKING_SPEED_MIN)
 		{

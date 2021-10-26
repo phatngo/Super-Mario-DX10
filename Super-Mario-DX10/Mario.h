@@ -63,6 +63,12 @@
 #define MARIO_ANI_SMALL_JUMPINGDOWN_RIGHT	5
 #define MARIO_ANI_SMALL_JUMPINGUP_LEFT		11
 #define MARIO_ANI_SMALL_JUMPINGDOWN_LEFT	12
+#define MARIO_ANI_SMALL_HOLD_IDLE_RIGHT		63
+#define MARIO_ANI_SMALL_HOLD_WALK_RIGHT	    64
+#define MARIO_ANI_SMALL_HOLD_JUMP_RIGHT		65
+#define MARIO_ANI_SMALL_HOLD_IDLE_LEFT		67
+#define MARIO_ANI_SMALL_HOLD_WALK_LEFT	    68
+#define MARIO_ANI_SMALL_HOLD_JUMP_LEFT		69
 
 #define MARIO_ANI_TAIL_IDLE_RIGHT		    30
 #define MARIO_ANI_TAIL_IDLE_LEFT		    38
@@ -142,6 +148,8 @@ class CMario : public CGameObject
 	bool isSitDown;
 	bool isStandUpAgain;
 	float maxXcoordinate;
+	bool isHold;
+	bool isThrow;
 public: 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT>* objects=NULL);
@@ -157,4 +165,8 @@ public:
 	int GetPoint() { return this->totalPoint; }
 	int GetMoney() { return this->totalMoney; }
 	void SetMaxXCoordinate(float maxXCoordinate) { this->maxXcoordinate = maxXCoordinate; }
+	void SetIsHold(bool isHold) { this->isHold = isHold; }
+	void SetIsThrow(bool isThrow) { this->isThrow = isThrow; }
+	bool IsThrow() { return isThrow; }
+	bool IsHold() { return this->isHold; }
 };
