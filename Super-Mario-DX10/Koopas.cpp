@@ -132,7 +132,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					goomba->SetIsTouchedByKoopas();
 				}
 				if (e->ny > 0) {
-					DebugOut(L"bbbbbbbbbbb \n");
 					ay = 0;
 					vx += ax * dt;
 					x = x0 + dx;
@@ -319,6 +318,20 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			else
 				this->x = marioX - KOOPAS_BBOX_WIDTH;
 			this->y = marioY - (MARIO_SMALL_BBOX_HEIGHT / 2);
+			break;
+		case MARIO_LEVEL_BIG:
+			if (mario->nx > 0)
+				this->x = marioX + KOOPAS_BBOX_WIDTH + 1;
+			else
+				this->x = marioX - KOOPAS_BBOX_WIDTH;
+			this->y = marioY + (MARIO_BIG_BBOX_HEIGHT / 3);
+			break;
+		case MARIO_LEVEL_TAIL:
+			if (mario->nx > 0)
+				this->x = marioX + KOOPAS_BBOX_WIDTH + 1;
+			else
+				this->x = marioX - KOOPAS_BBOX_WIDTH;
+			this->y = marioY + (MARIO_TAIL_BBOX_HEIGHT / 3);
 			break;
 		default:
 			break;

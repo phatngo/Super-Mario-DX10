@@ -32,22 +32,28 @@
 #define MARIO_STATE_RELEASE_JUMP    600
 #define MARIO_STATE_SIT             700
 
-#define MARIO_ANI_BIG_IDLE_RIGHT		        14
-#define MARIO_ANI_BIG_IDLE_LEFT			        22
-#define MARIO_ANI_BIG_WALKING_RIGHT		        15
-#define MARIO_ANI_BIG_WALKING_FAST_RIGHT		15
-#define MARIO_ANI_BIG_WALKING_LEFT		        23
-#define MARIO_ANI_BIG_WALKING_FAST_LEFT		    24
-#define MARIO_ANI_BIG_KICK_RIGHT				74
+#define MARIO_ANI_BIG_IDLE_RIGHT		    14
+#define MARIO_ANI_BIG_IDLE_LEFT			    22
+#define MARIO_ANI_BIG_WALKING_RIGHT		    15
+#define MARIO_ANI_BIG_WALKING_FAST_RIGHT    16
+#define MARIO_ANI_BIG_WALKING_LEFT		    23
+#define MARIO_ANI_BIG_WALKING_FAST_LEFT		24
+#define MARIO_ANI_BIG_KICK_RIGHT		    74
 #define MARIO_ANI_BIG_KICK_LEFT				78
-#define MARIO_ANI_BIG_BRAKING_RIGHT			    20
-#define MARIO_ANI_BIG_BRAKING_LEFT			    28
+#define MARIO_ANI_BIG_BRAKING_RIGHT			20
+#define MARIO_ANI_BIG_BRAKING_LEFT			28
 #define MARIO_ANI_BIG_JUMPINGUP_RIGHT		18
 #define MARIO_ANI_BIG_JUMPINGDOWN_RIGHT		19
 #define MARIO_ANI_BIG_JUMPINGUP_LEFT		26
 #define MARIO_ANI_BIG_JUMPINGDOWN_LEFT		27
 #define MARIO_ANI_BIG_SIT_RIGHT 	        21
 #define MARIO_ANI_BIG_SIT_LEFT 	            29
+#define MARIO_ANI_BIG_HOLD_IDLE_RIGHT		71
+#define MARIO_ANI_BIG_HOLD_WALK_RIGHT	    72
+#define MARIO_ANI_BIG_HOLD_JUMP_RIGHT		73
+#define MARIO_ANI_BIG_HOLD_IDLE_LEFT		75
+#define MARIO_ANI_BIG_HOLD_WALK_LEFT	    76
+#define MARIO_ANI_BIG_HOLD_JUMP_LEFT		77
 
 #define MARIO_ANI_SMALL_IDLE_RIGHT		    0
 #define MARIO_ANI_SMALL_IDLE_LEFT	        7
@@ -86,6 +92,12 @@
 #define MARIO_ANI_TAIL_JUMPINGDOWN_LEFT		43
 #define MARIO_ANI_TAIL_SIT_RIGHT 	        45
 #define MARIO_ANI_TAIL_SIT_LEFT 	        37
+#define MARIO_ANI_TAIL_HOLD_IDLE_RIGHT		79
+#define MARIO_ANI_TAIL_HOLD_WALK_RIGHT	    80
+#define MARIO_ANI_TAIL_HOLD_JUMP_RIGHT		81
+#define MARIO_ANI_TAIL_HOLD_IDLE_LEFT		83
+#define MARIO_ANI_TAIL_HOLD_WALK_LEFT	    84
+#define MARIO_ANI_TAIL_HOLD_JUMP_LEFT		85
 
 #define MARIO_ANI_TRANSFORM_BIG_RIGHT	    115
 #define MARIO_ANI_TRANSFORM_BIG_LEFT	    116
@@ -150,6 +162,7 @@ class CMario : public CGameObject
 	float maxXcoordinate;
 	bool isHold;
 	bool isThrow;
+	bool isReadyToHold = false;
 public: 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT>* objects=NULL);
@@ -167,6 +180,8 @@ public:
 	void SetMaxXCoordinate(float maxXCoordinate) { this->maxXcoordinate = maxXCoordinate; }
 	void SetIsHold(bool isHold) { this->isHold = isHold; }
 	void SetIsThrow(bool isThrow) { this->isThrow = isThrow; }
+	void SetIsReadyToHold(bool isReadyToHold) { this->isReadyToHold = isReadyToHold; }
 	bool IsThrow() { return isThrow; }
 	bool IsHold() { return this->isHold; }
+	bool IsReadyToHold() { return this->isReadyToHold; }
 };

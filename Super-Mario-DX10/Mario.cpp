@@ -207,8 +207,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 							//If koopas is not dead
 							if (koopas->GetState() == KOOPAS_STATE_IN_SHELL)
 							{
+								isReadyToHold = true;
 								if (state != MARIO_STATE_DIE) {
-									if (isHold) {
+									if (isReadyToHold && CGame::GetInstance()->IsKeyDown(DIK_Q)) {
 										koopas->SetIsHold(true);
 									}
 									else {
@@ -561,7 +562,40 @@ void CMario::Render()
 		}
 		else if (level == MARIO_LEVEL_TAIL)
 		{
-			if (vy < 0) {
+			if (isHold)
+			{
+				if (vx == 0)
+				{
+					if (nx > 0)
+					{
+						if (vy < 0)
+							ani = MARIO_ANI_TAIL_HOLD_JUMP_RIGHT;
+						else
+							ani = MARIO_ANI_TAIL_HOLD_IDLE_RIGHT;
+					}
+					else {
+						if (vy < 0)
+							ani = MARIO_ANI_TAIL_HOLD_JUMP_LEFT;
+						else
+							ani = MARIO_ANI_TAIL_HOLD_IDLE_LEFT;
+					}
+				}
+				else if (vx > 0)
+				{
+					if (vy < 0)
+						ani = MARIO_ANI_TAIL_HOLD_JUMP_RIGHT;
+					else
+						ani = MARIO_ANI_TAIL_HOLD_WALK_RIGHT;
+				}
+				else
+				{
+					if (vy < 0)
+						ani = MARIO_ANI_TAIL_HOLD_JUMP_LEFT;
+					else
+						ani = MARIO_ANI_TAIL_HOLD_WALK_LEFT;
+				}
+			}
+			else if (vy < 0) {
 				if (nx > 0)
 					ani = MARIO_ANI_TAIL_JUMPINGUP_RIGHT;
 				else
@@ -634,7 +668,40 @@ void CMario::Render()
 		}
 		else if (level == MARIO_LEVEL_BIG)
 		{
-		if (vy < 0) {
+		if (isHold)
+		{
+			if (vx == 0)
+			{
+				if (nx > 0)
+				{
+					if (vy < 0)
+						ani = MARIO_ANI_BIG_HOLD_JUMP_RIGHT;
+					else
+						ani = MARIO_ANI_BIG_HOLD_IDLE_RIGHT;
+				}
+				else {
+					if (vy < 0)
+						ani = MARIO_ANI_BIG_HOLD_JUMP_LEFT;
+					else
+						ani = MARIO_ANI_BIG_HOLD_IDLE_LEFT;
+				}
+			}
+			else if (vx > 0)
+			{
+				if (vy < 0)
+					ani = MARIO_ANI_BIG_HOLD_JUMP_RIGHT;
+				else
+					ani = MARIO_ANI_BIG_HOLD_WALK_RIGHT;
+			}
+			else
+			{
+				if (vy < 0)
+					ani = MARIO_ANI_BIG_HOLD_JUMP_LEFT;
+				else
+					ani = MARIO_ANI_BIG_HOLD_WALK_LEFT;
+			}
+		}
+		else if (vy < 0) {
 			if (nx > 0) {
 				ani = MARIO_ANI_BIG_JUMPINGUP_RIGHT;
 			}
@@ -903,12 +970,13 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 
 	if (level==MARIO_LEVEL_BIG 
 	|| level==MARIO_LEVEL_TRANSFORM_BIG 
-	|| level==MARIO_LEVEL_TRANSFORM_SMALL)
+	|| level==MARIO_LEVEL_TRANSFORM_SMALL
+	|| (level == MARIO_LEVEL_BIG && isHold))
 	{
 		right = x + MARIO_BIG_BBOX_WIDTH;
 		bottom = y + MARIO_BIG_BBOX_HEIGHT;
 	}
-	else if (level == MARIO_LEVEL_TAIL || level==MARIO_LEVEL_TRANSFORM_TAIL)
+	else if (level == MARIO_LEVEL_TAIL || level==MARIO_LEVEL_TRANSFORM_TAIL || (level == MARIO_LEVEL_TAIL && isHold))
 	{
 		right = x + MARIO_TAIL_BBOX_WIDTH;
 		bottom = y + MARIO_TAIL_BBOX_HEIGHT;

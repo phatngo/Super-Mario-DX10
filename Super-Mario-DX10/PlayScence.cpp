@@ -551,8 +551,11 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	if (KeyCode == DIK_Q) {
-		mario->SetIsHold(false);
-		mario->SetIsThrow(true);
+		if (mario->IsHold()) {
+			mario->SetIsHold(false);
+			mario->SetIsThrow(true);
+			mario->SetIsReadyToHold(false);
+		}
 	}
 	if (KeyCode == DIK_RIGHT && mario->IsHold()) {
 		mario->SetState(MARIO_STATE_IDLE);
@@ -578,9 +581,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		mario->SetState(MARIO_STATE_WALKING_LEFT);
 	else if (game->IsKeyDown(DIK_DOWN)) 
 		mario->SetState(MARIO_STATE_SIT);
-	else if (game->IsKeyDown(DIK_Q)) {
-		mario->SetIsHold(true);
-		mario->SetIsThrow(false);
+	//If want to change the following key, please also change on OnKeyUp function and the Update function of mario
+	else if (game->IsKeyDown(DIK_Q) && mario->IsReadyToHold()) {
+			mario->SetIsHold(true);
+			mario->SetIsThrow(false);
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);
