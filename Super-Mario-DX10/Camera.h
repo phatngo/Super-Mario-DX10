@@ -2,9 +2,7 @@
 #include "Game.h"
 
 
-#define MARIO_MINIMUM_POSITION_X 80
-#define CAMERA_POSITION_Y 238
-#define CAMERA_FURTHEST_RIGHT_COORD 2894
+#define CAMERA_EXTRA_Y 10
 
 class CCamera
 {

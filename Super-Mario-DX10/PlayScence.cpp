@@ -224,7 +224,7 @@ void CPlayScene::_ParseSection_EXTRA_INFORMATION(string line)
 
 void CPlayScene::_ParseSection_OBJECTS(string line)
 {
-
+	cam = CCamera::GetInstance();
 	wstring path = ToWSTR(line);
 	//float longest_y=0.0;
 	//float oLeft = -1, oTop = -1, oRight = -1, oBottom = -1;
@@ -278,6 +278,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			}
 			obj = new CMario(x, y);
 			player = (CMario*)obj;
+			cam->SetPlayerStartX(x);
 			break;
 		case OBJECT_TYPE_BRICK:
 			obj = new CBrick();
@@ -417,7 +418,6 @@ void CPlayScene::Load()
 void CPlayScene::Update(DWORD dt)
 {
 	vector<LPGAMEOBJECT> coObjects;
-	cam = CCamera::GetInstance();
 	units.clear();
 	objectsRenderFirst.clear();
 	objectsRenderSecond.clear();
@@ -479,7 +479,6 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return;
 	player->GetPosition(cx, cy);
 	float playerStartX = player->GetStartX();
-	cam->SetPlayerStartX(playerStartX);
 	cam->SetCameraPosition(cx, mapWidth);
 	grid->UpdateGrid(units);
 	hud->Update(dt);
@@ -585,6 +584,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	else if (game->IsKeyDown(DIK_Q) && mario->IsReadyToHold()) {
 			mario->SetIsHold(true);
 			mario->SetIsThrow(false);
+	}
+	else if (game->IsKeyDown(DIK_T)) {
+		//This is for testing when teleporting to another position
+		mario->SetPosition(2258, 50);
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);
