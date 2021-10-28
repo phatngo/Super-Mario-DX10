@@ -6,17 +6,18 @@
 
 #define MARIO_WALKING_SPEED_START	0.0001f 
 #define MARIO_WALKING_SPEED_MAX		0.15f
-#define MARIO_RUNNING_SPEED_MAX		0.2f
+#define MARIO_RUNNING_SPEED_MAX		0.20f
 #define MARIO_SPEED_MAX				0.25f
 #define MARIO_ACCELERATION			0.0007f
 #define MARIO_WALKING_SPEED_MIN		0.05f
+#define MARIO_SPEED_RUN_FLY_MAX	    0.40f
 
 
 #define MARIO_JUMP_SPEED_Y		    0.43f 
 #define MARIO_JUMP_DEFLECT_SPEED    0.3f
 
 #define MARIO_GRAVITY			    0.002f
-#define MARIO_ACCEL_WALK_X	        0.0007f
+#define MARIO_ACCEL_WALK_X	        0.0005f
 
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
 
@@ -54,6 +55,10 @@
 #define MARIO_ANI_BIG_HOLD_IDLE_LEFT		75
 #define MARIO_ANI_BIG_HOLD_WALK_LEFT	    76
 #define MARIO_ANI_BIG_HOLD_JUMP_LEFT		77
+#define MARIO_ANI_BIG_MAX_SPEED_RIGHT		17
+#define MARIO_ANI_BIG_MAX_SPEED_LEFT		25
+#define MARIO_ANI_BIG_FLY_RIGHT		       105
+#define MARIO_ANI_BIG_FLY_LEFT		       106
 
 #define MARIO_ANI_SMALL_IDLE_RIGHT		    0
 #define MARIO_ANI_SMALL_IDLE_LEFT	        7
@@ -75,6 +80,10 @@
 #define MARIO_ANI_SMALL_HOLD_IDLE_LEFT		67
 #define MARIO_ANI_SMALL_HOLD_WALK_LEFT	    68
 #define MARIO_ANI_SMALL_HOLD_JUMP_LEFT		69
+#define MARIO_ANI_SMALL_MAX_SPEED_RIGHT		3
+#define MARIO_ANI_SMALL_MAX_SPEED_LEFT		10
+#define MARIO_ANI_SMALL_FLY_RIGHT		    103
+#define MARIO_ANI_SMALL_FLY_LEFT		    104
 
 #define MARIO_ANI_TAIL_IDLE_RIGHT		    30
 #define MARIO_ANI_TAIL_IDLE_LEFT		    38
@@ -98,6 +107,15 @@
 #define MARIO_ANI_TAIL_HOLD_IDLE_LEFT		83
 #define MARIO_ANI_TAIL_HOLD_WALK_LEFT	    84
 #define MARIO_ANI_TAIL_HOLD_JUMP_LEFT		85
+#define MARIO_ANI_TAIL_MAX_SPEED_RIGHT		33
+#define MARIO_ANI_TAIL_MAX_SPEED_LEFT		41
+#define MARIO_ANI_TAIL_FLY_UP_RIGHT		    107
+#define MARIO_ANI_TAIL_FLY_DOWN_RIGHT       108
+#define MARIO_ANI_TAIL_FLY_FLAPPING_RIGHT   109
+#define MARIO_ANI_TAIL_FLY_UP_LEFT		    110
+#define MARIO_ANI_TAIL_FLY_DOWN_LEFT        111
+#define MARIO_ANI_TAIL_FLY_FLAPPING_LEFT    112
+
 
 #define MARIO_ANI_TRANSFORM_BIG_RIGHT	    115
 #define MARIO_ANI_TRANSFORM_BIG_LEFT	    116
@@ -163,6 +181,7 @@ class CMario : public CGameObject
 	bool isHold;
 	bool isThrow;
 	bool isReadyToHold = false;
+	bool isReadyToRunMax = false;
 public: 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT>* objects=NULL);
@@ -184,4 +203,7 @@ public:
 	bool IsThrow() { return isThrow; }
 	bool IsHold() { return this->isHold; }
 	bool IsReadyToHold() { return this->isReadyToHold; }
+	void SetIsReadyToRunMax(bool isReadyToRunMax) { this->isReadyToRunMax = isReadyToRunMax; }
+	bool IsReadyToRunMax() { return this->isReadyToRunMax; }
+
 };

@@ -562,6 +562,9 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	if (KeyCode == DIK_LEFT && mario->IsHold()) {
 		mario->SetState(MARIO_STATE_IDLE);
 	}
+	if (KeyCode == DIK_Z) {
+		mario->SetIsReadyToRunMax(false);
+	}
 }
 
 
@@ -587,7 +590,13 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	}
 	else if (game->IsKeyDown(DIK_T)) {
 		//This is for testing when teleporting to another position
-		mario->SetPosition(2258, 50);
+		//mario->SetPosition(2258, 50);
+		mario->SetPosition(672, 370);
+	}
+	else if (game->IsKeyDown(DIK_Z)) {
+		if (mario->GetState() == MARIO_STATE_WALKING_RIGHT || mario->GetState() == MARIO_STATE_WALKING_LEFT) {
+			mario->SetIsReadyToRunMax(true);
+		}
 	}
 	else
 		mario->SetState(MARIO_STATE_IDLE);
