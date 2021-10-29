@@ -13,7 +13,12 @@ HUD::HUD() {
 
 void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
-
+	if (CCamera::GetInstance()->IsAbove()) {
+		this->y = this->start_Y - CGame::GetInstance()->GetScreenHeight() + CAMERA_EXTRA_Y;
+	}
+	else {
+		this->y = this->start_Y;
+	}
 	CMario* player = CGame::GetInstance()->GetCurrentScene()->GetPlayer();
 	pointDigits.clear();
 	//Mario's point update
@@ -24,7 +29,7 @@ void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		if (i == 0) {
 			font = new Font(
 				firstPointPositionX, 
-				this->start_Y + firstPointPositionY
+				this->y + firstPointPositionY
 			);
 		}
 		else {
@@ -86,7 +91,7 @@ void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		if (i == 0) {
 			font = new Font(
 				lastMoneyPositionX,
-				this->start_Y + lastMoneyPositionY
+				this->y + lastMoneyPositionY
 			);
 		}
 		else {
@@ -139,7 +144,7 @@ void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	if (moneyDigits.size() == 0) {
 		font = new Font(
 			lastMoneyPositionX,
-			this->start_Y + lastMoneyPositionY
+			this->y + lastMoneyPositionY
 		);
 		switch (totalMoney)
 		{
@@ -181,7 +186,7 @@ void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		float last_font_X, last_font_Y;
 		moneyDigits[moneyDigits.size() - 1]->GetPosition(last_font_X, last_font_Y);
 		font = new Font(last_font_X - FONT_WIDTH,
-			this->start_Y + lastMoneyPositionY);
+			this->y + lastMoneyPositionY);
 		switch (totalMoney)
 		{
 		case DIGIT_0:
@@ -224,7 +229,7 @@ void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 
 void HUD::Render() {
-	animation_set->at(0)->Render(this->x + CCamera::GetInstance()->GetCameraX(),this->start_Y);
+	animation_set->at(0)->Render(this->x + CCamera::GetInstance()->GetCameraX(),this->y);
 
 	for (int i = 0; i < POINT_DIGIT_NUMBER; i++) {
 		pointDigits[i]->Render();

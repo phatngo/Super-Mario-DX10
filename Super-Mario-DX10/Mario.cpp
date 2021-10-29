@@ -49,7 +49,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 	
 	if (!isHold) {
 		vx += ax * dt;
-		if (CGame::GetInstance()->IsKeyDown(DIK_Z) && abs(vx) >= MARIO_RUNNING_SPEED_MAX) {
+		if (CGame::GetInstance()->IsKeyDown(DIK_Z) && (CGame::GetInstance()->IsKeyDown(DIK_RIGHT) || (CGame::GetInstance()->IsKeyDown(DIK_LEFT))) && abs(vx) >= MARIO_RUNNING_SPEED_MAX) {
 			if (vx >= MARIO_SPEED_RUN_FLY_MAX) {
 				vx = MARIO_SPEED_RUN_FLY_MAX;
 			}
@@ -71,7 +71,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 	CGameObject::Update(dt);
 
 	// Simple fall down
-	vy += MARIO_GRAVITY*dt;
+	if (abs(vx) == MARIO_SPEED_RUN_FLY_MAX) {
+		isFlyingToTheSky = true;
+		vy += 0;
+	}
+	else {
+		vy += MARIO_GRAVITY * dt;
+	}
+
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -714,9 +721,16 @@ void CMario::Render()
 		}
 		else if (vy < 0) {
 			if (nx > 0) {
+				if (vx == MARIO_SPEED_RUN_FLY_MAX) {
+					ani = MARIO_ANI_BIG_FLY_RIGHT;
+				}else
 				ani = MARIO_ANI_BIG_JUMPINGUP_RIGHT;
 			}
 			if (nx < 0) {
+				if (abs(vx) == MARIO_SPEED_RUN_FLY_MAX) {
+					ani = MARIO_ANI_BIG_FLY_LEFT;
+				}
+				else
 				ani = MARIO_ANI_BIG_JUMPINGUP_LEFT;
 			}
 		}
@@ -863,8 +877,12 @@ void CMario::Render()
 				}
 				else {
 					if (vy < 0) {
-						if (state == MARIO_STATE_JUMP)
-							ani = MARIO_ANI_SMALL_JUMPINGUP_RIGHT;
+						if (vx == MARIO_SPEED_RUN_FLY_MAX) {
+							ani = MARIO_ANI_SMALL_FLY_RIGHT;
+						}
+						else if (state == MARIO_STATE_JUMP) {
+							 ani = MARIO_ANI_SMALL_JUMPINGUP_RIGHT;
+						}
 						else
 							ani = MARIO_ANI_SMALL_JUMPINGDOWN_RIGHT;
 					}
@@ -890,8 +908,14 @@ void CMario::Render()
 				}
 				else {
 					if (vy < 0) {
-						if (state == MARIO_STATE_JUMP)
-							ani = MARIO_ANI_SMALL_JUMPINGUP_LEFT;
+						if (abs(vx) == MARIO_SPEED_RUN_FLY_MAX) {
+							ani = MARIO_ANI_SMALL_FLY_LEFT;
+						}else if (state == MARIO_STATE_JUMP) {
+							if (abs(vx) == MARIO_SPEED_RUN_FLY_MAX)
+								ani = MARIO_ANI_SMALL_FLY_LEFT;
+							else
+							    ani = MARIO_ANI_SMALL_JUMPINGUP_LEFT;
+						}
 						else
 							ani = MARIO_ANI_SMALL_JUMPINGDOWN_LEFT;
 					}
@@ -934,6 +958,7 @@ void CMario::SetState(int state)
 		if (this->state == MARIO_STATE_SIT) {
 			isSitDown = false;
 		}
+		isFlyingToTheSky = false;
 		break;
 	case MARIO_STATE_WALKING_LEFT: 
 		if (!isHold) {
@@ -946,11 +971,17 @@ void CMario::SetState(int state)
 		if (this->state == MARIO_STATE_SIT) {
 			isSitDown = false;
 		}
+		isFlyingToTheSky = false;
 		break;
 	case MARIO_STATE_JUMP:
-		if (isOnGround) {
+		if (isOnGround && !isReadyToRunMax) {
 			vy = -MARIO_JUMP_SPEED_Y;
 			isOnGround = false;
+		}
+		if (isOnGround && isReadyToRunMax) {
+			isFlyingToTheSky = true;
+			vy = -MARIO_JUMP_SPEED_Y;
+			ax = MARIO_ACCELERATION;
 		}
 		break; 
 	case MARIO_STATE_IDLE:
@@ -972,9 +1003,11 @@ void CMario::SetState(int state)
 		if (this->state == MARIO_STATE_SIT) {
 			isSitDown = false;
 		}
+		isFlyingToTheSky = false;
 		break;
 	case MARIO_STATE_DIE:
 		vy = -MARIO_DIE_DEFLECT_SPEED;
+		isFlyingToTheSky = false;
 		break;
 	case MARIO_STATE_SIT:
 		if (level != MARIO_LEVEL_SMALL) {
@@ -982,6 +1015,7 @@ void CMario::SetState(int state)
 			vx = 0;
 			ax = 0;
 		}
+		isFlyingToTheSky = false;
 		break;
 	}
 	CGameObject::SetState(state);

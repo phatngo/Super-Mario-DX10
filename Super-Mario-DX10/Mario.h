@@ -182,6 +182,7 @@ class CMario : public CGameObject
 	bool isThrow;
 	bool isReadyToHold = false;
 	bool isReadyToRunMax = false;
+	bool isFlyingToTheSky = false;
 public: 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT>* objects=NULL);
