@@ -30,10 +30,11 @@ class CQuestionBrick : public CGameObject
 {
 	bool isObjectCreated;
 	Timer pointAppearanceTimer;
+	int repeatTime;
 public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
-	CQuestionBrick(int tag);
+	CQuestionBrick(int tag, int repeatTime);
 	void SetState(int state);
 	void CreateObject();
 	void CreateCoin();

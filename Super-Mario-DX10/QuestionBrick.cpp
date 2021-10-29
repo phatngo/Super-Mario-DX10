@@ -20,18 +20,22 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	{
 	case QUESTION_BRICK_STATE_JUMPING:
 		this->SetState(QUESTION_BRICK_STATE_FALLING);
-		break;
-	case QUESTION_BRICK_STATE_FALLING:
-		this->SetState(QUESTION_BRICK_STATE_STOP);
-		break;
-	case QUESTION_BRICK_STATE_STOP:
 		if (tag == COIN_TAG) {
 			//Delay until coin disappears => Effect point appears
-			if (pointAppearanceTimer.ElapsedTime() >= TIME_UNTIL_POINT_APPEAR && pointAppearanceTimer.IsStarted()) {
+			if (pointAppearanceTimer.IsStarted()) {
 				player->AddPoint(this->x, this->y - BRICK_BBOX_HEIGHT);
 				player->AddMoney();
 				pointAppearanceTimer.Reset();
 			}
+		}
+		break;
+	case QUESTION_BRICK_STATE_FALLING:
+		if (repeatTime <= 0) {
+			this->SetState(QUESTION_BRICK_STATE_STOP);
+		}
+		else
+		{
+			this->SetState(QUESTION_BRICK_STATE_IDLE);
 		}
 		break;
 	default:
@@ -45,7 +49,7 @@ void CQuestionBrick::Render() {
 	switch (this->state)
 	{
 	case QUESTION_BRICK_STATE_JUMPING:
-		ani = QUESTION_BRICK_ANI_STOP;
+		ani = QUESTION_BRICK_ANI_SPINNING;
 		break;
 	case QUESTION_BRICK_STATE_FALLING:
 		ani = QUESTION_BRICK_ANI_STOP;
@@ -70,9 +74,10 @@ void CQuestionBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = y + BRICK_BBOX_HEIGHT;
 }
 
-CQuestionBrick::CQuestionBrick(int tag) {
+CQuestionBrick::CQuestionBrick(int tag, int repeatTime) {
 	SetState(QUESTION_BRICK_STATE_IDLE);
 	this->SetTag(tag);
+	this->repeatTime = repeatTime + 1;
 	isObjectCreated = false;
 }
 
@@ -85,6 +90,7 @@ void CQuestionBrick::SetState(int state) {
 		if (tag == COIN_TAG) {
 			pointAppearanceTimer.Start();
 		}
+		repeatTime--;
 		break;
 	}
 	case QUESTION_BRICK_STATE_FALLING:
@@ -103,7 +109,6 @@ void CQuestionBrick::SetState(int state) {
 }
 
 void CQuestionBrick::CreateObject() {
-	if (!isObjectCreated) {
 		switch (this->tag)
 		{
 		case COIN_TAG:
@@ -118,8 +123,6 @@ void CQuestionBrick::CreateObject() {
 		default:
 			break;
 		}
-		isObjectCreated = true;
-	}
 }
 
 void CQuestionBrick::CreateCoin() {

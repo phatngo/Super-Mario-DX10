@@ -381,7 +381,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			else if (dynamic_cast<CCoin*>(e->obj))
 			{
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
-				vy = -MARIO_JUMP_SPEED_Y/2;
+				if (e->ny > 0) {
+					vy = -MARIO_JUMP_SPEED_Y;
+				}
+				if (e->nx != 0) {
+					x = x0 + dx;
+				}
 				coin->SetIsDestroyed();
 				AddMoney();
 			}
@@ -930,7 +935,6 @@ void CMario::Render()
 							ani = MARIO_ANI_SMALL_WALKING_FAST_LEFT;
 						}
 						else if (abs(vx) >= MARIO_SPEED_RUN_FLY_MAX) {
-							DebugOut(L"vx: %f \n", vx);
 							ani = MARIO_ANI_SMALL_MAX_SPEED_LEFT;
 						}
 					}

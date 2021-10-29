@@ -255,12 +255,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		int tag = -1;
 		int objectInsideTag = -1;
+		int repeat_time = -1;
 
 		if (tokens.size() > 4)
 			tag = atoi(tokens[4].c_str());
 
 		if (tokens.size() > 5)
 			objectInsideTag = atoi(tokens[5].c_str());
+
+		if (tokens.size() > 7)
+			repeat_time = atoi(tokens[7].c_str());
 		
 		CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 
@@ -305,7 +309,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case OBJECT_TYPE_QUESTION_BRICK:
 		{
 			if (objectInsideTag != -1) {
-				obj = new CQuestionBrick(objectInsideTag);
+				obj = new CQuestionBrick(objectInsideTag, repeat_time);
 				break;
 			}
 		}
@@ -591,7 +595,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	else if (game->IsKeyDown(DIK_T)) {
 		//This is for testing when teleporting to another position
 		//mario->SetPosition(2258, 50);
-		mario->SetPosition(672, 370);
+		mario->SetPosition(1488, 150);
 	}
 	else if (game->IsKeyDown(DIK_Z)) {
 		if (game->IsKeyDown(DIK_RIGHT) || game->IsKeyDown(DIK_LEFT)) {
