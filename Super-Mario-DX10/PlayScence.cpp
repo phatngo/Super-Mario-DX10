@@ -24,6 +24,7 @@
 #include "Card.h"
 #include "Camera.h"
 #include "CourseClear.h"
+#include "Pipe.h"
 #include "Textures.h"
 using namespace std;
 
@@ -61,6 +62,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_COIN 6
 #define OBJECT_TYPE_HUD 58
 #define OBJECT_TYPE_CARD 57
+
 
 #define EXTRA_INFO_FIRST_POINT_IN_HUD_POSITION 1
 #define EXTRA_INFO_LAST_POINT_IN_HUD_POSITION 2
@@ -226,9 +228,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 {
 	cam = CCamera::GetInstance();
 	wstring path = ToWSTR(line);
-	//float longest_y=0.0;
-	//float oLeft = -1, oTop = -1, oRight = -1, oBottom = -1;
-	//float height_of_object_with_longest_y;
 	ifstream f;
 	DebugOut(L"[INFO] Start object resources from : %s \n", path.c_str());
 	f.open(path.c_str());
@@ -284,8 +283,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			player = (CMario*)obj;
 			cam->SetPlayerStartX(x);
 			break;
-		case OBJECT_TYPE_BRICK:
-			obj = new CBrick();
+		case OBJECT_TYPE_BRICK:{
+			if (tag == IS_PIPE) {
+				obj = new CBrick(tag,objectInsideTag);
+			}
+			else {
+				obj = new CBrick();
+			}
+			}
 			break;
 		case OBJECT_TYPE_COIN:
 			obj = new CCoin();

@@ -14,3 +14,12 @@ void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
 	b = y + BRICK_BBOX_HEIGHT;
 }
 
+CBrick::CBrick(int tag, int isAbleToGoIn) {
+	this->tag = tag;
+	if (isAbleToGoIn == 0) {
+		this->isAbleToGoIn = true;
+	}
+}
+
+
+

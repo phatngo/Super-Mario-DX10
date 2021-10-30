@@ -64,6 +64,9 @@
     <Filter Include="Grid">
       <UniqueIdentifier>{d6b79e2f-6be1-4358-bb11-a2ec2fce72e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Map Objects\Pipe">
+      <UniqueIdentifier>{f17a5edc-2d61-4adb-9f12-1fea70ec9d4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">

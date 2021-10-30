@@ -364,11 +364,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				}
 			}
 			else if (dynamic_cast<CBrick*>(e->obj)) {
-				if (e->ny < 0) {
+			CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+			
+			if (e->ny < 0) {
+				if (brick->IsPipe() && brick->IsAbleToGoIn()) {
+					
+				}
+				else {
 					isOnGround = true;
 					if (CGame::GetInstance()->GetCurrentScene()->GetSceneDone()) {
 						vx = MARIO_WALKING_SPEED_MAX;
 					}
+				}
 				}
 			}
 			else if (dynamic_cast<CFlashAnimationBrick*>(e->obj)) {
