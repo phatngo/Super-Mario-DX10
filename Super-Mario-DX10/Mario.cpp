@@ -619,12 +619,21 @@ void CMario::Render()
 				}
 			}
 			else if (vy < 0) {
-				if (nx > 0)
+				if (nx > 0) {
+					if (vx == MARIO_SPEED_RUN_FLY_MAX) {
+						ani = MARIO_ANI_TAIL_FLY_UP_RIGHT;
+					}else
 					ani = MARIO_ANI_TAIL_JUMPINGUP_RIGHT;
-				else
+				}
+				else{
+					if (abs(vx) == MARIO_SPEED_RUN_FLY_MAX) {
+						ani = MARIO_ANI_TAIL_FLY_UP_LEFT;
+					}
+					else
 					ani = MARIO_ANI_TAIL_JUMPINGUP_LEFT;
+				}
 			}
-			if (vx == 0)
+			else if (vx == 0)
 			{
 				if (nx > 0) {
 					if (vy < 0) {
@@ -665,8 +674,11 @@ void CMario::Render()
 						if (vx < MARIO_WALKING_SPEED_MAX) {
 							ani = MARIO_ANI_TAIL_WALKING_RIGHT;
 						}
-						else {
+						else if (vx >= MARIO_WALKING_SPEED_MAX && vx < MARIO_SPEED_RUN_FLY_MAX) {
 							ani = MARIO_ANI_TAIL_WALKING_FAST_RIGHT;
+						}
+						else if (vx >= MARIO_SPEED_RUN_FLY_MAX) {
+							ani = MARIO_ANI_TAIL_MAX_SPEED_RIGHT;
 						}
 					}
 				}
@@ -679,11 +691,14 @@ void CMario::Render()
 					if (ax > 0 && nx > 0)
 						ani = MARIO_ANI_TAIL_BRAKING_RIGHT;
 					else {
-						if (vx > MARIO_WALKING_SPEED_MAX) {
+						if (abs(vx) < MARIO_WALKING_SPEED_MAX) {
 							ani = MARIO_ANI_TAIL_WALKING_LEFT;
 						}
-						else {
+						else if (abs(vx) >= MARIO_WALKING_SPEED_MAX && abs(vx) < MARIO_SPEED_RUN_FLY_MAX) {
 							ani = MARIO_ANI_TAIL_WALKING_FAST_LEFT;
+						}
+						else if (abs(vx) >= MARIO_SPEED_RUN_FLY_MAX) {
+							ani = MARIO_ANI_TAIL_MAX_SPEED_LEFT;
 						}
 					}
 				}
