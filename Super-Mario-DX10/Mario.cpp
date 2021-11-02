@@ -42,6 +42,7 @@ CMario::CMario(float x, float y) : CGameObject()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> *objects)
 {
+
 	if (kickTimer.IsStarted() && kickTimer.ElapsedTime() >= KICK_TIME && isKickingKoopas) {
 		isKickingKoopas = false;
 		kickTimer.Reset();
@@ -195,7 +196,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					}
 				}
 			}
-			else if (dynamic_cast<CKoopas*>(e->obj)) // if e->obj is Koopas
+		    if (dynamic_cast<CKoopas*>(e->obj)) // if e->obj is Koopas
 			{
 				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 
@@ -327,7 +328,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					}
 				}
 			}
-			else if (dynamic_cast<CBlock*>(e->obj)) 
+			if (dynamic_cast<CBlock*>(e->obj)) 
 			{
 				CBlock* block = dynamic_cast<CBlock*>(e->obj);
 				float bTop, bLeft, bRight, bBottom;
@@ -348,7 +349,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					vy = -MARIO_JUMP_DEFLECT_SPEED;
 				}
 			}
-			else if (dynamic_cast<CQuestionBrick*>(e->obj)) // if e->obj is Quesion Brick
+			if (dynamic_cast<CQuestionBrick*>(e->obj)) // if e->obj is Quesion Brick
 			{
 				CQuestionBrick* questionBrick = dynamic_cast<CQuestionBrick*>(e->obj);
 				//Mario stays under question brick
@@ -363,29 +364,28 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 						SetState(MARIO_STATE_IDLE);
 				}
 			}
-			else if (dynamic_cast<CBrick*>(e->obj)) {
+			if (dynamic_cast<CBrick*>(e->obj)) {
 			CBrick* brick = dynamic_cast<CBrick*>(e->obj);
-			
 			if (e->ny < 0) {
+				isOnGround = true;
 				if (brick->IsPipe() && brick->IsAbleToGoIn()) {
 					
 				}
 				else {
-					isOnGround = true;
 					if (CGame::GetInstance()->GetCurrentScene()->GetSceneDone()) {
 						vx = MARIO_WALKING_SPEED_MAX;
 					}
 				}
 				}
 			}
-			else if (dynamic_cast<CFlashAnimationBrick*>(e->obj)) {
+			if (dynamic_cast<CFlashAnimationBrick*>(e->obj)) {
 			if (e->ny < 0) {
 				isOnGround = true;
 				if (state == MARIO_STATE_RELEASE_JUMP)
 					SetState(MARIO_STATE_IDLE);
 			}
             }
-			else if (dynamic_cast<CCoin*>(e->obj))
+			if (dynamic_cast<CCoin*>(e->obj))
 			{
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
 				if (e->ny > 0) {
@@ -397,7 +397,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				coin->SetIsDestroyed();
 				AddMoney();
 			}
-			else if (dynamic_cast<CFireBullet*>(e->obj)) {
+			if (dynamic_cast<CFireBullet*>(e->obj)) {
 				if (untouchable == 0)
 				{
 						//If mario is not in the big size
@@ -418,7 +418,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 							SetState(MARIO_STATE_DIE);	
 				}
             }
-			else if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
+			if (dynamic_cast<CPiranhaPlant*>(e->obj)) {
 			if (untouchable == 0)
 			 {
 				CPiranhaPlant* piranhaPlant = dynamic_cast<CPiranhaPlant*>(e->obj);
@@ -444,7 +444,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					SetState(MARIO_STATE_DIE);
 			 }
             }
-			else if (dynamic_cast<CFirePiranhaPlant*>(e->obj)) {
+			if (dynamic_cast<CFirePiranhaPlant*>(e->obj)) {
 			if (untouchable == 0)
 			{
 				CFirePiranhaPlant* firePiranhaPlant = dynamic_cast<CFirePiranhaPlant*>(e->obj);
@@ -469,7 +469,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 					SetState(MARIO_STATE_DIE);
 			}
 			}
-			else if (dynamic_cast<CMushroom*>(e->obj)) 
+			if (dynamic_cast<CMushroom*>(e->obj)) 
             {
 			CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
 			mushroom->SetIsDestroyed();
@@ -486,7 +486,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 			}
 
 			}
-			else if (dynamic_cast<CLeaf*>(e->obj)) {
+			if (dynamic_cast<CLeaf*>(e->obj)) {
 			CLeaf* leaf = dynamic_cast<CLeaf*>(e->obj);
 			leaf->SetIsDestroyed();
 			if (e->ny > 0) {
@@ -510,12 +510,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJE
 				this->transformTimer.Start();
 			}
 			}
-			else if (dynamic_cast<CPortal *>(e->obj))
-			{
-				CPortal *p = dynamic_cast<CPortal *>(e->obj);
-				CGame::GetInstance()->SwitchScene(p->GetSceneId());
-			}
-			else if (dynamic_cast<Card*>(e->obj)) {
+			if (dynamic_cast<Card*>(e->obj)) {
 			Card* card = dynamic_cast<Card*>(e->obj);
 			if (e->ny > 0) {
 				card->SetState(CARD_STATE_FLY_UP);

@@ -62,6 +62,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define OBJECT_TYPE_COIN 6
 #define OBJECT_TYPE_HUD 58
 #define OBJECT_TYPE_CARD 57
+#define OBJECT_TYPE_PORTAL 50
 
 
 #define EXTRA_INFO_FIRST_POINT_IN_HUD_POSITION 1
@@ -345,6 +346,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"\nParseSection_GRID: Done\n");
 			break;
 		}
+		case OBJECT_TYPE_PORTAL: {
+			int scene_id = atoi(tokens[4].c_str());
+			int isToExtraScene = atoi(tokens[5].c_str());
+			float start_x = 0, start_y = 0;
+			start_x = (float)atoi(tokens[6].c_str());
+			start_y = (float)atoi(tokens[7].c_str());
+			obj = new CPortal(scene_id, start_x, start_y);
+			int pu = atoi(tokens[8].c_str());
+			if (pu == 1)
+				((CPortal*)obj)->pipeUp = true;
+			else
+				((CPortal*)obj)->pipeUp = false;
+			obj->SetTag(isToExtraScene);
+			break;
+		}
 		default:
 			obj = NULL;
 			break;
@@ -437,11 +453,11 @@ void CPlayScene::Update(DWORD dt)
 	
 	for (UINT i = 0; i < units.size(); i++)
 	{
-		
+
 		LPGAMEOBJECT obj = units[i]->GetObj();
 		objects.push_back(obj);
 		//CalRevivable
-		
+
 		for each (auto object in objects)
 		{
 			//Still having an error when calling summon koopas related to Grid, so that's why it is commented
@@ -462,14 +478,15 @@ void CPlayScene::Update(DWORD dt)
 			objectsRenderFirst.push_back(obj);
 		else if (dynamic_cast<CBrick*> (obj)
 			|| (dynamic_cast<CQuestionBrick*> (obj) || (dynamic_cast<CFlashAnimationBrick*> (obj)))
-			|| dynamic_cast<CBrick*>(obj))
+			)
 			objectsRenderSecond.push_back(obj);
 		else if (dynamic_cast<CFireBullet*> (obj)
 			|| dynamic_cast<CMushroom*>(obj)
 			|| dynamic_cast<CLeaf*> (obj) && (obj->state == LEAF_STATE_FLY_DOWN_LEFT || obj->state == LEAF_STATE_FLY_DOWN_RIGHT)
 			|| dynamic_cast<EffectPoint*>(obj) || dynamic_cast<CPiece*>(obj)
 			|| dynamic_cast<Card*>(obj)
-			|| dynamic_cast<CourseClear*>(obj))
+			|| dynamic_cast<CourseClear*>(obj)
+			|| dynamic_cast<CPortal*>(obj))
 			objectsRenderThird.push_back(obj);
 	}
 
@@ -599,8 +616,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	}
 	else if (game->IsKeyDown(DIK_T)) {
 		//This is for testing when teleporting to another position
-		//mario->SetPosition(2258, 50);
-		mario->SetPosition(1488, 150);
+		mario->SetPosition(2258.0f, 50.0f);
+		//mario->SetPosition(1488, 150);
 	}
 	else if (game->IsKeyDown(DIK_Z)) {
 		if (game->IsKeyDown(DIK_RIGHT) || game->IsKeyDown(DIK_LEFT)) {
