@@ -8,6 +8,7 @@
 #include "Utils.h"
 
 
+
 #define DIRECTINPUT_VERSION 0x0800
 #define SCREEN_WIDTH 272
 #define SCREEN_HEIGHT 256
@@ -15,10 +16,12 @@
 
 #include "Scence.h"
 
+
 using namespace std;
 
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
+
 
 class CGame
 {
@@ -58,8 +61,11 @@ class CGame
 
 	int screen_width = 272;
 	int screen_height = 256;
+	int pre_scene = -1;
+	
 
 public:
+
 	void InitKeyboard();
 	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }
 	void Init(HWND hWnd, HINSTANCE hInstance);
@@ -94,6 +100,7 @@ public:
 		return scenes[current_scene];
 	}
 	void SwitchScene(int scene_id);
+	void SwitchExtraScene(int scene_id, float start_x, float start_y, bool pipeUp);
 
 	int GetScreenWidth() { return SCREEN_WIDTH; }
 	int GetScreenHeight() { return SCREEN_HEIGHT; }

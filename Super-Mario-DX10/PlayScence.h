@@ -24,12 +24,14 @@ protected:
 	vector<LPGAMEOBJECT> objectsRenderSecond;
 	vector<LPGAMEOBJECT> objectsRenderThird;
 	CMap* current_map = NULL;
-	HUD* hud;
+	
 
 	//Grid
 	vector<Unit*> units;
 	Unit* unit = NULL;
 	Grid* grid = NULL;
+
+	HUD* hud;
 
 
 	//Camera
@@ -62,7 +64,9 @@ public:
 	void AddObjects(CGameObject* gameObj) { 
 		this->objects.insert(this->objects.end()-2, gameObj);
 	}
-	
+	void SetPlayer(CMario* m) { player = m; }
+	void SetHUD(HUD* hud) { this->hud = hud; }
+	HUD* GetHUD() { return this->hud; }
 
 	virtual CMario * GetPlayer() { return player; } 
 	

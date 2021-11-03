@@ -2,6 +2,7 @@
 #include"GameObject.h"
 #include"Sprites.h"
 #include "Font.h"
+
 #define FONT_BBOX_WIDTH						8
 #define DEFAULT_TIME						300
 
@@ -23,7 +24,7 @@
 
 
 
-class HUD:public CGameObject
+class HUD : public CGameObject
 {
 	int type;
 	vector<Font*>pointDigits;

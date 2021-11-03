@@ -11,6 +11,8 @@
 #define MARIO_ACCELERATION			0.0007f
 #define MARIO_WALKING_SPEED_MIN		0.05f
 #define MARIO_SPEED_RUN_FLY_MAX	    0.40f
+#define MARIO_SPEED_RUN_FLY_MAX	    0.40f
+#define MARIO_PIPE_SPEED	        0.02f
 
 
 #define MARIO_JUMP_SPEED_Y		    0.43f 
@@ -121,6 +123,10 @@
 #define MARIO_ANI_TRANSFORM_BIG_LEFT	    116
 #define MARIO_ANI_TRANSFORM_TAIL 	        117
 
+#define MARIO_SPRITE_PIPING_SMALL           10900
+#define MARIO_SPRITE_PIPING_BIG             11900
+#define MARIO_SPRITE_PIPING_TAIL            12900
+
 
 
 
@@ -153,7 +159,13 @@
 #define ALPHA             1.0f
 #define UNTOUCHABLE_ALPHA 0.5f
 #define KICK_TIME 300
+#define PIPE_TIME 600
 #define MARIO_MAX_COORDINATE_X		2802
+
+#define IS_PIPE_UP -1
+#define IS_PIPE_DOWN 1
+#define IS_NOT_PIPE 0
+
 
 
 class CMario : public CGameObject
@@ -173,6 +185,7 @@ class CMario : public CGameObject
 	bool isKickingKoopas;
 	bool isOnGround;
 	Timer kickTimer;
+	Timer pipeTimer;
 	bool isChangeDirection;
 	float postion_y;
 	bool isSitDown;
@@ -183,6 +196,9 @@ class CMario : public CGameObject
 	bool isReadyToHold = false;
 	bool isReadyToRunMax = false;
 	bool isFlyingToTheSky = false;
+	bool isPipedUp = false;
+	bool isPipedDown = false;
+	int pipeDirection = -1;
 public: 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT>* objects=NULL);
@@ -206,5 +222,8 @@ public:
 	bool IsReadyToHold() { return this->isReadyToHold; }
 	void SetIsReadyToRunMax(bool isReadyToRunMax) { this->isReadyToRunMax = isReadyToRunMax; }
 	bool IsReadyToRunMax() { return this->isReadyToRunMax; }
-
+	bool IsPipeUp() { return this->isPipedUp;}
+	bool IsPipeDown() { return this->isPipedDown; }
+	void SetIsPipe(int pipeDirection);
+	Timer GetPipeTimer() { return this->pipeTimer; }
 };

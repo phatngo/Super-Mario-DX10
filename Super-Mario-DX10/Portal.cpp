@@ -1,5 +1,6 @@
 #include "Portal.h"
 #include "Game.h"
+#include "Mario.h"
 
 
 CPortal::CPortal(int scene_id, float start_x, float start_y)
@@ -23,9 +24,20 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 			//&& mario->isSitting
 			&& mLeft >= oLeft && mRight <= oRight)
 		{
-			DebugOut(L"Touched with mario \n");
+			if (this->pipeUp && CGame::GetInstance()->IsKeyDown(DIK_UP)) {
+				mario->SetIsPipe(IS_PIPE_UP);
+			}
+			if (!this->pipeUp && CGame::GetInstance()->IsKeyDown(DIK_DOWN)) {
+				mario->SetIsPipe(IS_PIPE_DOWN);
+			}
 		}
 	}
+	if(mario->IsPipeUp()||mario->IsPipeDown())
+		if (mario->GetPipeTimer().IsStarted() && mario->GetPipeTimer().ElapsedTime() >= PIPE_TIME) {
+			mario->SetIsPipe(IS_NOT_PIPE);
+			//Swith-to-extra
+			CGame::GetInstance()->SwitchExtraScene(scene_id, start_x, start_y, mario->IsPipeUp());
+		}
 }
 
 void CPortal::Render()

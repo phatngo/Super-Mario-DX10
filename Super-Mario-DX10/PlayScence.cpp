@@ -70,6 +70,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define EXTRA_INFO_CAMERA_STANDARD_Y_COORDINATE 3
 #define EXTRA_INFO_CAMERA_FURTHEST_Y_COORDINATE 4
 #define EXTRA_INFO_MARIO_MAX_X_COORDINATE 5
+#define HUD_INITIAL_POSITION_COORDINATE 6
 
 #define UNKNOWN_VALUE -1
 
@@ -219,6 +220,9 @@ void CPlayScene::_ParseSection_EXTRA_INFORMATION(string line)
 	case EXTRA_INFO_MARIO_MAX_X_COORDINATE:
 		player->SetMaxXCoordinate(atoi(tokens[1].c_str()));
 		break;
+	case HUD_INITIAL_POSITION_COORDINATE:
+		hud->SetPosition(atof(tokens[1].c_str()), atof(tokens[2].c_str()));
+		break;
 	default:
 		break;
 	}
@@ -343,7 +347,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			int gridCols = atoi(tokens[1].c_str());
 			int gridRows = atoi(tokens[2].c_str());
 			grid = new Grid(gridCols, gridRows);
-			DebugOut(L"\nParseSection_GRID: Done\n");
 			break;
 		}
 		case OBJECT_TYPE_PORTAL: {
@@ -523,6 +526,7 @@ void CPlayScene::Render()
 	for (unsigned int i = 0; i < objectsRenderThird.size(); i++)
 		objectsRenderThird[i]->Render();
 	
+
 	hud->Render();
 }
 
@@ -535,6 +539,7 @@ void CPlayScene::Unload()
 		delete objects[i];
 
 	objects.clear();
+	
 	player = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
@@ -602,10 +607,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 
 	// disable control key when Mario die 
 	if (mario->GetState() == MARIO_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT) && !CGame::GetInstance()->GetCurrentScene()->GetSceneDone()) {
+	if (game->IsKeyDown(DIK_RIGHT) && !CGame::GetInstance()->GetCurrentScene()->GetSceneDone() && !mario->IsPipeUp() && !mario->IsPipeDown()) {
 		mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	}
-	else if (game->IsKeyDown(DIK_LEFT) && !CGame::GetInstance()->GetCurrentScene()->GetSceneDone())
+	else if (game->IsKeyDown(DIK_LEFT) && !CGame::GetInstance()->GetCurrentScene()->GetSceneDone() && !mario->IsPipeUp() && !mario->IsPipeDown())
 		mario->SetState(MARIO_STATE_WALKING_LEFT);
 	else if (game->IsKeyDown(DIK_DOWN)) 
 		mario->SetState(MARIO_STATE_SIT);

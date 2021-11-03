@@ -552,6 +552,31 @@ void CGame::SwitchScene(int scene_id)
 	s->Load();
 }
 
+void CGame::SwitchExtraScene(int scene_id, float start_x, float start_y, bool pipeUp) {
+	DebugOut(L"[INFO] Switching Extra to scene %d\n", scene_id);
+
+	bool isHaveToReload = true;
+	if (pre_scene == scene_id)
+		isHaveToReload = false;
+
+	//switch scene
+	pre_scene = current_scene;
+	((CPlayScene*)scenes[scene_id])->SetHUD(((CPlayScene*)scenes[current_scene])->GetHUD());
+	current_scene = scene_id;
+	LPSCENE s = scenes[scene_id];
+	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
+
+	//put player to extrascene
+	CMario* omario = ((CPlayScene*)scenes[pre_scene])->GetPlayer();
+	omario->SetPosition(start_x, start_y);
+	((CPlayScene*)s)->SetPlayer(omario);
+	//load extra scene if necessary
+	if (isHaveToReload)
+		s->Load();
+	
+	((CPlayScene*)scenes[current_scene])->GetHUD()->SetAnimationSet(CAnimationSets::GetInstance()->Get(127));
+}
+
 void CGame::SetPointSamplerState()
 {
 	pD3DDevice->VSSetSamplers(0, 1, &pPointSamplerState);
