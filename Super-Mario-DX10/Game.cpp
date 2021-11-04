@@ -560,6 +560,14 @@ void CGame::SwitchExtraScene(int scene_id, float start_x, float start_y, bool pi
 		isHaveToReload = false;
 
 	//switch scene
+	CCamera* cam = CCamera::GetInstance();
+	cam->SetPreSceneStandardCameraPositionY(cam->GetStandardCameraPositionY());
+	cam->SetPreSceneCameraFurthestPosition(cam->GetCameraFurthestPositionY());
+	cam->SetIsAbove(false);
+	
+	float hud_y = ((CPlayScene*)scenes[current_scene])->GetHUD()->GetStartY();
+	((CPlayScene*)scenes[current_scene])->GetHUD()->SetPreSceneYPosition(hud_y);
+
 	pre_scene = current_scene;
 	((CPlayScene*)scenes[scene_id])->SetHUD(((CPlayScene*)scenes[current_scene])->GetHUD());
 	current_scene = scene_id;
@@ -570,11 +578,56 @@ void CGame::SwitchExtraScene(int scene_id, float start_x, float start_y, bool pi
 	CMario* omario = ((CPlayScene*)scenes[pre_scene])->GetPlayer();
 	omario->SetPosition(start_x, start_y);
 	((CPlayScene*)s)->SetPlayer(omario);
+
+	
+
+
 	//load extra scene if necessary
 	if (isHaveToReload)
 		s->Load();
-	
 	((CPlayScene*)scenes[current_scene])->GetHUD()->SetAnimationSet(CAnimationSets::GetInstance()->Get(127));
+}
+
+void CGame::SwitchBackToOldScene(int scene_id, float start_x, float start_y, bool pipeUp) {
+	DebugOut(L"[INFO] Switching Extra to scene %d\n", scene_id);
+
+	bool isHaveToReload = true;
+	if (pre_scene == scene_id)
+		isHaveToReload = false;
+
+	//switch scene
+	pre_scene = current_scene;
+	((CPlayScene*)scenes[scene_id])->SetHUD(((CPlayScene*)scenes[current_scene])->GetHUD());
+	current_scene = scene_id;
+	LPSCENE s = scenes[scene_id];
+	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
+
+	//put player to extrascene
+	CMario* omario = ((CPlayScene*)scenes[pre_scene])->GetPlayer();;
+	omario->SetPosition(start_x, start_y);
+	float mx, my;
+	
+	
+
+	((CPlayScene*)s)->SetPlayer(omario);
+	omario = ((CPlayScene*)s)->GetPlayer();
+	omario->GetPosition(mx, my);
+
+
+	float hud_y = ((CPlayScene*)scenes[current_scene])->GetHUD()->GetPreSceneYPosition();
+
+	CCamera* cam = CCamera::GetInstance();
+	cam->SetStandardCameraPositionY(cam->GetPreSceneStandardCameraPositionY());
+	cam->SetCameraFurthestPositionY(cam->GetPreSceneCameraFurthestPosition());
+	cam->SetCameraPosition(start_x);
+
+	((CPlayScene*)scenes[current_scene])->GetHUD()->SetAnimationSet(CAnimationSets::GetInstance()->Get(127));
+
+	//load extra scene if necessary
+	if (isHaveToReload) {
+		s->Load();
+	}
+	((CPlayScene*)scenes[current_scene])->GetHUD()->SetYPosition(hud_y);
 }
 
 void CGame::SetPointSamplerState()

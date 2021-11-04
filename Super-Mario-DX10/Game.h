@@ -101,6 +101,7 @@ public:
 	}
 	void SwitchScene(int scene_id);
 	void SwitchExtraScene(int scene_id, float start_x, float start_y, bool pipeUp);
+	void SwitchBackToOldScene(int scene_id, float start_x, float start_y, bool pipeUp);
 
 	int GetScreenWidth() { return SCREEN_WIDTH; }
 	int GetScreenHeight() { return SCREEN_HEIGHT; }

@@ -159,7 +159,7 @@
 #define ALPHA             1.0f
 #define UNTOUCHABLE_ALPHA 0.5f
 #define KICK_TIME 300
-#define PIPE_TIME 600
+#define PIPE_TIME 1500
 #define MARIO_MAX_COORDINATE_X		2802
 
 #define IS_PIPE_UP -1

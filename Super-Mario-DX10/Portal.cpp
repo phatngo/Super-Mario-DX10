@@ -21,23 +21,33 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		mario->GetBoundingBox(mLeft, mTop, mRight, mBottom);
 		GetBoundingBox(oLeft, oTop, oRight, oBottom);
 		if (isColliding(floor(mLeft), floor(mTop), ceil(mRight), ceil(mBottom))
-			//&& mario->isSitting
 			&& mLeft >= oLeft && mRight <= oRight)
 		{
-			if (this->pipeUp && CGame::GetInstance()->IsKeyDown(DIK_UP)) {
-				mario->SetIsPipe(IS_PIPE_UP);
-			}
-			if (!this->pipeUp && CGame::GetInstance()->IsKeyDown(DIK_DOWN)) {
+				if (CGame::GetInstance()->IsKeyDown(DIK_UP)) {
+					mario->SetIsPipe(IS_PIPE_UP);
+				}
+
+			if (CGame::GetInstance()->IsKeyDown(DIK_DOWN)) {
 				mario->SetIsPipe(IS_PIPE_DOWN);
 			}
 		}
 	}
-	if(mario->IsPipeUp()||mario->IsPipeDown())
-		if (mario->GetPipeTimer().IsStarted() && mario->GetPipeTimer().ElapsedTime() >= PIPE_TIME) {
-			mario->SetIsPipe(IS_NOT_PIPE);
-			//Swith-to-extra
-			CGame::GetInstance()->SwitchExtraScene(scene_id, start_x, start_y, mario->IsPipeUp());
+	if (mario->IsPipeUp() || mario->IsPipeDown()) {
+		if (this->tag == 1) {
+			if (mario->GetPipeTimer().IsStarted() && mario->GetPipeTimer().ElapsedTime() >= PIPE_TIME) {
+				CGame::GetInstance()->SwitchExtraScene(scene_id, start_x, start_y, mario->IsPipeUp());
+				mario->SetIsPipe(IS_NOT_PIPE);
+				//Swith-to-extra
+			}
 		}
+		else if (this->tag == 2) {
+			if (mario->GetPipeTimer().IsStarted() && mario->GetPipeTimer().ElapsedTime() >= PIPE_TIME) {
+				CGame::GetInstance()->SwitchBackToOldScene(scene_id, start_x, start_y, mario->IsPipeUp());
+				mario->SetIsPipe(IS_NOT_PIPE);
+				//Swith-to-extra
+			}
+		}
+	}
 }
 
 void CPortal::Render()

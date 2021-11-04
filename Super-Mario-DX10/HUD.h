@@ -33,7 +33,12 @@ class HUD : public CGameObject
 	float firstPointPositionY = UNKNOWN_VALUE;
 	float lastMoneyPositionX = UNKNOWN_VALUE;
 	float lastMoneyPositionY = UNKNOWN_VALUE;
+	float preScene_y;
 public:
+	void SetYPosition(float y) {this->start_Y = y; }
+	void SetPreSceneYPosition(float y) { this->preScene_y = y; }
+	float GetPreSceneYPosition() { return this->preScene_y; }
+
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void GetBoundingBox(float& oLeft, float& oTop, float& oRight, float& oBottom) {};

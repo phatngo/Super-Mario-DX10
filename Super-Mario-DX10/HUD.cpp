@@ -12,7 +12,6 @@ HUD::HUD() {
 }
 
 void HUD::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-
 	if (CCamera::GetInstance()->IsAbove()) {
 		this->y = this->start_Y - CGame::GetInstance()->GetScreenHeight() + CAMERA_EXTRA_Y;
 	}

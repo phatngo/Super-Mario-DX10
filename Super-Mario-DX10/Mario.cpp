@@ -43,7 +43,10 @@ CMario::CMario(float x, float y) : CGameObject()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> *objects)
 {
-
+	if (isPipedUp) {
+		DebugOut(L"y pos: %f \n", this->y);
+		DebugOut(L"x pos: %f \n", this->x);
+	}
 	if (kickTimer.IsStarted() && kickTimer.ElapsedTime() >= KICK_TIME && isKickingKoopas) {
 		isKickingKoopas = false;
 		kickTimer.Reset();
