@@ -577,19 +577,26 @@ void CGame::SwitchExtraScene(int scene_id, float start_x, float start_y, bool pi
 	//put player to extrascene
 	CMario* omario = ((CPlayScene*)scenes[pre_scene])->GetPlayer();
 	omario->SetPosition(start_x, start_y);
+	int isPipeDown;
+	if (omario->IsPipeDown()) {
+		isPipeDown = 1;
+	}
+	else {
+		isPipeDown = -1;
+	}
 	((CPlayScene*)s)->SetPlayer(omario);
 
 	
 
-
 	//load extra scene if necessary
 	if (isHaveToReload)
 		s->Load();
+	omario->SetIsPipe(isPipeDown);
 	((CPlayScene*)scenes[current_scene])->GetHUD()->SetAnimationSet(CAnimationSets::GetInstance()->Get(127));
 }
 
 void CGame::SwitchBackToOldScene(int scene_id, float start_x, float start_y, bool pipeUp) {
-	DebugOut(L"[INFO] Switching Extra to scene %d\n", scene_id);
+	DebugOut(L"[INFO] Switching back to scene %d\n", scene_id);
 
 	bool isHaveToReload = true;
 	if (pre_scene == scene_id)
@@ -603,16 +610,6 @@ void CGame::SwitchBackToOldScene(int scene_id, float start_x, float start_y, boo
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 
 	//put player to extrascene
-	CMario* omario = ((CPlayScene*)scenes[pre_scene])->GetPlayer();;
-	omario->SetPosition(start_x, start_y);
-	float mx, my;
-	
-	
-
-	((CPlayScene*)s)->SetPlayer(omario);
-	omario = ((CPlayScene*)s)->GetPlayer();
-	omario->GetPosition(mx, my);
-
 
 	float hud_y = ((CPlayScene*)scenes[current_scene])->GetHUD()->GetPreSceneYPosition();
 
@@ -620,6 +617,10 @@ void CGame::SwitchBackToOldScene(int scene_id, float start_x, float start_y, boo
 	cam->SetStandardCameraPositionY(cam->GetPreSceneStandardCameraPositionY());
 	cam->SetCameraFurthestPositionY(cam->GetPreSceneCameraFurthestPosition());
 	cam->SetCameraPosition(start_x);
+
+	CMario* omario = ((CPlayScene*)scenes[current_scene])->GetPlayer();
+	omario->SetPosition(start_x, start_y);
+	((CPlayScene*)scenes[current_scene])->SetPlayer(omario);
 
 	((CPlayScene*)scenes[current_scene])->GetHUD()->SetAnimationSet(CAnimationSets::GetInstance()->Get(127));
 

@@ -166,6 +166,8 @@
 #define IS_PIPE_DOWN 1
 #define IS_NOT_PIPE 0
 
+#define MARIO_DY_GET_OUT_FROM_PIPE 40
+
 
 
 class CMario : public CGameObject
@@ -199,7 +201,9 @@ class CMario : public CGameObject
 	bool isPipedUp = false;
 	bool isPipedDown = false;
 	int pipeDirection = -1;
+	Timer stopPipingTimer;
 public: 
+	Timer GetStopPipingTimer() { return this->stopPipingTimer; }
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL, vector<LPGAMEOBJECT>* objects=NULL);
 	virtual void Render();

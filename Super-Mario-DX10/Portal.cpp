@@ -27,24 +27,29 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 					mario->SetIsPipe(IS_PIPE_UP);
 				}
 
-			if (CGame::GetInstance()->IsKeyDown(DIK_DOWN)) {
+			    if (CGame::GetInstance()->IsKeyDown(DIK_DOWN)) {
 				mario->SetIsPipe(IS_PIPE_DOWN);
-			}
+			    }
 		}
 	}
 	if (mario->IsPipeUp() || mario->IsPipeDown()) {
-		if (this->tag == 1) {
+		if (this->tag == TO_EXTRA_SCENE) {
 			if (mario->GetPipeTimer().IsStarted() && mario->GetPipeTimer().ElapsedTime() >= PIPE_TIME) {
-				CGame::GetInstance()->SwitchExtraScene(scene_id, start_x, start_y, mario->IsPipeUp());
-				mario->SetIsPipe(IS_NOT_PIPE);
+				if (mario->IsPipeUp()) {
+					CGame::GetInstance()->SwitchExtraScene(scene_id, start_x, start_y, mario->IsPipeUp());
+					mario->SetIsPipe(IS_NOT_PIPE);
+				}
+				else {
+					CGame::GetInstance()->SwitchExtraScene(scene_id, start_x, start_y, !mario->IsPipeUp());
+					mario->SetIsPipe(IS_NOT_PIPE);
+				}
 				//Swith-to-extra
 			}
 		}
-		else if (this->tag == 2) {
+		else if (this->tag == BACK_TO_MAIN_SCENE) {
 			if (mario->GetPipeTimer().IsStarted() && mario->GetPipeTimer().ElapsedTime() >= PIPE_TIME) {
 				CGame::GetInstance()->SwitchBackToOldScene(scene_id, start_x, start_y, mario->IsPipeUp());
-				mario->SetIsPipe(IS_NOT_PIPE);
-				//Swith-to-extra
+				
 			}
 		}
 	}

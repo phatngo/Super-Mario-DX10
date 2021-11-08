@@ -44,9 +44,14 @@ CMario::CMario(float x, float y) : CGameObject()
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects, vector<LPGAMEOBJECT> *objects)
 {
 	if (isPipedUp) {
-		DebugOut(L"y pos: %f \n", this->y);
-		DebugOut(L"x pos: %f \n", this->x);
+		if (start_Y - y >= MARIO_DY_GET_OUT_FROM_PIPE) {
+			//isPipedDown = false;
+			isPipedUp = false;
+		}
 	}
+
+	
+	
 	if (kickTimer.IsStarted() && kickTimer.ElapsedTime() >= KICK_TIME && isKickingKoopas) {
 		isKickingKoopas = false;
 		kickTimer.Reset();
@@ -1171,7 +1176,8 @@ void CMario::SetIsPipe(int pipeDirection) {
 		pipeTimer.Start();
 	}
 	else {
-		isPipedUp = false;
-		isPipedDown = false;
+			isPipedUp = false;
+			isPipedDown = false;
+			pipeTimer.Reset();
 	}
 }

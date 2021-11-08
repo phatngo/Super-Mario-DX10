@@ -57,7 +57,6 @@ void CCamera::SetCameraPosition(float marioX) {
 		isAbove = true;
 		cameraPositionY = standardCameraPositionY - CGame::GetInstance()->GetScreenHeight() + CAMERA_EXTRA_Y;
 	}
-	DebugOut(L"camx: %d \n", cameraPositionX);
 	CGame::GetInstance()->SetCamPos(cameraPositionX, cameraPositionY);
 }
 

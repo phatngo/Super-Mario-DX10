@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameObject.h"
+#include "Timer.h"
 
 #define TOPLAYSCENE			0
 #define TOEXTRASCENE		1
@@ -10,12 +11,15 @@
 #define PORTAL_BBOX_WIDTH_1_3 15
 #define PORTAL_BBOX_HEIGHT	1
 
+#define TO_EXTRA_SCENE 1
+#define BACK_TO_MAIN_SCENE 2
+
 class CPortal : public CGameObject
 {
 	int scene_id;	// target scene to switch to 
 
 	int width;
-	int height; 
+	int height;
 public:
 	float start_x, start_y;
 	bool pipeUp = false;
