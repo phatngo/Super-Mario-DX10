@@ -25,7 +25,7 @@
 
 CMario::CMario(float x, float y) : CGameObject()
 {
-	level = MARIO_LEVEL_BIG;
+	level = MARIO_LEVEL_TAIL;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
 
