@@ -1,2 +1,0 @@
-D:\school\game\phatngo_game - Copy\SuperMario\Debug\SuperMario.vcxproj.CopyComplete
-D:\school\game\gamee\Super-Mario-DX10\SuperMario\Debug\SuperMario.vcxproj.CopyComplete
